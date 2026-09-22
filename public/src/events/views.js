@@ -222,8 +222,8 @@ export const eventViewMethods = {
     if (this.dom.eventsHeaderBar) {
       this.dom.eventsHeaderBar.style.display = isCalendar ? "" : "none";
     }
-    if (this.dom.eventsSimpleDropinView) {
-      this.dom.eventsSimpleDropinView.style.display = isCalendar ? "none" : "block";
+    if (this.dom.eventsSubpageHost) {
+      this.dom.eventsSubpageHost.style.display = isCalendar ? "none" : "block";
     }
     if (this.dom.schedulePageShell) {
       this.dom.schedulePageShell.style.display = isSchedule ? "block" : "none";

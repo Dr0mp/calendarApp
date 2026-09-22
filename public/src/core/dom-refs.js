@@ -150,7 +150,7 @@ export const domRefsMethods = {
       btnZoomMonthly: document.getElementById("btn-zoom-monthly"),
       btnZoomYearly: document.getElementById("btn-zoom-yearly"),
       btnZoomIn: document.getElementById("btn-zoom-in"),
-      eventsSimpleDropinView: document.getElementById("events-simple-dropin-view"),
+      eventsSubpageHost: document.getElementById("events-subpage-host"),
       schedulePageShell: document.getElementById("schedule-page-shell"),
       schedulePageFormHost: document.getElementById("schedule-page-form-host"),
       myEventsPageShell: document.getElementById("my-events-page-shell"),
