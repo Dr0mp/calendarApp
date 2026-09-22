@@ -4,7 +4,13 @@
   "type": "module",
   "description": "Multi-platform social media calendar with Control Panel, 2026 dimension standards, month-by-month views, and smart filters.",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "playwright test",
+    "test:smoke": "playwright test tests/smoke.spec.js",
+    "test:update-screens": "playwright test tests/visual.spec.js --update-snapshots",
+    "lint": "node tools/check-syntax.mjs",
+    "metrics": "node tools/audit/metrics.mjs",
+    "check": "npm run lint && npm test && npm run metrics"
   },
   "keywords": [
     "calendar",
@@ -25,5 +31,8 @@
     "express-rate-limit": "^8.7.0",
     "helmet": "^8.3.0",
     "jsonwebtoken": "^9.0.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1"
   }
 }
