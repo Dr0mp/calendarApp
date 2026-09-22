@@ -33,10 +33,14 @@ const cookieCache = new Map(); // username -> auth cookie (avoids the 20-logins/
 
 export async function login(page, username, password = 'demo123', { ui = false } = {}) {
   const ctx = page.context();
+  let viaCookie = false;
   if (!ui && cookieCache.has(username)) {
     await ctx.addCookies([cookieCache.get(username)]);
     await page.reload();
-  } else {
+    // A cached cookie may have been revoked meanwhile (logout bumps the token version).
+    viaCookie = await page.waitForSelector('#universal-nav-bar', { state: 'visible', timeout: 3000 }).then(() => true, () => false);
+  }
+  if (!viaCookie) {
     await page.fill('#direct-login-username', username);
     await page.fill('#direct-login-password', password);
     await page.press('#direct-login-password', 'Enter');
