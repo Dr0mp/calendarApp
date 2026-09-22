@@ -69,7 +69,7 @@ export const notificationMethods = {
           <div class="notif-card-title-row">
             <div class="notif-title">${this.escapeHtml(evt.title)}</div>
             ${this.notifFilter === "all" ? `
-          <span class="promo-status-badge ${isPromoted ? 'promoted' : 'pending'}">
+          <span class="promo-status-badge ${isPromoted ? 'is-promoted' : 'is-pending'}">
             ${status}
           </span>` : ""}
           </div>

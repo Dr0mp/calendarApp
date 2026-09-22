@@ -2742,11 +2742,11 @@ dialog::backdrop {
   transition: all var(--duration-fast) ease;
 }
 
-.promo-status-badge.pending {
+.promo-status-badge.is-pending {
   border: 1px solid rgb(var(--amber-500) / 0.4);
 }
 
-.promo-status-badge.promoted {
+.promo-status-badge.is-promoted {
   border: 1px solid rgb(var(--emerald-500) / 0.4);
 }
 
@@ -4046,13 +4046,13 @@ button.timeline-time-header-spacer:hover {
   white-space: nowrap;
 }
 
-.promo-status-badge.pending {
+.promo-status-badge.is-pending {
   background: rgb(var(--amber-500) / 0.08);
   color: #d9b76c;
   border-color: transparent;
 }
 
-.promo-status-badge.promoted {
+.promo-status-badge.is-promoted {
   background: rgb(var(--emerald-400) / 0.08);
   color: #8fcdb2;
   border-color: transparent;
@@ -4300,12 +4300,12 @@ button.timeline-time-header-spacer:hover {
   font-weight: 500;
 }
 
-#social-notifications-modal .promo-status-badge.pending {
+#social-notifications-modal .promo-status-badge.is-pending {
   background: rgb(var(--amber-500) / 0.12);
   color: #d99a12;
 }
 
-#social-notifications-modal .promo-status-badge.promoted {
+#social-notifications-modal .promo-status-badge.is-promoted {
   background: rgb(var(--emerald-500) / 0.1);
   color: #198a68;
 }
@@ -4421,12 +4421,12 @@ button.timeline-time-header-spacer:hover {
   background-color: var(--bg-input);
 }
 
-:root[data-theme="light"] .promo-status-badge.pending {
+:root[data-theme="light"] .promo-status-badge.is-pending {
   background: #fff7e8;
   color: #9a5a00;
 }
 
-:root[data-theme="light"] .promo-status-badge.promoted {
+:root[data-theme="light"] .promo-status-badge.is-promoted {
   background: rgb(var(--emerald-50));
   color: rgb(var(--emerald-700));
 }
@@ -5318,3 +5318,15 @@ button.timeline-time-header-spacer:hover {
 .u-w-full { width: 100% !important; }
 .u-w-min-680-94vw { width: min(680px, 94vw) !important; }
 .u-wrap { flex-wrap: wrap !important; }
+
+/* Admin events table: locked / room-only status badges (were inline styles) */
+.promo-status-badge.is-locked {
+  background: rgb(var(--amber-500) / 0.15);
+  color: rgb(var(--amber-400));
+  border-color: rgb(var(--amber-500) / 0.3);
+}
+.promo-status-badge.is-room-only {
+  background: rgb(var(--purple-500) / 0.15);
+  color: rgb(var(--purple-400));
+  border-color: rgb(var(--purple-500) / 0.3);
+}

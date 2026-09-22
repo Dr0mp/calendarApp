@@ -183,7 +183,7 @@ export const adminPanelMethods = {
           </div>
         </td>
         <td>
-          <span class="promo-status-badge ${isLocked ? 'locked' : (isRoomOnly ? 'room_only' : (isPromoted ? 'promoted' : 'pending'))}" style="${isLocked ? 'background: rgba(245, 158, 11, 0.15); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3);' : (isRoomOnly ? 'background: rgba(168, 85, 247, 0.15); color: #c084fc; border-color: rgba(168, 85, 247, 0.3);' : '')}">
+          <span class="promo-status-badge ${isLocked ? 'is-locked' : (isRoomOnly ? 'is-room-only' : (isPromoted ? 'is-promoted' : 'is-pending'))}">
             ${this.t(isLocked ? "admin_status_locked" : (isRoomOnly ? "badge_room_booking" : (isPromoted ? "admin_status_promoted" : "admin_status_awaiting")))}
           </span>
         </td>
