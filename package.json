@@ -10,7 +10,9 @@
     "test:update-screens": "playwright test tests/visual.spec.js --update-snapshots",
     "lint": "node tools/check-syntax.mjs",
     "metrics": "node tools/audit/metrics.mjs",
-    "check": "npm run lint && npm test && npm run metrics"
+    "check": "npm run lint && npm test && npm run metrics",
+    "audit:setup": "cd tools/audit && npm install",
+    "css-diff": "node tools/audit/css-diff.mjs"
   },
   "keywords": [
     "calendar",
