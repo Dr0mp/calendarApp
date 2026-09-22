@@ -44,7 +44,7 @@ export const adminPanelMethods = {
     this.adminActiveCategory = category;
     this.savePrefs();
     this.dom.adminCatTabs?.forEach(tab => {
-      tab.classList.toggle("active", (tab.dataset.adminCat || "all") === category);
+      tab.classList.toggle("is-active", (tab.dataset.adminCat || "all") === category);
     });
 
     const sections = [

@@ -121,8 +121,8 @@ export const eventViewMethods = {
 
     document.querySelectorAll(".notif-filter-pill").forEach(pill => {
       pill.addEventListener("click", () => {
-        document.querySelectorAll(".notif-filter-pill").forEach(p => p.classList.remove("active"));
-        pill.classList.add("active");
+        document.querySelectorAll(".notif-filter-pill").forEach(p => p.classList.remove("is-active"));
+        pill.classList.add("is-active");
         this.notifFilter = pill.dataset.notifFilter || "all";
         this.renderSocialNotifications();
       });
@@ -190,9 +190,9 @@ export const eventViewMethods = {
     }
 
     // Toggle button active states
-    if (this.dom.btnZoomDaily) this.dom.btnZoomDaily.classList.toggle("active", level === "daily");
-    if (this.dom.btnZoomMonthly) this.dom.btnZoomMonthly.classList.toggle("active", level === "monthly");
-    if (this.dom.btnZoomYearly) this.dom.btnZoomYearly.classList.toggle("active", level === "yearly");
+    if (this.dom.btnZoomDaily) this.dom.btnZoomDaily.classList.toggle("is-active", level === "daily");
+    if (this.dom.btnZoomMonthly) this.dom.btnZoomMonthly.classList.toggle("is-active", level === "monthly");
+    if (this.dom.btnZoomYearly) this.dom.btnZoomYearly.classList.toggle("is-active", level === "yearly");
 
     // Toggle view containers
     if (this.dom.eventsDailyView) this.dom.eventsDailyView.style.display = level === "daily" ? "flex" : "none";
@@ -240,17 +240,17 @@ export const eventViewMethods = {
 
     if (this.dom.navEventsBtn) {
       const isCalendarTab = this.activeApp === "events" && isCalendar;
-      this.dom.navEventsBtn.classList.toggle("active", isCalendarTab);
+      this.dom.navEventsBtn.classList.toggle("is-active", isCalendarTab);
       this.dom.navEventsBtn.setAttribute("aria-selected", isCalendarTab ? "true" : "false");
     }
     if (this.dom.navScheduleBtn) {
       const isScheduleTab = this.activeApp === "events" && isSchedule;
-      this.dom.navScheduleBtn.classList.toggle("active", isScheduleTab);
+      this.dom.navScheduleBtn.classList.toggle("is-active", isScheduleTab);
       this.dom.navScheduleBtn.setAttribute("aria-selected", isScheduleTab ? "true" : "false");
     }
     if (this.dom.navMyEventsBtn) {
       const isMyEventsTab = this.activeApp === "events" && isMyEvents;
-      this.dom.navMyEventsBtn.classList.toggle("active", isMyEventsTab);
+      this.dom.navMyEventsBtn.classList.toggle("is-active", isMyEventsTab);
       this.dom.navMyEventsBtn.setAttribute("aria-selected", isMyEventsTab ? "true" : "false");
     }
 
@@ -350,7 +350,7 @@ export const eventViewMethods = {
 
     // "All Users" pill
     const allBtn = document.createElement("button");
-    allBtn.className = `user-filter-pill ${this.eventsSelectedUser === "all" ? "active" : ""}`;
+    allBtn.className = `user-filter-pill ${this.eventsSelectedUser === "all" ? "is-active" : ""}`;
     allBtn.innerHTML = `
       <span>${this.t("events_filter_all_users")}</span>
       <span class="user-filter-count">${userCounts.all || 0}</span>
@@ -366,7 +366,7 @@ export const eventViewMethods = {
     if (this.currentUser) {
       const myCount = userCounts[this.currentUser.username] || 0;
       const myBtn = document.createElement("button");
-      myBtn.className = `user-filter-pill ${this.eventsSelectedUser === "my" ? "active" : ""}`;
+      myBtn.className = `user-filter-pill ${this.eventsSelectedUser === "my" ? "is-active" : ""}`;
       myBtn.innerHTML = `
         <span>${this.t("events_filter_my_events")}</span>
         <span class="user-filter-count">${myCount}</span>
@@ -385,7 +385,7 @@ export const eventViewMethods = {
       const count = userCounts[user.username] || 0;
       const isSelected = this.eventsSelectedUser === user.username;
       const uBtn = document.createElement("button");
-      uBtn.className = `user-filter-pill ${isSelected ? "active" : ""}`;
+      uBtn.className = `user-filter-pill ${isSelected ? "is-active" : ""}`;
       if (isSelected) {
         uBtn.style.borderColor = theme.accent;
         uBtn.style.boxShadow = `0 0 12px ${theme.glow}`;

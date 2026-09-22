@@ -68,7 +68,7 @@
 
         <!-- Language Switcher (RO / EN - Default RO) -->
         <div data-i18n-aria-label="aria_lang_switch" class="lang-switcher-pill" role="group" aria-label="Comută limba">
-          <button type="button" class="lang-btn active" data-lang="ro" title="Română">RO</button>
+          <button type="button" class="lang-btn is-active" data-lang="ro" title="Română">RO</button>
           <span class="lang-divider">|</span>
           <button type="button" class="lang-btn" data-lang="en" title="English">EN</button>
         </div>
@@ -93,7 +93,7 @@
           <svg class="ui-icon theme-icon-light" aria-hidden="true"><use href="#icon-sun"></use></svg>
         </button>
         <div data-i18n-aria-label="aria_lang_switch" class="lang-switcher-pill" role="group" aria-label="Comută limba">
-          <button type="button" class="lang-btn active" data-lang="ro" title="Română">RO</button>
+          <button type="button" class="lang-btn is-active" data-lang="ro" title="Română">RO</button>
           <span class="lang-divider">|</span>
           <button type="button" class="lang-btn" data-lang="en" title="English">EN</button>
         </div>
@@ -168,7 +168,7 @@
           <div data-i18n-aria-label="aria_view_switcher" class="nav-block-zoom" role="group" aria-label="Comutator vizualizare calendar">
             <div class="nav-block-zoom-tabs">
               <button data-i18n-title="social_view_year" data-i18n="social_view_year" id="view-year-btn" type="button" class="nav-block-zoom-btn zoom-level-btn" title="An">An</button>
-              <button data-i18n-title="social_view_calendar" data-i18n="social_view_calendar" id="view-month-btn" type="button" class="nav-block-zoom-btn zoom-level-btn active" title="Calendar">Calendar</button>
+              <button data-i18n-title="social_view_calendar" data-i18n="social_view_calendar" id="view-month-btn" type="button" class="nav-block-zoom-btn zoom-level-btn is-active" title="Calendar">Calendar</button>
               <button data-i18n-title="social_view_feed" data-i18n="social_view_feed" id="view-feed-btn" type="button" class="nav-block-zoom-btn zoom-level-btn" title="Flux / Listă">Flux / Listă</button>
             </div>
           </div>
@@ -287,7 +287,7 @@
             </button>
             <div class="nav-block-zoom-tabs">
               <button data-i18n-title="events_zoom_year_title" data-i18n="events_zoom_year" id="btn-zoom-yearly" type="button" class="nav-block-zoom-btn zoom-level-btn" title="Zoom: An (privire de ansamblu și salt rapid)">An</button>
-              <button data-i18n-title="events_zoom_month_title" data-i18n="events_zoom_month" id="btn-zoom-monthly" type="button" class="nav-block-zoom-btn zoom-level-btn active" title="Zoom: Lună (grilă calendar)">Lună</button>
+              <button data-i18n-title="events_zoom_month_title" data-i18n="events_zoom_month" id="btn-zoom-monthly" type="button" class="nav-block-zoom-btn zoom-level-btn is-active" title="Zoom: Lună (grilă calendar)">Lună</button>
               <button data-i18n-title="events_zoom_day_title" data-i18n="events_zoom_day" id="btn-zoom-daily" type="button" class="nav-block-zoom-btn zoom-level-btn" title="Zoom: Zi (orar 08:00 – 22:00)">Zi</button>
             </div>
             <button data-i18n-title="events_zoom_in" id="btn-zoom-in" type="button" class="nav-block-icon-btn" title="Mărește (An → Lună → Zi)">
@@ -340,7 +340,7 @@
           <!-- Toolbar: Filter Tabs & Search -->
           <div class="my-events-toolbar">
             <div data-i18n-aria-label="aria_my_events_filter" class="my-events-filter-tabs" id="my-events-filter-tabs" role="radiogroup" aria-label="Filtru tip evenimente">
-              <button data-i18n="my_events_filter_all" type="button" class="btn-filter-tab active" data-filter="all" id="filter-my-events-all">Toate</button>
+              <button data-i18n="my_events_filter_all" type="button" class="btn-filter-tab is-active" data-filter="all" id="filter-my-events-all">Toate</button>
               <button data-i18n="my_events_filter_public" type="button" class="btn-filter-tab" data-filter="event" id="filter-my-events-public">Evenimente Publice</button>
               <button data-i18n="my_events_filter_room" type="button" class="btn-filter-tab" data-filter="room_only" id="filter-my-events-room">Doar Cazare</button>
               <button data-i18n="my_events_filter_locked" type="button" class="btn-filter-tab" data-filter="locked" id="filter-my-events-locked">Blocări Interval</button>
@@ -429,7 +429,7 @@
       <!-- Admin Category Filter Toolbar (Segmented tabs style matching Social Calendar & Evenimentele Mele) -->
       <div class="my-events-toolbar admin-toolbar">
         <div data-i18n-aria-label="aria_admin_categories" class="my-events-filter-tabs admin-category-filter-tabs" id="admin-category-nav-bar" role="radiogroup" aria-label="Categorii panou administrare">
-          <button type="button" class="btn-filter-tab active" data-admin-cat="all" id="admin-cat-all">
+          <button type="button" class="btn-filter-tab is-active" data-admin-cat="all" id="admin-cat-all">
             <span data-i18n="admin_cat_all" data-i18n="admin_cat_all">Toate Secțiunile</span>
             <span class="filter-tab-badge" id="admin-count-all">5</span>
           </button>
@@ -744,7 +744,7 @@
       <!-- Filter tabs -->
       <div class="notifications-filter-bar" id="notif-filter-bar">
         <button type="button" class="notif-filter-pill" data-filter="all"><span data-i18n="notif_filter_all" data-notif-filter-label="all">Toate Evenimentele</span> <span id="notif-count-all">0</span></button>
-        <button type="button" class="notif-filter-pill active" data-filter="pending"><span data-i18n="notif_filter_pending" data-notif-filter-label="pending">În așteptarea promovării</span> <span id="notif-count-pending">0</span></button>
+        <button type="button" class="notif-filter-pill is-active" data-filter="pending"><span data-i18n="notif_filter_pending" data-notif-filter-label="pending">În așteptarea promovării</span> <span id="notif-count-pending">0</span></button>
         <button type="button" class="notif-filter-pill" data-filter="promoted"><span data-i18n="notif_filter_posted" data-notif-filter-label="promoted">Publicate</span> <span id="notif-count-promoted">0</span></button>
       </div>
 
@@ -894,7 +894,7 @@
       <!-- Entry Type Switcher (Top Centered Tabs matching other pages) -->
       <div class="schedule-entry-type-toolbar" id="event-entry-type-group">
         <div data-i18n-aria-label="aria_entry_type" class="entry-type-segmented-nav my-events-filter-tabs" id="event-entry-type-segmented" role="radiogroup" aria-label="Tip înregistrare">
-          <button type="button" class="btn-filter-tab btn-entry-type active" data-entry-type="event" id="btn-entry-type-event">
+          <button type="button" class="btn-filter-tab btn-entry-type is-active" data-entry-type="event" id="btn-entry-type-event">
             <svg class="ui-icon" aria-hidden="true"><use href="#icon-calendar"></use></svg>
             <span class="entry-type-title" id="lbl-entry-type-event" data-i18n="event_type_event">Eveniment Public</span>
           </button>

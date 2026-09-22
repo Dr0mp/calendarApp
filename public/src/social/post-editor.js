@@ -406,7 +406,7 @@ export const postEditorMethods = {
     if (this.dom.detailShareBox) {
       if (post.shareLink) {
         this.dom.detailShareBox.style.display = "block";
-        this.dom.detailShareBox.classList.remove("empty");
+        this.dom.detailShareBox.classList.remove("is-empty");
         this.dom.detailShareLinkText.textContent = post.shareLink;
         this.dom.detailShareLinkText.href = post.shareLink.startsWith("http") ? post.shareLink : "#";
         this.dom.detailShareLinkText.onclick = (e) => {
@@ -426,7 +426,7 @@ export const postEditorMethods = {
         if (this.dom.detailShareStatusBadge) this.dom.detailShareStatusBadge.textContent = this.t("post_share_linked");
       } else {
         this.dom.detailShareBox.style.display = "block";
-        this.dom.detailShareBox.classList.add("empty");
+        this.dom.detailShareBox.classList.add("is-empty");
         this.dom.detailShareLinkText.textContent = this.t("post_share_none_hint");
         this.dom.detailShareLinkText.removeAttribute("href");
         this.dom.detailShareLinkText.onclick = null;

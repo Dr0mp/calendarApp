@@ -145,9 +145,9 @@ export const socialCalendarMethods = {
   syncSocialViewMode() {
     const mode = ["calendar", "year", "feed"].includes(this.viewMode) ? this.viewMode : "year";
     this.viewMode = mode;
-    this.dom.viewYearBtn?.classList.toggle("active", mode === "year");
-    this.dom.viewMonthBtn.classList.toggle("active", mode === "calendar");
-    this.dom.viewFeedBtn.classList.toggle("active", mode === "feed");
+    this.dom.viewYearBtn?.classList.toggle("is-active", mode === "year");
+    this.dom.viewMonthBtn.classList.toggle("is-active", mode === "calendar");
+    this.dom.viewFeedBtn.classList.toggle("is-active", mode === "feed");
     this.dom.calendarView.style.display = mode === "calendar" ? "flex" : "none";
     this.dom.feedView.style.display = mode === "feed" ? "flex" : "none";
     if (this.dom.socialYearView) this.dom.socialYearView.style.display = mode === "year" ? "block" : "none";
@@ -250,7 +250,7 @@ export const socialCalendarMethods = {
     // "All Platforms" Tab
     const allTab = document.createElement("button");
     allTab.type = "button";
-    allTab.className = `btn-filter-tab ${this.selectedPlatformId === "all" ? "active" : ""}`;
+    allTab.className = `btn-filter-tab ${this.selectedPlatformId === "all" ? "is-active" : ""}`;
     allTab.innerHTML = `
       <span>${this.t("social_all_platforms")}</span>
       <span class="filter-tab-badge">${totalMonthPosts}</span>
@@ -268,7 +268,7 @@ export const socialCalendarMethods = {
 
       const tab = document.createElement("button");
       tab.type = "button";
-      tab.className = `btn-filter-tab ${this.selectedPlatformId === platform.id ? "active" : ""}`;
+      tab.className = `btn-filter-tab ${this.selectedPlatformId === platform.id ? "is-active" : ""}`;
       tab.dataset.platform = platform.id;
       const iconSrc = this.getPlatformIcon(platform);
       tab.innerHTML = `

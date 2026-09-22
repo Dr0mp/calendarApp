@@ -1493,7 +1493,7 @@ dialog::backdrop {
   transform: translateY(-1px);
 }
 
-.nav-tab-btn.active {
+.nav-tab-btn.is-active {
   color: rgb(var(--white)) !important;
   background: var(--primary) !important;
   border-color: var(--primary-bright) !important;
@@ -1551,7 +1551,7 @@ dialog::backdrop {
   transform: translateY(-1px);
 }
 
-.nav-icon-btn.active {
+.nav-icon-btn.is-active {
   color: rgb(var(--red-500));
   background: rgb(var(--red-500) / 0.15);
   border-color: rgb(var(--red-500) / 0.4);
@@ -1628,7 +1628,7 @@ dialog::backdrop {
   background: var(--bg-card-hover);
 }
 
-.lang-btn.active {
+.lang-btn.is-active {
   color: rgb(var(--white));
   background: var(--primary);
   box-shadow: 0 1px 4px var(--primary-glow);
@@ -1808,7 +1808,7 @@ dialog::backdrop {
   color: var(--text-primary);
 }
 
-.user-filter-pill.active {
+.user-filter-pill.is-active {
   background: rgb(var(--violet-500));
   color: rgb(var(--white));
   border-color: rgb(var(--violet-500));
@@ -2059,7 +2059,7 @@ dialog::backdrop {
   background: rgb(var(--slate-200));
 }
 
-.btn-filter-tab.active {
+.btn-filter-tab.is-active {
   color: rgb(var(--white));
   background: var(--primary);
   border-color: var(--primary-bright);
@@ -2376,21 +2376,21 @@ dialog::backdrop {
   background: rgb(var(--slate-200));
 }
 
-.btn-entry-type.active {
+.btn-entry-type.is-active {
   color: rgb(var(--white));
   background: var(--primary);
   border-color: var(--primary-bright);
   box-shadow: 0 2px 8px var(--primary-glow);
 }
 
-.btn-entry-type[data-entry-type="locked"].active {
+.btn-entry-type[data-entry-type="locked"].is-active {
   background: rgb(var(--amber-500));
   color: rgb(var(--slate-800));
   border-color: rgb(var(--amber-500) / 0.5);
   box-shadow: 0 2px 8px rgb(var(--amber-500) / 0.35);
 }
 
-.btn-entry-type[data-entry-type="room_only"].active {
+.btn-entry-type[data-entry-type="room_only"].is-active {
   background: rgb(var(--purple-500));
   color: rgb(var(--white));
   border-color: rgb(var(--purple-500) / 0.5);
@@ -2734,7 +2734,7 @@ dialog::backdrop {
   border-color: var(--border-strong);
 }
 
-.notif-filter-pill.active {
+.notif-filter-pill.is-active {
   border-color: rgb(var(--violet-500));
 }
 
@@ -2862,7 +2862,7 @@ dialog::backdrop {
   background: var(--bg-card-hover);
 }
 
-.notif-filter-pill.active {
+.notif-filter-pill.is-active {
   border: 0;
   color: var(--text-primary);
   background: var(--bg-card);
@@ -3362,8 +3362,8 @@ dialog::backdrop {
   background: rgb(var(--white) / 0.06);
 }
 
-.nav-block-zoom-btn.active,
-.zoom-level-btn.active {
+.nav-block-zoom-btn.is-active,
+.zoom-level-btn.is-active {
   color: rgb(var(--white));
 }
 
@@ -3604,8 +3604,8 @@ button.timeline-time-header-spacer:hover {
 
 
 
-.nav-block-zoom-btn.active,
-.zoom-level-btn.active {
+.nav-block-zoom-btn.is-active,
+.zoom-level-btn.is-active {
   background: #2d638e;
   box-shadow: none;
 }
@@ -4262,8 +4262,8 @@ button.timeline-time-header-spacer:hover {
   transform: scale(1.04);
 }
 
-.share-pill-btn.copied,
-.btn-copied {
+.share-pill-btn.is-copied,
+.is-copied {
   background: rgb(var(--emerald-500)) !important;
   color: rgb(var(--white)) !important;
   border-color: rgb(var(--emerald-500)) !important;
@@ -4273,7 +4273,7 @@ button.timeline-time-header-spacer:hover {
   transition: all var(--duration-base) ease;
 }
 
-.detail-share-box.empty {
+.detail-share-box.is-empty {
   background: rgb(var(--white) / 0.02) !important;
   border-color: var(--border-subtle) !important;
 }
@@ -4329,7 +4329,7 @@ button.timeline-time-header-spacer:hover {
   border-color: var(--border-strong);
 }
 
-:root[data-theme="light"] .nav-tab-btn.active {
+:root[data-theme="light"] .nav-tab-btn.is-active {
   color: rgb(var(--white)) !important;
   background: var(--primary) !important;
   border-color: var(--primary-bright) !important;
@@ -4354,7 +4354,7 @@ button.timeline-time-header-spacer:hover {
   border-color: var(--border-strong);
 }
 
-:root[data-theme="light"] .nav-icon-btn.active {
+:root[data-theme="light"] .nav-icon-btn.is-active {
   background: rgb(var(--red-100));
   color: rgb(var(--red-600));
   border-color: rgb(var(--red-300));
@@ -4375,7 +4375,7 @@ button.timeline-time-header-spacer:hover {
   background: rgb(var(--slate-200));
 }
 
-:root[data-theme="light"] .lang-btn.active {
+:root[data-theme="light"] .lang-btn.is-active {
   color: rgb(var(--white));
   background: var(--primary);
 }
@@ -4630,8 +4630,8 @@ button.timeline-time-header-spacer:hover {
   color: var(--text-primary);
 }
 
-:root[data-theme="light"] .nav-block-zoom-btn.active,
-:root[data-theme="light"] .zoom-level-btn.active {
+:root[data-theme="light"] .nav-block-zoom-btn.is-active,
+:root[data-theme="light"] .zoom-level-btn.is-active {
   background: rgb(var(--white));
   color: rgb(var(--sky-800));
   box-shadow: 0 1px 2px rgb(var(--slate-900) / 0.12);
@@ -5043,7 +5043,7 @@ button.timeline-time-header-spacer:hover {
   background: rgb(var(--black) / 0.05);
 }
 
-.social-platform-filter-tabs .btn-filter-tab.active {
+.social-platform-filter-tabs .btn-filter-tab.is-active {
   color: rgb(var(--white));
   background: var(--primary);
   border-color: var(--primary-bright);
@@ -5074,12 +5074,12 @@ button.timeline-time-header-spacer:hover {
   margin-left: 2px;
 }
 
-.social-platform-filter-tabs .btn-filter-tab:not(.active) .filter-tab-badge {
+.social-platform-filter-tabs .btn-filter-tab:not(.is-active) .filter-tab-badge {
   background: rgb(var(--white) / 0.08);
   color: var(--text-muted);
 }
 
-:root[data-theme="light"] .social-platform-filter-tabs .btn-filter-tab:not(.active) .filter-tab-badge {
+:root[data-theme="light"] .social-platform-filter-tabs .btn-filter-tab:not(.is-active) .filter-tab-badge {
   background: rgb(var(--black) / 0.08);
   color: var(--text-secondary);
 }

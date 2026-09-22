@@ -234,14 +234,14 @@ export const wizardMethods = {
       this.dom.eventEntryTypeInput.value = type;
     }
     if (this.dom.btnEntryTypeEvent) {
-      this.dom.btnEntryTypeEvent.classList.toggle("active", type === "event");
+      this.dom.btnEntryTypeEvent.classList.toggle("is-active", type === "event");
     }
     if (this.dom.btnEntryTypeLocked) {
-      this.dom.btnEntryTypeLocked.classList.toggle("active", type === "locked");
+      this.dom.btnEntryTypeLocked.classList.toggle("is-active", type === "locked");
     }
     if (this.dom.btnEntryTypeRoom) {
       this.dom.btnEntryTypeRoom.style.display = this.canBookRooms() ? "inline-flex" : "none";
-      this.dom.btnEntryTypeRoom.classList.toggle("active", type === "room_only");
+      this.dom.btnEntryTypeRoom.classList.toggle("is-active", type === "room_only");
     }
 
     const isLocked = type === "locked";

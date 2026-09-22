@@ -84,7 +84,7 @@ export const i18nMethods = {
 
     // Update all language toggle buttons
     document.querySelectorAll(".lang-btn").forEach(btn => {
-      btn.classList.toggle("active", btn.dataset.lang === lang);
+      btn.classList.toggle("is-active", btn.dataset.lang === lang);
     });
 
     // Role-dependent and state-dependent labels

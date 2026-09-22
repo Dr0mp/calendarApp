@@ -41,10 +41,10 @@ export const utilMethods = {
       if (btnElement) {
         const origText = btnElement.innerHTML;
         btnElement.innerHTML = '<svg class="ui-icon u-w-12 u-h-12 u-valign-middle"><use href="#icon-check"></use></svg> ' + this.t("copied_label");
-        btnElement.classList.add("btn-copied");
+        btnElement.classList.add("is-copied");
         setTimeout(() => {
           btnElement.innerHTML = origText;
-          btnElement.classList.remove("btn-copied");
+          btnElement.classList.remove("is-copied");
         }, 2200);
       }
     };

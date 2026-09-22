@@ -37,8 +37,8 @@ export const routerMethods = {
     if (this.dom.myEventsFilterTabs) {
       this.dom.myEventsFilterTabs.querySelectorAll(".btn-filter-tab").forEach(btn => {
         btn.addEventListener("click", () => {
-          this.dom.myEventsFilterTabs.querySelectorAll(".btn-filter-tab").forEach(b => b.classList.remove("active"));
-          btn.classList.add("active");
+          this.dom.myEventsFilterTabs.querySelectorAll(".btn-filter-tab").forEach(b => b.classList.remove("is-active"));
+          btn.classList.add("is-active");
           this.myEventsActiveFilter = btn.dataset.filter || "all";
           this.renderMyEventsPage();
         });
@@ -123,25 +123,25 @@ export const routerMethods = {
     // Active menu tab indicator (tabs swapping through pages)
     if (this.dom.navEventsBtn) {
       const isCalendarTab = viewName === "events" && this.eventsLayoutMode === "panel";
-      this.dom.navEventsBtn.classList.toggle("active", isCalendarTab);
+      this.dom.navEventsBtn.classList.toggle("is-active", isCalendarTab);
       this.dom.navEventsBtn.setAttribute("aria-selected", isCalendarTab ? "true" : "false");
     }
     if (this.dom.navScheduleBtn) {
       const isScheduleTab = viewName === "events" && this.eventsLayoutMode === "schedule";
-      this.dom.navScheduleBtn.classList.toggle("active", isScheduleTab);
+      this.dom.navScheduleBtn.classList.toggle("is-active", isScheduleTab);
       this.dom.navScheduleBtn.setAttribute("aria-selected", isScheduleTab ? "true" : "false");
     }
     if (this.dom.navMyEventsBtn) {
       const isMyEventsTab = viewName === "events" && this.eventsLayoutMode === "my-events";
-      this.dom.navMyEventsBtn.classList.toggle("active", isMyEventsTab);
+      this.dom.navMyEventsBtn.classList.toggle("is-active", isMyEventsTab);
       this.dom.navMyEventsBtn.setAttribute("aria-selected", isMyEventsTab ? "true" : "false");
     }
     if (this.dom.navSocialBtn) {
-      this.dom.navSocialBtn.classList.toggle("active", viewName === "social");
+      this.dom.navSocialBtn.classList.toggle("is-active", viewName === "social");
       this.dom.navSocialBtn.setAttribute("aria-selected", viewName === "social" ? "true" : "false");
     }
     if (this.dom.navAdminBtn) {
-      this.dom.navAdminBtn.classList.toggle("active", viewName === "admin");
+      this.dom.navAdminBtn.classList.toggle("is-active", viewName === "admin");
       this.dom.navAdminBtn.setAttribute("aria-selected", viewName === "admin" ? "true" : "false");
     }
 

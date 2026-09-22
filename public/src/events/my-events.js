@@ -25,7 +25,7 @@ export const myEventsMethods = {
     if (!this.canBookRooms() && this.myEventsActiveFilter === "room_only") {
       this.myEventsActiveFilter = "all";
       document.querySelectorAll("#my-events-filter-tabs .btn-filter-tab").forEach(b => {
-        b.classList.toggle("active", b.getAttribute("data-filter") === "all");
+        b.classList.toggle("is-active", b.getAttribute("data-filter") === "all");
       });
     }
 
