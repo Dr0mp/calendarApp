@@ -29,6 +29,8 @@ P('\n## IDENTICAL DECLARATION BLOCKS (>=3 decls): '+blocks.length);blocks.forEac
 // usage
 const src=html+'\n'+js;
 const tokens=new Set((src.match(/[A-Za-z_][\w-]*/g)||[]));
+// classes composed at runtime: label-${type}, toast--${tone}
+const DYNAMIC=['label-hour','label-next-day','label-next-week','toast--info','toast--success','toast--warning','toast--danger'];DYNAMIC.forEach(c=>tokens.add(c));
 const unused=[...classes.keys()].filter(c=>!tokens.has(c));
 // dynamic prefix check
 const dyn=unused.filter(c=>{const m=c.match(/^(.*?[-_])[^-_]+$/);return m&&src.includes(m[1]+'${')||m&&new RegExp("['\"`]"+m[1].replace(/[-]/g,'\\-')+"['\"`]\\s*\\+").test(src)});

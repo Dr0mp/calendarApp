@@ -9,7 +9,7 @@ const src = fs.readdirSync(root).filter(f => /\.(js|html)$/.test(f)).map(f => fs
 function walk(d) { return fs.readdirSync(d).flatMap(f => { const p = path.join(d, f); return fs.statSync(p).isDirectory() ? walk(p) : [p]; }); }
 const tokens = new Set(src.match(/[A-Za-z_][\w-]*/g));
 // Classes composed at runtime (e.g. `label-${s.type}`)
-['label-hour', 'label-next-day', 'label-next-week'].forEach(c => tokens.add(c));
+['label-hour', 'label-next-day', 'label-next-week', 'toast--info', 'toast--success', 'toast--warning', 'toast--danger'].forEach(c => tokens.add(c));
 
 const isDead = sel => { let dead = false; sp(x => x.walkClasses(n => { if (!tokens.has(n.value)) dead = true; })).processSync(sel); return dead; };
 const ast = postcss.parse(fs.readFileSync(cssFile, 'utf8'));
