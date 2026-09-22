@@ -2,7 +2,7 @@ const fs=require('fs'),postcss=require('postcss'),sp=require('postcss-selector-p
 const D=(p=>require('fs').existsSync(p+'/public/index.html')?p+'/public/':p+'/')(require('path').resolve(process.argv[2]||'.'));
 const css=fs.readFileSync(D+'styles.css','utf8');
 const html=fs.readFileSync(D+'index.html','utf8');
-const js=fs.readFileSync(D+'app.js','utf8');
+const SF=require('./src-files.cjs');const js=SF.readApp(D);
 const root=postcss.parse(css);
 const ctx=r=>{let p=r.parent,a=[];while(p&&p.type!=='root'){if(p.type==='atrule')a.push('@'+p.name+' '+p.params);p=p.parent;}return a.join(' ');};
 const selMap={},blockMap={},classes=new Map(),ids=new Map(),propsBySel={};

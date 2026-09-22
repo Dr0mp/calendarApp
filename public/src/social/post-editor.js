@@ -1,0 +1,477 @@
+// Create/edit/view social posts, media and share links.
+// Mixed into SocialCalendarApp.prototype by src/app.js; `this` is the app instance.
+
+export const postEditorMethods = {
+  // Post Creator / Editor Dialog Handling
+  openAddPostModal(preselectedDate = null, prefillData = null) {
+    const requestedDate = prefillData?.date || preselectedDate;
+    if (requestedDate && this.isPastEventDate(requestedDate)) {
+      alert(this.t("post_past_create_unavailable"));
+      return;
+    }
+    const enabledPlatforms = this.platforms.filter(p => p.enabled !== false);
+    if (enabledPlatforms.length === 0) {
+      alert(this.t("alert_platforms_disabled"));
+      return;
+    }
+
+    this.dom.postEditId.value = "";
+    this.dom.postDialogActionText.textContent = prefillData ? "Promote event on social" : "Schedule new post";
+    this.dom.postForm.reset();
+
+    // Track if this post is linked to an event promotion
+    this.eventPendingPromotionId = prefillData && prefillData.eventId ? prefillData.eventId : null;
+
+    // Populate Platform Dropdown
+    this.populatePlatformSelect();
+
+    // If prefill requests a specific platform or default to facebook, apply it
+    if (prefillData && prefillData.platformId) {
+      this.dom.postPlatformSelect.value = prefillData.platformId;
+    } else if (prefillData && this.getPlatform("facebook") && this.getPlatform("facebook").enabled !== false) {
+      this.dom.postPlatformSelect.value = "facebook";
+    } else if (this.selectedPlatformId !== "all") {
+      const currentSelected = this.getPlatform(this.selectedPlatformId);
+      if (currentSelected && currentSelected.enabled !== false) {
+        this.dom.postPlatformSelect.value = this.selectedPlatformId;
+      }
+    }
+
+    this.onPlatformSelectChanged();
+
+    // Date & Time
+    if (prefillData && prefillData.date) {
+      this.dom.postDateInput.value = prefillData.date;
+      this.dom.postTimeInput.value = prefillData.time || "12:00";
+    } else if (preselectedDate) {
+      this.dom.postDateInput.value = preselectedDate;
+    } else {
+      const preferredDate = `${this.currentYear}-${String(this.currentMonth + 1).padStart(2, "0")}-15`;
+      const defaultDate = this.isPastEventDate(preferredDate) ? this.getTodayDateString() : preferredDate;
+      this.dom.postDateInput.value = defaultDate;
+    }
+
+    // Prefill Title, Description & Media
+    if (prefillData) {
+      if (prefillData.title) this.dom.postTitleInput.value = prefillData.title;
+      if (prefillData.description) this.dom.postDescInput.value = prefillData.description;
+      if (prefillData.status) this.dom.postStatusSelect.value = prefillData.status;
+
+      if (prefillData.mediaUrl) {
+        this.setPostMedia({
+          type: "photo",
+          url: prefillData.mediaUrl,
+          name: "event-cover-16x9.jpg",
+          aspectRatio: "16:9",
+          count: 1
+        });
+      } else {
+        this.clearPostMedia();
+      }
+    } else {
+      this.clearPostMedia();
+    }
+
+    if (this.dom.postShareLink) {
+      this.dom.postShareLink.value = (prefillData && prefillData.shareLink) ? prefillData.shareLink : "";
+    }
+
+    this.updateLiveSpecHelper();
+    this.updateCaptionCounter();
+    this.dom.postDialog.showModal();
+  },
+  clearPostMedia() {
+    this.currentPostMedia = null;
+    this.dom.previewImg.style.display = "none";
+    this.dom.previewImg.src = "";
+    this.dom.previewVideo.style.display = "none";
+    this.dom.previewVideo.src = "";
+    this.dom.previewMediaName.textContent = "No media selected";
+    this.dom.previewAspectPill.textContent = "Awaiting upload";
+  },
+  openEditPostModal(postId) {
+    const post = this.posts.find(p => p.id === postId);
+    if (!post) return;
+
+    this.dom.postEditId.value = post.id;
+    this.dom.postDialogActionText.textContent = "Edit Scheduled Post";
+    this.populatePlatformSelect(post.platformId);
+
+    this.dom.postPlatformSelect.value = post.platformId;
+    this.onPlatformSelectChanged();
+
+    this.dom.postTypeSelect.value = post.postTypeId;
+    this.updateLiveSpecHelper();
+
+    this.dom.postDateInput.value = post.date;
+    this.dom.postTimeInput.value = post.time || "12:00";
+    this.dom.postTitleInput.value = post.title || "";
+    this.dom.postDescInput.value = post.description || "";
+    this.dom.postStatusSelect.value = post.status || "scheduled";
+    if (this.dom.postShareLink) {
+      this.dom.postShareLink.value = post.shareLink || "";
+    }
+
+    // Media
+    this.setPostMedia({
+      type: post.mediaType,
+      url: post.mediaUrl,
+      name: (post.mediaNames && post.mediaNames[0]) || "media-file",
+      aspectRatio: post.aspectRatio || "9:16",
+      count: post.mediaCount || 1
+    });
+
+    this.updateCaptionCounter();
+    this.dom.postDialog.showModal();
+  },
+  populatePlatformSelect(includePlatformId = null) {
+    this.dom.postPlatformSelect.innerHTML = "";
+    const platformsToShow = this.platforms.filter(p => p.enabled !== false || p.id === includePlatformId);
+    platformsToShow.forEach(platform => {
+      const opt = document.createElement("option");
+      opt.value = platform.id;
+      opt.textContent = platform.name + (platform.enabled === false ? ` (${this.t("cp_status_disabled")})` : "");
+      this.dom.postPlatformSelect.appendChild(opt);
+    });
+  },
+  onPlatformSelectChanged() {
+    const platformId = this.dom.postPlatformSelect.value;
+    const platform = this.getPlatform(platformId);
+    this.dom.postTypeSelect.innerHTML = "";
+
+    if (platform && platform.postTypes) {
+      platform.postTypes.forEach(pt => {
+        const opt = document.createElement("option");
+        opt.value = pt.id;
+        opt.textContent = `${pt.name} (${pt.recommendedWidth}×${pt.recommendedHeight} - ${pt.aspectRatio})`;
+        this.dom.postTypeSelect.appendChild(opt);
+      });
+    }
+
+    this.updateLiveSpecHelper();
+    this.updateCaptionCounter();
+  },
+  updateLiveSpecHelper() {
+    const platformId = this.dom.postPlatformSelect.value;
+    const postTypeId = this.dom.postTypeSelect.value;
+    const postType = this.getPostType(platformId, postTypeId);
+
+    if (!postType) {
+      this.dom.liveSpecHelper.innerHTML = `<span style="color: var(--text-muted)">Select a post type to see 2026 specs.</span>`;
+      return;
+    }
+
+    // Update collapsible summary headers
+    if (this.dom.specSummaryTitle) {
+      this.dom.specSummaryTitle.textContent = `Standard requirements: ${postType.name}`;
+    }
+    if (this.dom.specSummaryBadge) {
+      this.dom.specSummaryBadge.textContent = `${postType.aspectRatio} • ${postType.recommendedWidth}×${postType.recommendedHeight} px`;
+    }
+
+    this.dom.liveSpecHelper.innerHTML = `
+      <div class="spec-helper-title">
+        <span>2026 standard requirements: ${postType.name}</span>
+      </div>
+      <div class="spec-helper-grid">
+        <div class="spec-helper-item">
+          <strong>${postType.aspectRatio}</strong>
+          <span>Aspect Ratio</span>
+        </div>
+        <div class="spec-helper-item">
+          <strong>${postType.recommendedWidth} × ${postType.recommendedHeight} px</strong>
+          <span>Optimal Resolution</span>
+        </div>
+        <div class="spec-helper-item">
+          <strong>${postType.format}</strong>
+          <span>Format & Encoding</span>
+        </div>
+        <div class="spec-helper-item">
+          <strong>${postType.maxDuration || "N/A"}</strong>
+          <span>Duration / Count</span>
+        </div>
+        <div class="spec-helper-item">
+          <strong>${postType.maxFileSize || "Standard"}</strong>
+          <span>File Size Limit</span>
+        </div>
+        <div class="spec-helper-item">
+          <strong>${postType.captionLimit || 2200} chars</strong>
+          <span>Caption Limit</span>
+        </div>
+      </div>
+      <div class="spec-safe-zone">
+        <strong>Safe zone:</strong> ${postType.safeZone || "Keep text centered to avoid UI overlay obstructions."}
+      </div>
+    `;
+
+    // Update aspect tag in preview if waiting
+    if (this.dom.previewAspectPill) {
+      this.dom.previewAspectPill.textContent = `Standard: ${postType.aspectRatio}`;
+    }
+  },
+  updateCaptionCounter() {
+    const platformId = this.dom.postPlatformSelect.value;
+    const postTypeId = this.dom.postTypeSelect.value;
+    const postType = this.getPostType(platformId, postTypeId);
+    const limit = postType?.captionLimit || 2200;
+    const currentLength = this.dom.postDescInput.value.length;
+
+    this.dom.captionCounter.textContent = `${currentLength} / ${limit} chars`;
+    if (currentLength > limit) {
+      this.dom.captionCounter.style.color = "var(--danger)";
+      this.dom.captionCounter.textContent += " (Exceeds platform standard limit!)";
+    } else {
+      this.dom.captionCounter.style.color = "var(--text-muted)";
+    }
+  },
+  setPostMedia(media) {
+    this.currentPostMedia = {
+      type: media.type || "photo",
+      url: media.url,
+      name: media.name || "media-file",
+      aspectRatio: media.aspectRatio || media.ratio || "9:16",
+      count: media.count || 1
+    };
+
+    if (this.currentPostMedia.type === "video") {
+      this.dom.previewImg.style.display = "none";
+      this.dom.previewVideo.style.display = "block";
+      this.dom.previewVideo.src = this.currentPostMedia.url;
+    } else {
+      this.dom.previewVideo.style.display = "none";
+      this.dom.previewImg.style.display = "block";
+      this.dom.previewImg.src = this.currentPostMedia.url;
+    }
+
+    this.dom.previewMediaName.textContent = `${this.currentPostMedia.name} (${this.currentPostMedia.type === 'video' ? 'Video' : (this.currentPostMedia.count > 1 ? this.currentPostMedia.count + ' photos' : 'Single Photo')})`;
+  },
+  handleFileSelect(e) {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      this.processUploadedFiles(files);
+    }
+  },
+  processUploadedFiles(files) {
+    const firstFile = files[0];
+    const isVideo = firstFile.type.startsWith("video/");
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      this.setPostMedia({
+        type: isVideo ? "video" : (files.length > 1 ? "photos" : "photo"),
+        url: event.target.result,
+        name: firstFile.name,
+        aspectRatio: isVideo ? "9:16" : (files.length > 1 ? "4:5" : "1:1"),
+        count: files.length
+      });
+    };
+
+    reader.readAsDataURL(firstFile);
+  },
+  handleUrlApply() {
+    const url = this.dom.mediaUrlInput.value.trim();
+    if (!url) return;
+    const isVideo = url.endsWith(".mp4") || url.endsWith(".mov") || url.endsWith(".webm");
+    this.setPostMedia({
+      type: isVideo ? "video" : "photo",
+      url: url,
+      name: url.substring(url.lastIndexOf("/") + 1) || "linked-media",
+      aspectRatio: isVideo ? "9:16" : "4:5",
+      count: 1
+    });
+    this.dom.mediaUrlInput.value = "";
+  },
+  handlePostFormSubmit(e) {
+    e.preventDefault();
+
+    if (this.isDemoAccount()) {
+      alert(this.t("demo_no_save_post"));
+      return;
+    }
+
+    // If media not set yet, check if URL input has text
+    if (!this.currentPostMedia) {
+      const urlText = this.dom.mediaUrlInput.value.trim();
+      if (urlText) {
+        this.handleUrlApply();
+      } else {
+        alert(this.t("alert_media_required"));
+        return;
+      }
+    }
+
+    const editId = this.dom.postEditId.value;
+    if (!editId && this.isPastEventDate(this.dom.postDateInput.value)) {
+      alert(this.t("post_past_create_unavailable"));
+      return;
+    }
+    const platformId = this.dom.postPlatformSelect.value;
+    const postTypeId = this.dom.postTypeSelect.value;
+    const postType = this.getPostType(platformId, postTypeId);
+
+    const postData = {
+      id: editId || `post-${Date.now()}`,
+      platformId: platformId,
+      postTypeId: postTypeId,
+      date: this.dom.postDateInput.value,
+      time: this.dom.postTimeInput.value || "12:00",
+      title: this.dom.postTitleInput.value.trim(),
+      description: this.dom.postDescInput.value.trim(),
+      status: this.dom.postStatusSelect.value,
+      mediaType: this.currentPostMedia.type,
+      mediaUrl: this.currentPostMedia.url,
+      mediaCount: this.currentPostMedia.count,
+      mediaNames: [this.currentPostMedia.name],
+      aspectRatio: postType ? postType.aspectRatio : (this.currentPostMedia.aspectRatio || "9:16"),
+      shareLink: this.dom.postShareLink ? this.dom.postShareLink.value.trim() : ""
+    };
+
+    if (editId) {
+      const index = this.posts.findIndex(p => p.id === editId);
+      if (index !== -1) {
+        this.posts[index] = postData;
+      }
+    } else {
+      this.posts.push(postData);
+
+      // Link event if this post was created via event promotion notification
+      if (this.eventPendingPromotionId) {
+        const evt = this.events.find(e => e.id === this.eventPendingPromotionId);
+        if (evt) {
+          evt.socialStatus = "promoted";
+          evt.promotedPostId = postData.id;
+          evt.promotedAt = new Date().toISOString();
+          this.saveEvents();
+        }
+        this.eventPendingPromotionId = null;
+      }
+    }
+
+    this.savePosts();
+    this.updateSocialNotificationBadge();
+    this.dom.postDialog.close();
+    this.render();
+  },
+  openShareLink(urlOrPath) {
+    if (!urlOrPath) return;
+    const clean = urlOrPath.trim();
+    if (clean.startsWith("http://") || clean.startsWith("https://")) {
+      window.open(clean, "_blank", "noopener,noreferrer");
+    } else {
+      // Local or network share path (e.g. \\server\share or f:\...)
+      this.copyToClipboard(clean);
+      alert((this.t("alert_share_path_detail")).replace("${path}", clean));
+    }
+  },
+  // Post Detail Modal
+  openPostDetailModal(postId) {
+    const post = this.posts.find(p => p.id === postId);
+    if (!post) return;
+
+    this.currentDetailPostId = postId;
+    const platform = this.getPlatform(post.platformId);
+    const postType = this.getPostType(post.platformId, post.postTypeId);
+
+    // Media renderer
+    if (post.mediaType === "video") {
+      this.dom.detailMediaBox.innerHTML = `
+        <video src="${post.mediaUrl}" controls style="max-width: 100%; max-height: 420px;"></video>
+      `;
+    } else {
+      this.dom.detailMediaBox.innerHTML = `
+        <img src="${post.mediaUrl}" alt="Post Media" style="max-width: 100%; max-height: 420px; object-fit: contain;">
+      `;
+    }
+
+    // Platform badge
+    const iconSrc = this.getPlatformIcon(platform);
+    this.dom.detailPlatformBadge.style.background = platform ? platform.color : "var(--primary)";
+    this.dom.detailPlatformBadge.style.color = "#fff";
+    this.dom.detailPlatformBadge.innerHTML = `
+      <img class="platform-favicon" src="${iconSrc}" alt="" onerror="this.style.display='none'" style="filter: brightness(1.2);">
+      <span>${platform ? platform.name : post.platformId}</span>
+    `;
+
+    this.dom.detailTitle.textContent = post.title || "Untitled Post";
+    this.dom.detailDateTime.textContent = `${post.date} at ${post.time || "12:00"}`;
+    this.dom.detailPostType.textContent = `${postType ? postType.name : "Post"} (${post.aspectRatio || '9:16'})`;
+    
+    const mediaCountStr = post.mediaCount > 1 ? ` (${post.mediaCount} slides)` : "";
+    this.dom.detailMediaFormat.textContent = `${post.mediaType === 'video' ? 'Video clip' : 'Photo'}${mediaCountStr}`;
+    
+    this.dom.detailStatus.textContent = (post.status || "Scheduled").toUpperCase();
+    this.dom.detailStatus.style.color = post.status === "published" ? "#10b981" : "#60a5fa";
+
+    // Asset & File Share Section
+    if (this.dom.detailShareBox) {
+      if (post.shareLink) {
+        this.dom.detailShareBox.style.display = "block";
+        this.dom.detailShareBox.classList.remove("empty");
+        this.dom.detailShareLinkText.textContent = post.shareLink;
+        this.dom.detailShareLinkText.href = post.shareLink.startsWith("http") ? post.shareLink : "#";
+        this.dom.detailShareLinkText.onclick = (e) => {
+          if (!post.shareLink.startsWith("http")) {
+            e.preventDefault();
+            this.openShareLink(post.shareLink);
+          }
+        };
+        if (this.dom.btnDetailOpenShare) {
+          this.dom.btnDetailOpenShare.style.display = "inline-flex";
+          this.dom.btnDetailOpenShare.onclick = (e) => {
+            e.preventDefault();
+            this.openShareLink(post.shareLink);
+          };
+        }
+        if (this.dom.btnDetailCopyShare) this.dom.btnDetailCopyShare.style.display = "inline-flex";
+        if (this.dom.detailShareStatusBadge) this.dom.detailShareStatusBadge.textContent = "Assets Linked";
+      } else {
+        this.dom.detailShareBox.style.display = "block";
+        this.dom.detailShareBox.classList.add("empty");
+        this.dom.detailShareLinkText.textContent = "No external file share attached. (Click Edit Post to attach Drive, Dropbox, or Server share)";
+        this.dom.detailShareLinkText.removeAttribute("href");
+        this.dom.detailShareLinkText.onclick = null;
+        if (this.dom.btnDetailOpenShare) this.dom.btnDetailOpenShare.style.display = "none";
+        if (this.dom.btnDetailCopyShare) this.dom.btnDetailCopyShare.style.display = "none";
+        if (this.dom.detailShareStatusBadge) this.dom.detailShareStatusBadge.textContent = "No Share Attached";
+      }
+    }
+
+    this.dom.detailDescBox.textContent = post.description || "No caption provided.";
+
+    this.dom.detailDialog.showModal();
+  },
+  deleteCurrentDetailPost() {
+    if (!this.currentDetailPostId) return;
+    if (this.isDemoAccount()) {
+      alert(this.t("demo_no_delete"));
+      return;
+    }
+    if (confirm(this.t("confirm_delete_post"))) {
+      this.posts = this.posts.filter(p => p.id !== this.currentDetailPostId);
+      this.savePosts();
+      this.dom.detailDialog.close();
+      this.render();
+    }
+  },
+  duplicateCurrentDetailPost() {
+    const post = this.posts.find(p => p.id === this.currentDetailPostId);
+    if (!post) return;
+    if (this.isDemoAccount()) {
+      alert(this.t("demo_no_save_post"));
+      return;
+    }
+
+    const duplicated = {
+      ...post,
+      id: `post-${Date.now()}`,
+      title: `${post.title} (Copy)`,
+      status: "draft"
+    };
+
+    this.posts.push(duplicated);
+    this.savePosts();
+    this.dom.detailDialog.close();
+    this.render();
+    alert(this.t("alert_post_duplicated"));
+  }
+};

@@ -15,7 +15,7 @@ test('server source and data files are not served', async ({ request }) => {
     const r = await request.get(BASE + p);
     expect(r.status(), p).toBe(404);
   }
-  expect((await request.get(BASE + '/app.js')).status()).toBe(200);
+  expect((await request.get(BASE + '/src/app.js')).status()).toBe(200);
   expect((await request.get(BASE + '/')).status()).toBe(200);
 });
 

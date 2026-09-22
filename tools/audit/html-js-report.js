@@ -1,6 +1,6 @@
 const fs=require('fs'),acorn=require('acorn'),walk=require('acorn-walk'),postcss=require('postcss'),sp=require('postcss-selector-parser');
 const D=(p=>require('fs').existsSync(p+'/public/index.html')?p+'/public/':p+'/')(require('path').resolve(process.argv[2]||'.'));const R=f=>fs.readFileSync(D+f,'utf8');
-const html=R('index.html'),js=R('app.js'),i18n=R('i18n.js'),seed=R('seed-data.js'),css=R('styles.css');
+const html=R('index.html'),js=require('./src-files.cjs').readApp(D),i18n=fs.readFileSync(require('./src-files.cjs').i18nPath(D),'utf8'),seed=fs.readFileSync(require('./src-files.cjs').seedPath(D),'utf8'),css=R('styles.css');
 const out=[];const P=s=>out.push(s);
 // CSS class set
 const cssC=new Set();postcss.parse(css).walkRules(r=>{try{sp(s=>s.walkClasses(n=>cssC.add(n.value))).processSync(r.selector)}catch{}});

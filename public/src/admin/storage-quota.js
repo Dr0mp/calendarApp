@@ -1,0 +1,279 @@
+// Admin: storage usage, quota alerts and cleanup.
+// Mixed into SocialCalendarApp.prototype by src/app.js; `this` is the app instance.
+import { DEFAULT_STORAGE_QUOTA_BYTES } from "../constants.js";
+
+export const storageQuotaMethods = {
+  calculateStorageUsage() {
+    let eventsBytes = 0;
+    this.events.forEach(evt => {
+      // Byte length of entire event record including heavy base64/URL covers
+      eventsBytes += JSON.stringify(evt).length;
+    });
+
+    let postsBytes = 0;
+    this.posts.forEach(post => {
+      postsBytes += JSON.stringify(post).length;
+    });
+
+    const realUsedBytes = eventsBytes + postsBytes;
+    const quotaBytes = this.storageQuotaBytes || DEFAULT_STORAGE_QUOTA_BYTES;
+
+    let usedBytes = realUsedBytes;
+    if (this.simulatedStorageRatio !== null && !isNaN(this.simulatedStorageRatio)) {
+      usedBytes = Math.round(quotaBytes * this.simulatedStorageRatio);
+    }
+
+    const percentUsed = Math.min(100, Math.max(0, (usedBytes / quotaBytes) * 100));
+    const isWarning = percentUsed >= 80 && percentUsed < 90;
+    const isCritical = percentUsed >= 90;
+
+    return {
+      realUsedBytes,
+      usedBytes,
+      quotaBytes,
+      percentUsed,
+      isWarning,
+      isCritical,
+      eventsBytes,
+      postsBytes,
+      freeBytes: Math.max(0, quotaBytes - usedBytes),
+      isSimulated: this.simulatedStorageRatio !== null
+    };
+  },
+  updateStorageQuotaDisplay() {
+    const stats = this.calculateStorageUsage();
+
+    // Top nav bar warning badge
+    if (this.dom.navAdminQuotaBadge) {
+      if (stats.isCritical) {
+        this.dom.navAdminQuotaBadge.style.display = "inline-flex";
+        this.dom.navAdminQuotaBadge.textContent = "!";
+        this.dom.navAdminQuotaBadge.title = `${this.t("notif_level_critical")}: ${stats.percentUsed.toFixed(1)}% / 8 GB`;
+      } else if (stats.isWarning) {
+        this.dom.navAdminQuotaBadge.style.display = "inline-flex";
+        this.dom.navAdminQuotaBadge.textContent = "!";
+        this.dom.navAdminQuotaBadge.title = `${this.t("notif_level_warning")}: ${stats.percentUsed.toFixed(1)}% / 8 GB`;
+      } else {
+        this.dom.navAdminQuotaBadge.style.display = "none";
+      }
+    }
+
+    // Admin announcement banner
+    if (this.dom.adminQuotaAlertBanner) {
+      if (stats.isCritical || stats.isWarning) {
+        this.dom.adminQuotaAlertBanner.style.display = "flex";
+        this.dom.adminQuotaAlertBanner.className = `admin-quota-banner ${stats.isCritical ? 'danger' : 'warning'}`;
+        if (this.dom.quotaBannerIcon) {
+          this.dom.quotaBannerIcon.textContent = "!";
+        }
+        if (this.dom.quotaBannerTitle) {
+          this.dom.quotaBannerTitle.textContent = this.t("admin_quota_alert_title") + ` (${stats.percentUsed.toFixed(1)}%)`;
+        }
+        if (this.dom.quotaBannerDesc) {
+          this.dom.quotaBannerDesc.textContent = this.t("admin_quota_alert_desc");
+        }
+      } else {
+        this.dom.adminQuotaAlertBanner.style.display = "none";
+      }
+    }
+
+    // Admin Panel Section 4
+    if (this.dom.adminStorageUsedText) {
+      this.dom.adminStorageUsedText.textContent = this.formatBytes(stats.usedBytes);
+    }
+    if (this.dom.adminStorageTotalText) {
+      this.dom.adminStorageTotalText.textContent = `${this.t("admin_storage_used_sub")} (${this.formatBytes(stats.quotaBytes)})${stats.isSimulated ? ' [Sim]' : ''}`;
+    }
+    if (this.dom.adminStoragePctBadge) {
+      this.dom.adminStoragePctBadge.textContent = `${stats.percentUsed.toFixed(1)}%`;
+      this.dom.adminStoragePctBadge.className = `storage-pct-badge ${stats.isCritical ? 'danger' : (stats.isWarning ? 'warning' : '')}`;
+    }
+    if (this.dom.adminStorageMeterFill) {
+      this.dom.adminStorageMeterFill.style.width = `${stats.percentUsed}%`;
+      this.dom.adminStorageMeterFill.className = `storage-meter-fill ${stats.isCritical ? 'danger' : (stats.isWarning ? 'warning' : '')}`;
+    }
+    if (this.dom.storageEventsSize) {
+      this.dom.storageEventsSize.textContent = this.formatBytes(stats.eventsBytes);
+    }
+    if (this.dom.storageEventsCount) {
+      this.dom.storageEventsCount.textContent = `(${this.events.length} ${this.t("yearly_events_count_plural")})`;
+    }
+    if (this.dom.storagePostsSize) {
+      this.dom.storagePostsSize.textContent = this.formatBytes(stats.postsBytes);
+    }
+    if (this.dom.storagePostsCount) {
+      this.dom.storagePostsCount.textContent = `(${this.posts.length} posts)`;
+    }
+    if (this.dom.storageFreeSize) {
+      this.dom.storageFreeSize.textContent = this.formatBytes(stats.freeBytes);
+    }
+    if (this.dom.storageStatusSub) {
+      this.dom.storageStatusSub.textContent = stats.isCritical ? this.t("notif_level_critical") : (stats.isWarning ? this.t("notif_level_warning") : this.t("admin_status_healthy"));
+      this.dom.storageStatusSub.style.color = stats.isCritical ? "#f87171" : (stats.isWarning ? "#fbbf24" : "#34d399");
+    }
+  },
+  getPastEvents(daysThreshold = null) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    return this.events.filter(e => {
+      const eventDateStr = e.endDate || e.startDate || e.date;
+      if (!eventDateStr) return false;
+      const [y, m, d] = eventDateStr.split("-").map(Number);
+      const eventDate = new Date(y, m - 1, d);
+
+      if (daysThreshold === null) {
+        return eventDate < today;
+      }
+      const cutoff = new Date();
+      cutoff.setDate(cutoff.getDate() - daysThreshold);
+      cutoff.setHours(0, 0, 0, 0);
+      return eventDate < cutoff;
+    });
+  },
+  openStorageCleanupModal() {
+    this.updateCleanupModalPreviews();
+    if (this.dom.storageCleanupDialog) {
+      this.dom.storageCleanupDialog.showModal();
+    }
+  },
+  updateCleanupModalPreviews() {
+    const stats = this.calculateStorageUsage();
+    if (this.dom.cleanupModalUsageLabel) {
+      this.dom.cleanupModalUsageLabel.textContent = `${this.formatBytes(stats.usedBytes)} / ${this.formatBytes(stats.quotaBytes)} (${stats.percentUsed.toFixed(1)}%)`;
+    }
+    if (this.dom.cleanupModalMeterFill) {
+      this.dom.cleanupModalMeterFill.style.width = `${stats.percentUsed}%`;
+      this.dom.cleanupModalMeterFill.className = `storage-meter-fill ${stats.isCritical ? 'danger' : (stats.isWarning ? 'warning' : '')}`;
+    }
+
+    // Filter preview for Past Events
+    const filterVal = this.dom.cleanupEventAgeSelect ? this.dom.cleanupEventAgeSelect.value : "all-past";
+    const days = filterVal === "all-past" ? null : parseInt(filterVal, 10);
+    const pastEvents = this.getPastEvents(days);
+
+    let estimatedBytes = 0;
+    pastEvents.forEach(e => {
+      estimatedBytes += JSON.stringify(e).length;
+    });
+
+    if (this.dom.cleanupPreviewEvents) {
+      this.dom.cleanupPreviewEvents.textContent = `Matches: ${pastEvents.length} past event(s) (Est. ~${this.formatBytes(estimatedBytes)} to free)`;
+    }
+
+    // Strip images preview
+    const pastEventsWithImage = this.getPastEvents(null).filter(e => !!e.facebookImage);
+    let stripBytes = 0;
+    pastEventsWithImage.forEach(e => {
+      stripBytes += (e.facebookImage || "").length;
+    });
+
+    if (this.dom.cleanupStripPreview) {
+      this.dom.cleanupStripPreview.textContent = `${pastEventsWithImage.length} past event(s) holding images (~${this.formatBytes(stripBytes)})`;
+    }
+
+    // Social media purge preview
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const oldPublishedPosts = this.posts.filter(p => p.status === "published" && p.date < todayStr && p.mediaUrl);
+    if (this.dom.cleanupSocialPreview) {
+      this.dom.cleanupSocialPreview.textContent = `${oldPublishedPosts.length} published post(s) with media`;
+    }
+  },
+  executeCleanupPastEvents() {
+    if (this.isDemoAccount()) {
+      alert(this.t("demo_no_cleanup"));
+      return;
+    }
+    const filterVal = this.dom.cleanupEventAgeSelect ? this.dom.cleanupEventAgeSelect.value : "all-past";
+    const days = filterVal === "all-past" ? null : parseInt(filterVal, 10);
+    const toDelete = this.getPastEvents(days);
+
+    if (toDelete.length === 0) {
+      alert(this.t("alert_no_past_events"));
+      return;
+    }
+
+    const desc = filterVal === "all-past" ? "all past events prior to today" : `events older than ${days} days`;
+    if (!confirm(this.t("confirm_cleanup_delete").replace("${count}", toDelete.length).replace("${desc}", desc))) {
+      return;
+    }
+
+    const idsToDelete = new Set(toDelete.map(e => e.id));
+    this.events = this.events.filter(e => !idsToDelete.has(e.id));
+    this.saveEvents();
+
+    if (this.simulatedStorageRatio !== null) {
+      this.saveSimulatedStorage(null);
+    }
+
+    this.updateCleanupModalPreviews();
+    this.updateStorageQuotaDisplay();
+    this.renderAdminPanel();
+    this.renderEventsCalendar();
+    this.updateSocialNotificationBadge();
+
+    alert(this.t("alert_events_deleted").replace("${count}", toDelete.length));
+  },
+  executeStripPastImages() {
+    if (this.isDemoAccount()) {
+      alert(this.t("demo_no_cleanup"));
+      return;
+    }
+    const pastEventsWithImage = this.getPastEvents(null).filter(e => !!e.facebookImage);
+    if (pastEventsWithImage.length === 0) {
+      alert(this.t("alert_no_images_strip"));
+      return;
+    }
+
+    if (!confirm(this.t("confirm_cleanup_strip").replace("${count}", pastEventsWithImage.length))) {
+      return;
+    }
+
+    pastEventsWithImage.forEach(e => {
+      e.facebookImage = null;
+    });
+    this.saveEvents();
+
+    if (this.simulatedStorageRatio !== null) {
+      this.saveSimulatedStorage(null);
+    }
+
+    this.updateCleanupModalPreviews();
+    this.updateStorageQuotaDisplay();
+    this.renderAdminPanel();
+    this.renderEventsCalendar();
+
+    alert(this.t("alert_images_stripped").replace("${count}", pastEventsWithImage.length));
+  },
+  executeCleanupSocialMedia() {
+    if (this.isDemoAccount()) {
+      alert(this.t("demo_no_cleanup"));
+      return;
+    }
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const oldPublishedPosts = this.posts.filter(p => p.status === "published" && p.date < todayStr && p.mediaUrl);
+    if (oldPublishedPosts.length === 0) {
+      alert(this.t("alert_no_media_purge"));
+      return;
+    }
+
+    if (!confirm(this.t("confirm_cleanup_purge").replace("${count}", oldPublishedPosts.length))) {
+      return;
+    }
+
+    oldPublishedPosts.forEach(p => {
+      p.mediaUrl = null;
+    });
+    this.savePosts();
+
+    if (this.simulatedStorageRatio !== null) {
+      this.saveSimulatedStorage(null);
+    }
+
+    this.updateCleanupModalPreviews();
+    this.updateStorageQuotaDisplay();
+    this.render();
+
+    alert(this.t("alert_media_purged").replace("${count}", oldPublishedPosts.length));
+  }
+};
