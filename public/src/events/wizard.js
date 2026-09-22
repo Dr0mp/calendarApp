@@ -83,7 +83,7 @@ export const wizardMethods = {
       stepItem.appendChild(label);
 
       if (stepNum < this.wizardCurrentStep) {
-        stepItem.style.cursor = "pointer";
+        stepItem.classList.add("is-clickable");
         stepItem.addEventListener("click", () => {
           this.setWizardStep(stepNum);
         });

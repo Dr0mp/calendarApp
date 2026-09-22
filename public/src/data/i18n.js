@@ -646,7 +646,9 @@ export const TRANSLATIONS = {
     fb_invalid: "Invalid",
     // Plurals
     count_events_one: "{count} eveniment",
-    count_posts_one: "{count} postare"
+    count_posts_one: "{count} postare",
+    // Post editor: caption counter
+    caption_over_limit: "depășește limita standard a platformei!"
 
   },
 
@@ -1295,7 +1297,9 @@ export const TRANSLATIONS = {
     fb_invalid: "Invalid",
     // Plurals
     count_events_one: "{count} event",
-    count_posts_one: "{count} post"
+    count_posts_one: "{count} post",
+    // Post editor: caption counter
+    caption_over_limit: "exceeds the platform's standard limit!"
   }
 };
 

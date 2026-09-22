@@ -687,7 +687,7 @@ export const eventViewMethods = {
       cell.appendChild(dayHeader);
 
       // Clicking day number or cell background zooms directly into that Day's Timeline
-      cell.style.cursor = "pointer";
+      cell.classList.add("is-clickable");
       cell.addEventListener("click", (e) => {
         if (e.target.closest(".event-card-pill") || e.target.closest(".btn-add-day")) return;
         this.setEventsZoomLevel("daily", cellDateString);

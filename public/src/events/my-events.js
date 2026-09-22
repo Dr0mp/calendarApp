@@ -307,12 +307,10 @@ export const myEventsMethods = {
     const canViewPrivateDesc = !isLocked || (this.currentUser && (this.currentUser.role === 'admin' || this.currentUser.role === 'moderator' || this.currentUser.id === event.creatorId || this.currentUser.username === event.creatorUsername));
     if (!canViewPrivateDesc) {
       this.dom.eventDetailDesc.textContent = this.t("event_private_desc_hidden");
-      this.dom.eventDetailDesc.style.fontStyle = "italic";
-      this.dom.eventDetailDesc.style.opacity = "0.75";
+      this.dom.eventDetailDesc.classList.add("is-private");
     } else {
       this.dom.eventDetailDesc.textContent = event.description || this.t("event_no_notes");
-      this.dom.eventDetailDesc.style.fontStyle = "normal";
-      this.dom.eventDetailDesc.style.opacity = "1";
+      this.dom.eventDetailDesc.classList.remove("is-private");
     }
 
     // Facebook Page Cover presentation

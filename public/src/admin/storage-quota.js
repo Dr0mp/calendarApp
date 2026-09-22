@@ -109,7 +109,7 @@ export const storageQuotaMethods = {
     }
     if (this.dom.storageStatusSub) {
       this.dom.storageStatusSub.textContent = stats.isCritical ? this.t("notif_level_critical") : (stats.isWarning ? this.t("notif_level_warning") : this.t("admin_status_healthy"));
-      this.dom.storageStatusSub.style.color = stats.isCritical ? "#f87171" : (stats.isWarning ? "#fbbf24" : "#34d399");
+      this.dom.storageStatusSub.dataset.tone = stats.isCritical ? "danger" : (stats.isWarning ? "warning" : "success");
     }
   },
   getPastEvents(daysThreshold = null) {

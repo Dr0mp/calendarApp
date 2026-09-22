@@ -12,7 +12,7 @@ const rows = [
   ['styles.css lines', lines('public/styles.css') || lines('styles.css')],
   ['duplicate selectors', n(css, /SELECTORS DEFINED MULTIPLE TIMES \(same context\): (\d+)/)],
   ['overridden props', n(css, /PROPERTY OVERRIDDEN BY LATER RULE OF SAME SELECTOR: (\d+)/)],
-  ['!important', n(css, /## !important: (\d+)/)],
+  ['!important (excl. utilities, [hidden])', n(css, /## !important: (\d+)/)],
   ['hardcoded colors (css, unique)', n(css, /HARDCODED COLORS outside :root vars: (\d+)/)],
   ['font-size values', n(css, /FONT-SIZE VALUES: (\d+)/)],
   ['border-radius values', n(css, /BORDER-RADIUS: (\d+)/)],

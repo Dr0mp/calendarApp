@@ -216,13 +216,9 @@ export const postEditorMethods = {
     const limit = postType?.captionLimit || 2200;
     const currentLength = this.dom.postDescInput.value.length;
 
-    this.dom.captionCounter.textContent = `${currentLength} / ${limit} chars`;
-    if (currentLength > limit) {
-      this.dom.captionCounter.style.color = "var(--danger)";
-      this.dom.captionCounter.textContent += " (Exceeds platform standard limit!)";
-    } else {
-      this.dom.captionCounter.style.color = "var(--text-muted)";
-    }
+    const over = currentLength > limit;
+    this.dom.captionCounter.textContent = `${currentLength} / ${this.tf("spec_chars", { count: limit })}${over ? ` (${this.t("caption_over_limit")})` : ""}`;
+    this.dom.captionCounter.classList.toggle("is-over-limit", over);
   },
   setPostMedia(media) {
     this.currentPostMedia = {
@@ -386,8 +382,7 @@ export const postEditorMethods = {
     // Platform badge
     const iconSrc = this.getPlatformIcon(platform);
     this.dom.detailPlatformBadge.style.background = platform ? platform.color : "var(--primary)";
-    this.dom.detailPlatformBadge.style.color = "#fff";
-    this.dom.detailPlatformBadge.innerHTML = `
+        this.dom.detailPlatformBadge.innerHTML = `
       <img class="platform-favicon u-brighten" src="${iconSrc}" alt="" data-fallback="hide">
       <span>${platform ? platform.name : post.platformId}</span>
     `;
@@ -400,7 +395,7 @@ export const postEditorMethods = {
     this.dom.detailMediaFormat.textContent = `${this.t(post.mediaType === "video" ? "media_video" : "media_photo")}${mediaCountStr}`;
     
     this.dom.detailStatus.textContent = this.t(`post_status_${post.status || "scheduled"}`).toUpperCase();
-    this.dom.detailStatus.style.color = post.status === "published" ? "#10b981" : "#60a5fa";
+    this.dom.detailStatus.classList.toggle("is-published", post.status === "published");
 
     // Asset & File Share Section
     if (this.dom.detailShareBox) {

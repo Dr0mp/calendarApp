@@ -43,14 +43,14 @@ export const socialCalendarMethods = {
     if (this.dom.mediaDropZone) {
       this.dom.mediaDropZone.addEventListener("dragover", (e) => {
         e.preventDefault();
-        this.dom.mediaDropZone.style.borderColor = "var(--primary)";
+        this.dom.mediaDropZone.classList.add("is-dragover");
       });
       this.dom.mediaDropZone.addEventListener("dragleave", () => {
-        this.dom.mediaDropZone.style.borderColor = "";
+        this.dom.mediaDropZone.classList.remove("is-dragover");
       });
       this.dom.mediaDropZone.addEventListener("drop", (e) => {
         e.preventDefault();
-        this.dom.mediaDropZone.style.borderColor = "";
+        this.dom.mediaDropZone.classList.remove("is-dragover");
         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
           this.processUploadedFiles(e.dataTransfer.files);
         }
