@@ -460,39 +460,6 @@ export const INITIAL_POSTS = [
   }
 ];
 
-// Default System Users (Public Profiles for Local Mocking / Fallbacks)
-export const DEFAULT_USERS = [
-  {
-    id: "user-admin",
-    username: "admin",
-    name: "System Admin",
-    role: "admin",
-    avatar: "icon-shield",
-    color: "#ef4444",
-    createdAt: "2026-09-01"
-  },
-  {
-    id: "user-demo",
-    username: "demo",
-    name: "Demo Utilizator",
-    role: "user",
-    avatar: "icon-user",
-    color: "#8b5cf6",
-    createdAt: "2026-09-01",
-    isDemo: true
-  },
-  {
-    id: "user-demo-admin",
-    username: "demo_admin",
-    name: "Demo Admin",
-    role: "admin",
-    avatar: "icon-shield",
-    color: "#f59e0b",
-    createdAt: "2026-09-01",
-    isDemo: true
-  }
-];
-
 // Initial Events for the Shared Events Calendar
 export const INITIAL_EVENTS = [
   {

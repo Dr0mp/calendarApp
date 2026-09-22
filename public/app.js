@@ -1,4 +1,4 @@
-import { DEFAULT_PLATFORMS, INITIAL_POSTS, DEFAULT_USERS, INITIAL_EVENTS, DEFAULT_SPACES, DEFAULT_ROOMS } from "./seed-data.js";
+import { DEFAULT_PLATFORMS, INITIAL_POSTS, INITIAL_EVENTS, DEFAULT_SPACES, DEFAULT_ROOMS } from "./seed-data.js";
 import { TRANSLATIONS, MONTH_NAMES, SHORT_MONTH_NAMES, WEEKDAY_NAMES } from "./i18n.js";
 
 // Storage Keys
@@ -8,12 +8,16 @@ const STORAGE_PREFS_KEY = "social_cal_prefs_2026_v1";
 const STORAGE_LANG_KEY = "cal_suite_lang_v1";
 const STORAGE_THEME_KEY = "cal_suite_theme_v1";
 
-const STORAGE_USERS_KEY = "cal_suite_users_v1";
 const STORAGE_EVENTS_KEY = "cal_suite_events_v1";
 const STORAGE_SPACES_KEY = "cal_suite_spaces_v2";
 const STORAGE_ROOMS_KEY = "cal_suite_rooms_v2";
 const STORAGE_ACTIVE_APP_KEY = "cal_suite_active_app_v1";
 const STORAGE_STORAGE_SIM_KEY = "cal_suite_storage_sim_v1";
+// Storage/parse failures used to be swallowed silently; keep them visible in the console.
+function warnStorage(error) {
+  console.warn("[storage]", error);
+}
+
 const DEFAULT_STORAGE_QUOTA_BYTES = 8 * 1024 * 1024 * 1024; // 8 GB
 
 class SocialCalendarApp {
@@ -25,7 +29,7 @@ class SocialCalendarApp {
     this.posts = this.loadPosts();
 
     // Users, Spaces, Accommodation Rooms & Team Events Data
-    this.users = this.loadUsers();
+    this.users = []; // filled from the server by fetchServerUsers()
     this.spaces = this.loadSpaces();
     this.rooms = this.loadRooms();
     this.events = this.loadEvents();
@@ -36,7 +40,9 @@ class SocialCalendarApp {
 
     // Storage Quota State (8 GB Cap)
     this.storageQuotaBytes = DEFAULT_STORAGE_QUOTA_BYTES;
-    this.simulatedStorageRatio = this.loadSimulatedStorage();
+    // Developer-only quota simulator: open the app with ?dev=1 to show it.
+    this.devMode = new URLSearchParams(location.search).has("dev");
+    this.simulatedStorageRatio = this.devMode ? this.loadSimulatedStorage() : null;
     
     this.activeApp = "login";
     this.pendingLoginTarget = null;
@@ -72,6 +78,7 @@ class SocialCalendarApp {
     this.theme = this.loadTheme();
 
     this.initElements();
+    this.dom.storageSimToolbar?.toggleAttribute("hidden", !this.devMode);
     this.applyTheme(this.theme);
     this.loadPrefs();
     this.bindEvents();
@@ -144,32 +151,6 @@ class SocialCalendarApp {
     }
   }
 
-  // Users Storage
-  loadUsers() {
-    try {
-      const stored = localStorage.getItem(STORAGE_USERS_KEY);
-      if (stored) {
-        let users = JSON.parse(stored);
-        const validUsernames = ["admin", "demo", "demo_admin"];
-        users = users.filter(u => validUsernames.includes(u.username));
-        DEFAULT_USERS.forEach(defUser => {
-          if (!users.some(u => u.username === defUser.username)) {
-            users.push({ ...defUser });
-          }
-        });
-        localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(users));
-        return users;
-      }
-    } catch (e) {}
-    return JSON.parse(JSON.stringify(DEFAULT_USERS));
-  }
-
-  saveUsers() {
-    try {
-      localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(this.users));
-    } catch (e) {}
-  }
-
   // Spaces & Venues Storage
   loadSpaces() {
     try {
@@ -182,14 +163,14 @@ class SocialCalendarApp {
         localStorage.setItem(STORAGE_SPACES_KEY, JSON.stringify(spaces));
         return spaces;
       }
-    } catch (e) {}
+    } catch (e) { warnStorage(e); }
     return JSON.parse(JSON.stringify(DEFAULT_SPACES || []));
   }
 
   saveSpaces() {
     try {
       localStorage.setItem(STORAGE_SPACES_KEY, JSON.stringify(this.spaces));
-    } catch (e) {}
+    } catch (e) { warnStorage(e); }
   }
 
   // Accommodation / Sleeping Rooms Storage
@@ -204,14 +185,14 @@ class SocialCalendarApp {
         localStorage.setItem(STORAGE_ROOMS_KEY, JSON.stringify(rooms));
         return rooms;
       }
-    } catch (e) {}
+    } catch (e) { warnStorage(e); }
     return JSON.parse(JSON.stringify(DEFAULT_ROOMS || []));
   }
 
   saveRooms() {
     try {
       localStorage.setItem(STORAGE_ROOMS_KEY, JSON.stringify(this.rooms));
-    } catch (e) {}
+    } catch (e) { warnStorage(e); }
   }
 
   // Events Storage
@@ -221,14 +202,14 @@ class SocialCalendarApp {
       if (stored) {
         return JSON.parse(stored);
       }
-    } catch (e) {}
+    } catch (e) { warnStorage(e); }
     return JSON.parse(JSON.stringify(INITIAL_EVENTS));
   }
 
   saveEvents() {
     try {
       localStorage.setItem(STORAGE_EVENTS_KEY, JSON.stringify(this.events));
-    } catch (e) {}
+    } catch (e) { warnStorage(e); }
     this.updateStorageQuotaDisplay();
     this.updateMyEventsBadgeCount();
     if (this.activeApp === "events" && this.eventsLayoutMode === "my-events") {
@@ -351,7 +332,7 @@ class SocialCalendarApp {
       } else {
         localStorage.setItem(STORAGE_STORAGE_SIM_KEY, String(ratio));
       }
-    } catch (e) {}
+    } catch (e) { warnStorage(e); }
     this.simulatedStorageRatio = ratio;
   }
 
@@ -359,10 +340,10 @@ class SocialCalendarApp {
   // One-time removal of localStorage keys written by earlier builds.
   cleanupLegacyStorage() {
     const SCHEMA_KEY = "cal_suite_schema";
-    const SCHEMA_VERSION = 2;
+    const SCHEMA_VERSION = 3;
     try {
       if (Number(localStorage.getItem(SCHEMA_KEY)) >= SCHEMA_VERSION) return;
-      ["cal_suite_auth_session_v1", "cal_suite_spaces_v1", "cal_suite_rooms_v1"].forEach(k => localStorage.removeItem(k));
+      ["cal_suite_auth_session_v1", "cal_suite_users_v1", "cal_suite_spaces_v1", "cal_suite_rooms_v1"].forEach(k => localStorage.removeItem(k));
       localStorage.setItem(SCHEMA_KEY, String(SCHEMA_VERSION));
     } catch (e) {
       console.warn("Legacy storage cleanup skipped:", e);
@@ -427,14 +408,14 @@ class SocialCalendarApp {
         eventsLayoutMode: this.eventsLayoutMode,
         adminActiveCategory: this.adminActiveCategory
       }));
-    } catch (e) {}
+    } catch (e) { warnStorage(e); }
   }
 
   loadLanguage() {
     try {
       const stored = localStorage.getItem(STORAGE_LANG_KEY);
       if (stored === "en" || stored === "ro") return stored;
-    } catch (e) {}
+    } catch (e) { warnStorage(e); }
     // Default to Romanian ('ro')
     return "ro";
   }
@@ -443,14 +424,14 @@ class SocialCalendarApp {
     this.currentLang = lang;
     try {
       localStorage.setItem(STORAGE_LANG_KEY, lang);
-    } catch (e) {}
+    } catch (e) { warnStorage(e); }
   }
 
   loadTheme() {
     try {
       const stored = localStorage.getItem(STORAGE_THEME_KEY);
       if (stored === "light" || stored === "dark") return stored;
-    } catch (e) {}
+    } catch (e) { warnStorage(e); }
     return "light";
   }
 
@@ -465,7 +446,7 @@ class SocialCalendarApp {
       button.title = label;
       button.setAttribute("aria-pressed", String(this.theme === "light"));
     });
-    try { localStorage.setItem(STORAGE_THEME_KEY, this.theme); } catch (e) {}
+    try { localStorage.setItem(STORAGE_THEME_KEY, this.theme); } catch (e) { warnStorage(e); }
   }
 
   toggleTheme() {
@@ -527,8 +508,6 @@ class SocialCalendarApp {
     }
 
     // 2. Direct Login View
-    const dlBadge = document.querySelector("#direct-login-view .portal-brand-badge");
-    if (dlBadge) dlBadge.textContent = this.t("direct_login_badge");
     const dlTitle = document.querySelector(".direct-login-title");
     if (dlTitle) dlTitle.textContent = this.t("direct_login_title");
     const dlSubtitle = document.querySelector(".direct-login-subtitle");
@@ -728,7 +707,6 @@ class SocialCalendarApp {
     if (this.dom.loginSubmitBtn) this.dom.loginSubmitBtn.textContent = this.t("login_submit_btn");
 
     // Schedule Page & My Events Page
-    if (this.dom.schedulePageTitle) this.dom.schedulePageTitle.textContent = this.t("event_dialog_create_title");
     if (this.dom.myEventsPageTitle) this.dom.myEventsPageTitle.textContent = this.t("my_events_title");
     if (this.dom.myEventsSubtitle) this.dom.myEventsSubtitle.textContent = this.t("my_events_sub");
     const myEventsCreateLbl = document.getElementById("lbl-my-events-create-new");
@@ -752,8 +730,6 @@ class SocialCalendarApp {
     if (evDialogTitleLabel) evDialogTitleLabel.textContent = this.t("dropin_title_label");
     const evDialogDateLabel = document.querySelector("label[for='event-date-input']");
     if (evDialogDateLabel) evDialogDateLabel.textContent = this.t("dropin_date_label");
-    const evDialogEndDateLabel = document.querySelector("label[for='event-end-date-input']");
-    if (evDialogEndDateLabel) evDialogEndDateLabel.textContent = this.t("dropin_end_date_label");
     const evDialogRecurrentLabel = document.querySelector("#event-form .recurrence-box label.checkbox-label span");
     if (evDialogRecurrentLabel) evDialogRecurrentLabel.textContent = this.t("dropin_recurrent_label");
     const evDialogRecurrentRepeat = document.querySelector("label[for='event-recurrence-months']");
@@ -783,7 +759,6 @@ class SocialCalendarApp {
     if (this.dom.btnUseFbSample) this.dom.btnUseFbSample.textContent = this.t("dropin_use_sample_btn");
     const evDialogDescLabel = document.querySelector("label[for='event-desc-input']");
     if (evDialogDescLabel) evDialogDescLabel.textContent = this.t("dropin_desc_label");
-    if (this.dom.cancelEventDialogBtn) this.dom.cancelEventDialogBtn.textContent = this.t("event_cancel_btn");
     if (this.dom.saveEventBtn) this.dom.saveEventBtn.textContent = this.t("event_save_btn");
     if (this.wizardStepsConfig) {
       this.renderWizardIndicator();
@@ -895,9 +870,6 @@ class SocialCalendarApp {
     // Weekend watermark CSS variable
     document.documentElement.style.setProperty('--weekend-label', '"' + this.t("weekend_label") + '"');
 
-    // Portal card buttons
-    // (These will be re-set by updatePortalCardStatuses, which we also need to fix)
-
     // Edit User Dialog
     const editUserTitle = document.querySelector("#edit-user-dialog .dialog-header h2");
     if (editUserTitle) editUserTitle.textContent = this.t("edit_user_title");
@@ -916,6 +888,9 @@ class SocialCalendarApp {
 
   initElements() {
     this.dom = {
+      adminQuotaLimitBadge: document.getElementById("admin-quota-limit-badge"),
+      loginSubmitBtn: document.getElementById("login-submit-btn"),
+      savePostBtn: document.getElementById("save-post-btn"),
       // Universal Top Navigation Bar
       universalNavBar: document.getElementById("universal-nav-bar"),
       navEventsBtn: document.getElementById("nav-events-btn"),
@@ -929,7 +904,6 @@ class SocialCalendarApp {
       navUserName: document.getElementById("nav-user-name"),
       navUserRole: document.getElementById("nav-user-role"),
       navLogoutBtn: document.getElementById("nav-logout-btn"),
-      themeToggles: document.querySelectorAll("[data-theme-toggle]"),
 
       // Direct Login View
       directLoginView: document.getElementById("direct-login-view"),
@@ -980,7 +954,6 @@ class SocialCalendarApp {
 
       // Post Dialog
       postDialog: document.getElementById("post-dialog"),
-      postDialogTitle: document.getElementById("post-dialog-title"),
       postDialogActionText: document.getElementById("post-dialog-action-text"),
       closePostDialogBtn: document.getElementById("close-post-dialog-btn"),
       cancelPostDialogBtn: document.getElementById("cancel-post-dialog-btn"),
@@ -1070,12 +1043,9 @@ class SocialCalendarApp {
       btnZoomMonthly: document.getElementById("btn-zoom-monthly"),
       btnZoomYearly: document.getElementById("btn-zoom-yearly"),
       btnZoomIn: document.getElementById("btn-zoom-in"),
-      eventsZoomLevelBadge: document.getElementById("events-zoom-level-badge"),
-      eventsBannerZoomHint: document.getElementById("events-banner-zoom-hint"),
       eventsSimpleDropinView: document.getElementById("events-simple-dropin-view"),
       schedulePageShell: document.getElementById("schedule-page-shell"),
       schedulePageFormHost: document.getElementById("schedule-page-form-host"),
-      schedulePageTitle: document.getElementById("schedule-page-title"),
       myEventsPageShell: document.getElementById("my-events-page-shell"),
       myEventsPageTitle: document.getElementById("my-events-page-title"),
       myEventsSubtitle: document.getElementById("my-events-subtitle"),
@@ -1097,7 +1067,6 @@ class SocialCalendarApp {
       // Zoom Level Views
       eventsDailyView: document.getElementById("events-daily-view"),
       dailyTimelineHeaderBar: document.getElementById("daily-timeline-header-bar"),
-      dailyTimelineScrollWrap: document.getElementById("daily-timeline-scroll-wrap"),
       dailyTimelineBody: document.getElementById("daily-timeline-body"),
       eventsGridView: document.getElementById("events-grid-view"),
       eventsDaysGrid: document.getElementById("events-days-grid"),
@@ -1108,14 +1077,12 @@ class SocialCalendarApp {
       eventDialog: document.getElementById("event-dialog"),
       eventDialogFooter: document.getElementById("event-dialog-footer"),
       closeEventDialogBtn: document.getElementById("close-event-dialog-btn"),
-      cancelEventDialogBtn: document.getElementById("cancel-event-dialog-btn"),
       wizardStepsIndicator: document.getElementById("wizard-steps-indicator"),
       wizardStep3Host: document.getElementById("wizard-step-3-host"),
       wizardPrevBtn: document.getElementById("wizard-prev-btn"),
       wizardNextBtn: document.getElementById("wizard-next-btn"),
       saveEventBtn: document.getElementById("save-event-btn"),
       eventSmartSuggestionBox: document.getElementById("event-smart-suggestion-box"),
-      smartSuggestionTitle: document.getElementById("smart-suggestion-title"),
       smartConflictDetails: document.getElementById("smart-conflict-details"),
       smartSuggestionsList: document.getElementById("smart-suggestions-list"),
       eventDateWarning: document.getElementById("event-date-warning"),
@@ -1128,7 +1095,6 @@ class SocialCalendarApp {
       btnEntryTypeRoom: document.getElementById("btn-entry-type-room"),
       eventSpaceSelect: document.getElementById("event-space-select"),
       eventSpaceGroup: document.getElementById("event-space-group"),
-      eventRoomSelect: document.getElementById("event-room-select"),
       eventNeedsRoom: document.getElementById("event-needs-room"),
       eventRoomCategoryBlock: document.getElementById("event-room-category-block"),
       eventRoomCategoryHeader: document.getElementById("event-room-category-header"),
@@ -1146,7 +1112,6 @@ class SocialCalendarApp {
       eventCreatorDisplay: document.getElementById("event-creator-display"),
       eventDateGroup: document.getElementById("event-date-group"),
       eventDateInput: document.getElementById("event-date-input"),
-      eventEndDateInput: document.getElementById("event-end-date-input"),
       eventHourGroup: document.getElementById("event-hour-group"),
       eventHourInput: document.getElementById("event-hour-input"),
       eventDurationGroup: document.getElementById("event-duration-group"),
@@ -1206,7 +1171,6 @@ class SocialCalendarApp {
       // Admin Panel Elements
       adminUserCount: document.getElementById("admin-user-count"),
       adminEventCount: document.getElementById("admin-event-count"),
-      adminCategoryNavBar: document.getElementById("admin-category-nav-bar"),
       adminCatTabs: document.querySelectorAll("[data-admin-cat]"),
       adminUsersSection: document.getElementById("admin-users-section"),
       adminEventsSection: document.getElementById("admin-events-section"),
@@ -1268,6 +1232,7 @@ class SocialCalendarApp {
       storagePostsCount: document.getElementById("storage-posts-count"),
       storageFreeSize: document.getElementById("storage-free-size"),
       storageStatusSub: document.getElementById("storage-status-sub"),
+      storageSimToolbar: document.querySelector(".storage-sim-toolbar"),
       btnSimNormal: document.getElementById("btn-sim-normal"),
       btnSimWarning: document.getElementById("btn-sim-warning"),
       btnSimCritical: document.getElementById("btn-sim-critical"),
@@ -1611,7 +1576,6 @@ class SocialCalendarApp {
     this.dom.btnAddRoomBooking?.addEventListener("click", () => this.handleAddRoomBookingRow());
 
     this.dom.closeEventDialogBtn?.addEventListener("click", () => this.closeEventForm());
-    this.dom.cancelEventDialogBtn?.addEventListener("click", () => this.closeEventForm());
     this.dom.wizardPrevBtn?.addEventListener("click", () => this.prevWizardStep());
     this.dom.wizardNextBtn?.addEventListener("click", () => this.nextWizardStep());
     this.dom.eventForm?.addEventListener("submit", (e) => this.handleEventFormSubmit(e));
@@ -1622,18 +1586,9 @@ class SocialCalendarApp {
     if (this.dom.eventDateInput) {
       this.dom.eventDateInput.addEventListener("change", (e) => {
         const val = e.target.value;
-        if (this.dom.eventEndDateInput) this.dom.eventEndDateInput.value = val;
         this.updateFreeHoursBoard(val);
         this.checkEventDateConflict(val, val, this.dom.eventEditId?.value);
         this.findSmartSuggestions(val, this.dom.eventHourInput?.value, this.dom.eventDurationInput?.value, this.dom.eventEditId?.value);
-      });
-    }
-
-    if (this.dom.eventEndDateInput) {
-      this.dom.eventEndDateInput.addEventListener("change", (e) => {
-        const val = e.target.value || this.dom.eventDateInput?.value;
-        this.checkEventDateConflict(this.dom.eventDateInput?.value, val, this.dom.eventEditId?.value);
-        this.findSmartSuggestions(this.dom.eventDateInput?.value, this.dom.eventHourInput?.value, this.dom.eventDurationInput?.value, this.dom.eventEditId?.value);
       });
     }
 
@@ -1645,7 +1600,7 @@ class SocialCalendarApp {
 
     this.dom.eventDurationInput?.addEventListener("input", () => {
       this.updateFreeHoursBoard(this.dom.eventDateInput?.value);
-      this.checkEventDateConflict(this.dom.eventDateInput?.value, this.dom.eventEndDateInput?.value, this.dom.eventEditId?.value);
+      this.checkEventDateConflict(this.dom.eventDateInput?.value, this.dom.eventDateInput?.value, this.dom.eventEditId?.value);
       this.findSmartSuggestions(this.dom.eventDateInput?.value, this.dom.eventHourInput?.value, this.dom.eventDurationInput.value, this.dom.eventEditId?.value);
     });
 
@@ -3101,7 +3056,7 @@ class SocialCalendarApp {
     this.activeApp = viewName;
     try {
       localStorage.setItem(STORAGE_ACTIVE_APP_KEY, viewName);
-    } catch (e) {}
+    } catch (e) { warnStorage(e); }
 
     // Containers
     if (this.dom.directLoginView) {
@@ -3247,10 +3202,6 @@ class SocialCalendarApp {
     }
   }
 
-  updatePortalCardStatuses() {
-    // Portal was removed in favor of direct authentication
-  }
-
   // =========================================================================
   // AUTHENTICATION & SERVER REST HANDLERS
   // =========================================================================
@@ -3269,9 +3220,8 @@ class SocialCalendarApp {
         const data = await res.json();
         if (data.authenticated && data.user) {
           this.currentUser = data.user;
+          await this.fetchServerUsers();
           if (this.currentUser.role === "admin") {
-            this.isSocialUnlocked = true;
-            await this.fetchServerUsers();
             const savedApp = localStorage.getItem(STORAGE_ACTIVE_APP_KEY) || "social";
             this.setAppView(savedApp === "login" ? "social" : savedApp);
           } else {
@@ -3291,26 +3241,22 @@ class SocialCalendarApp {
     this.updateUserNavDisplay();
   }
 
+  // Admins get the full user list; everyone else gets the public directory (names/colours).
   async fetchServerUsers() {
+    const url = this.currentUser?.role === "admin" ? "/api/users" : "/api/users/directory";
     try {
-      const res = await fetch("/api/users", { credentials: "include" });
-      if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data) && data.length > 0) {
-          const validUsernames = ["admin", "demo", "demo_admin"];
-          const filtered = data.filter(u => validUsernames.includes(u.username));
-          this.users = filtered.length > 0 ? filtered : JSON.parse(JSON.stringify(DEFAULT_USERS));
-          this.saveUsers();
-          this.renderEventsUserFilterBar();
-          if (this.activeApp === "admin") {
-            this.renderAdminPanel();
-          }
-        }
-      }
+      const res = await fetch(url, { credentials: "include" });
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!Array.isArray(data)) return;
+      this.users = data;
+      this.renderEventsUserFilterBar();
+      if (this.activeApp === "admin") this.renderAdminPanel();
     } catch (err) {
       console.warn("Fetch server users error:", err);
     }
   }
+
 
   async handleDirectLoginSubmit(e) {
     e.preventDefault();
@@ -3334,18 +3280,16 @@ class SocialCalendarApp {
 
       this.dom.directLoginErrorMsg.style.display = "none";
       this.currentUser = data.user;
+      await this.fetchServerUsers();
 
       if (this.currentUser.role === "user") {
         this.setAppView("events");
       } else if (this.currentUser.role === "admin") {
-        this.isSocialUnlocked = true;
-        await this.fetchServerUsers();
         this.setAppView("social");
       } else {
         this.setAppView("events");
       }
       this.updateUserNavDisplay();
-      this.updatePortalCardStatuses();
     } catch (err) {
       this.dom.directLoginErrorMsg.textContent = this.t("login_error_invalid");
       this.dom.directLoginErrorMsg.style.display = "block";
@@ -3397,17 +3341,15 @@ class SocialCalendarApp {
 
       this.currentUser = user;
       this.dom.loginDialog.close();
+      await this.fetchServerUsers();
 
       if (user.role === "user") {
         this.setAppView("events");
       } else {
-        this.isSocialUnlocked = true;
-        await this.fetchServerUsers();
         const target = this.pendingLoginTarget === "admin" ? "admin" : (this.pendingLoginTarget === "events" ? "events" : "social");
         this.setAppView(target);
       }
       this.updateUserNavDisplay();
-      this.updatePortalCardStatuses();
     } catch (err) {
       this.dom.loginErrorMsg.textContent = this.t("login_error_invalid");
       this.dom.loginErrorMsg.style.display = "block";
@@ -3415,17 +3357,15 @@ class SocialCalendarApp {
   }
 
   async handleLogout() {
-    this.isSocialUnlocked = false;
     this.currentUser = null;
     try {
       await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
-    } catch (err) {}
+    } catch (err) { warnStorage(err); }
     try {
       localStorage.removeItem(STORAGE_ACTIVE_APP_KEY);
-    } catch (err) {}
+    } catch (err) { warnStorage(err); }
     this.setAppView("login");
     this.updateUserNavDisplay();
-    this.updatePortalCardStatuses();
   }
 
   // =========================================================================
@@ -3502,13 +3442,6 @@ class SocialCalendarApp {
     if (this.dom.eventsGridView) this.dom.eventsGridView.style.display = level === "monthly" ? "flex" : "none";
     if (this.dom.eventsYearlyView) this.dom.eventsYearlyView.style.display = level === "yearly" ? "block" : "none";
 
-    // Update Zoom level badge
-    if (this.dom.eventsZoomLevelBadge) {
-      if (level === "daily") this.dom.eventsZoomLevelBadge.textContent = "Zoom: Daily (100%)";
-      else if (level === "yearly") this.dom.eventsZoomLevelBadge.textContent = "Zoom: Yearly (20%)";
-      else this.dom.eventsZoomLevelBadge.textContent = "Zoom: Month (50%)";
-    }
-
     this.renderEventsCalendar();
   }
 
@@ -3529,10 +3462,6 @@ class SocialCalendarApp {
   formatEventPrice(event) {
     if (!event?.price || String(event.price).trim().toLowerCase() === "free") return this.t("event_free");
     return `${event.price} ${event.currency || "RON"}`;
-  }
-
-  toggleScheduleDropinView() {
-    this.openScheduleEventPage();
   }
 
   setEventsLayoutMode(mode) {
@@ -3759,7 +3688,6 @@ class SocialCalendarApp {
 
     // Switch to social view if not currently active
     if (this.activeApp !== "social") {
-      this.isSocialUnlocked = true;
       this.setAppView("social");
     }
 
@@ -3880,52 +3808,18 @@ class SocialCalendarApp {
       const endM = `${shortMonthNames[endD.getMonth()]} ${endD.getDate()}, ${endD.getFullYear()}`;
       const rangeTitle = `${startM} – ${endM}`;
       this.dom.eventsCurrentMonthLabel.textContent = rangeTitle;
-      if (this.dom.eventsBannerMonthName) this.dom.eventsBannerMonthName.textContent = rangeTitle;
-      if (this.dom.eventsBannerZoomHint) {
-        this.dom.eventsBannerZoomHint.textContent = this.currentLang === "ro" ? "• Interval orar: 08:00 – 22:00 • Apăsați pe interval pentru programare" : "• Timeline: 8:00 AM – 10:00 PM • Click slot to schedule";
-      }
     } else if (this.eventsZoomLevel === "yearly") {
       const yearTitle = `${this.t("yearly_overview_title")} ${this.eventsCurrentYear}`;
       this.dom.eventsCurrentMonthLabel.textContent = yearTitle;
-      if (this.dom.eventsBannerMonthName) this.dom.eventsBannerMonthName.textContent = yearTitle;
-      if (this.dom.eventsBannerZoomHint) {
-        this.dom.eventsBannerZoomHint.textContent = this.currentLang === "ro" ? "• Apăsați pe orice bulină sau card de lună pentru a deschide luna" : "• Click any event circle or month card to zoom into that month";
-      }
     } else {
       const monthTitle = `${monthNames[this.eventsCurrentMonth]} ${this.eventsCurrentYear}`;
       this.dom.eventsCurrentMonthLabel.textContent = monthTitle;
-      if (this.dom.eventsBannerMonthName) this.dom.eventsBannerMonthName.textContent = monthTitle;
-      if (this.dom.eventsBannerZoomHint) {
-        this.dom.eventsBannerZoomHint.textContent = this.currentLang === "ro" ? "• Apăsați pe o zi pentru a deschide orarul detaliat" : "• Click any date cell to zoom into that Day's Timeline";
-      }
-    }
-
-    // Active user indicator
-    if (this.dom.eventsLoggedInLabel) {
-      if (this.currentUser) {
-        this.dom.eventsLoggedInLabel.textContent = `${this.currentUser.name} (${this.currentUser.role})`;
-      } else {
-        this.dom.eventsLoggedInLabel.textContent = this.t("guest_user");
-      }
     }
 
     // Render user filter bar
     this.renderEventsUserFilterBar();
 
     const filtered = this.getFilteredEvents();
-    if (this.dom.eventsBannerActiveUser) {
-      let activeFilterLabel = this.t("events_filter_all_users");
-      if (this.eventsSelectedUser === "my") {
-        activeFilterLabel = this.t("events_filter_my_events");
-      } else if (this.eventsSelectedUser !== "all") {
-        const targetUser = this.users.find(u => u.username === this.eventsSelectedUser);
-        activeFilterLabel = targetUser ? targetUser.name : this.eventsSelectedUser;
-      }
-      this.dom.eventsBannerActiveUser.textContent = activeFilterLabel;
-    }
-    if (this.dom.eventsBannerCount) {
-      this.dom.eventsBannerCount.textContent = filtered.length;
-    }
 
     // Render view corresponding to active Zoom Level
     if (this.eventsZoomLevel === "daily") {
@@ -4629,7 +4523,7 @@ class SocialCalendarApp {
             this.dom.eventHourInput.value = slotStr;
           }
           this.updateFreeHoursBoard(dateStr);
-          this.checkEventDateConflict(this.dom.eventDateInput.value, this.dom.eventEndDateInput.value, this.dom.eventEditId.value);
+          this.checkEventDateConflict(this.dom.eventDateInput.value, this.dom.eventDateInput.value, this.dom.eventEditId.value);
         });
         const [selectedHour, selectedMinute] = (this.dom.eventHourInput?.value || "00:00").split(":").map(Number);
         const selectedStart = selectedHour + ((selectedMinute || 0) / 60);
@@ -4809,7 +4703,6 @@ class SocialCalendarApp {
   applySmartSuggestion(newDate, newHour) {
     if (newDate) {
       this.dom.eventDateInput.value = newDate;
-      this.dom.eventEndDateInput.value = newDate;
     }
     if (newHour) {
       this.dom.eventHourInput.value = newHour;
@@ -4955,13 +4848,7 @@ class SocialCalendarApp {
       target.appendChild(this.dom.eventDialogFooter);
     }
 
-    if (location === "page") {
-      if (this.dom.cancelEventDialogBtn) this.dom.cancelEventDialogBtn.style.display = "none";
-      if (this.dom.saveEventBtn) this.dom.saveEventBtn.style.display = "inline-flex";
-    } else {
-      if (this.dom.cancelEventDialogBtn) this.dom.cancelEventDialogBtn.style.display = "inline-flex";
-      if (this.dom.saveEventBtn) this.dom.saveEventBtn.style.display = "inline-flex";
-    }
+    if (this.dom.saveEventBtn) this.dom.saveEventBtn.style.display = "inline-flex";
   }
 
   updateMyEventsBadgeCount() {
@@ -4987,7 +4874,7 @@ class SocialCalendarApp {
     }
     if (!this.canBookRooms() && this.myEventsActiveFilter === "room_only") {
       this.myEventsActiveFilter = "all";
-      document.querySelectorAll("#my-events-filters .btn-filter-tab").forEach(b => {
+      document.querySelectorAll("#my-events-filter-tabs .btn-filter-tab").forEach(b => {
         b.classList.toggle("active", b.getAttribute("data-filter") === "all");
       });
     }
@@ -5711,7 +5598,6 @@ class SocialCalendarApp {
 
     const targetDate = preselectedDate || `${this.eventsCurrentYear}-${String(this.eventsCurrentMonth + 1).padStart(2, "0")}-15`;
     this.dom.eventDateInput.value = targetDate;
-    if (this.dom.eventEndDateInput) this.dom.eventEndDateInput.value = targetDate;
     this.dom.eventHourInput.value = "18:00";
     this.dom.eventDurationInput.value = "2";
     this.eventAsyncHours = [];
@@ -5771,7 +5657,6 @@ class SocialCalendarApp {
     this.dom.eventTitleInput.value = event.title;
     this.dom.eventCreatorDisplay.value = `${event.creatorName || event.creatorUsername} (Creator)`;
     this.dom.eventDateInput.value = event.startDate || event.date;
-    if (this.dom.eventEndDateInput) this.dom.eventEndDateInput.value = event.endDate || event.startDate || event.date;
     this.dom.eventHourInput.value = event.hour || event.time || "18:00";
     this.dom.eventDurationInput.value = event.durationHours || 2;
     this.eventAsyncHours = Array.isArray(event.scheduledHours) ? [...event.scheduledHours] : [];

@@ -47,3 +47,26 @@ test('A5: notification cards carry the is-pending / is-promoted state classes', 
   expect(n).toBeGreaterThan(0);
   for (let i = 0; i < n; i++) await expect(cards.nth(i)).toHaveClass(/\bis-(pending|promoted)\b/);
 });
+
+test('orphan element refs: applying a smart suggestion no longer throws', async ({ page }) => {
+  const errors = await boot(page); await login(page, 'demo_admin');
+  await page.click('#nav-schedule-btn');
+  const apply = page.locator('.btn-apply-suggestion').first();
+  await expect(apply).toBeVisible();
+  await apply.click();
+  await page.waitForTimeout(200);
+  expect(errors).toEqual([]);
+});
+
+test('orphan element refs: picking a free-hour slot no longer throws', async ({ page }) => {
+  const errors = await boot(page); await login(page, 'demo_admin');
+  await page.click('#nav-schedule-btn');
+  await page.fill('#event-title-input', 'Slot test');
+  await page.selectOption('#event-space-select', { index: 1 });
+  await page.click('#wizard-next-btn');
+  const slot = page.locator('#event-free-hours-board .hour-slot-chip.free').first();
+  await expect(slot).toBeVisible();
+  await slot.click();
+  await page.waitForTimeout(200);
+  expect(errors).toEqual([]);
+});
