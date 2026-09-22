@@ -1,0 +1,10 @@
+node_modules/
+users.json
+.env
+cookie.txt
+*.log
+test-results/
+playwright-report/
+tests/__screens_actual__/
+tools/audit/node_modules/
+tools/audit/*.txt

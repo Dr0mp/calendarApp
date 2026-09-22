@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-Platform Social Calendar (2026 Standards)</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%232563eb' d='M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1Zm12 8H5v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9Z'/></svg>">
+</head>
+<body>
+  <!-- Heroicons solid, MIT licensed: https://github.com/tailwindlabs/heroicons -->
+  <svg class="ui-icon-sprite" aria-hidden="true" focusable="false">
+    <symbol id="icon-calendar" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M12.75 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm-4.5 3a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm0 1.5a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm1.5-1.5a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm.75 1.5a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm2.25-1.5a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm0 1.5a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm2.25-1.5a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm.75 1.5a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm2.25-1.5a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm-1.5-3a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm1.5.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM6.75 2.25a.75.75 0 0 1 .75.75v1.5h9V3a.75.75 0 0 1 1.5 0v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75ZM20.25 11.25a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5Z" clip-rule="evenodd"/></symbol>
+    <symbol id="icon-megaphone" viewBox="0 0 24 24"><path fill="currentColor" d="M16.88 4.35c-2.07.83-4.29 1.37-6.6 1.57A20.7 20.7 0 0 1 8.25 6H7.5a5.25 5.25 0 0 0-.88 10.43c.33 1.37.8 2.69 1.38 3.94a1.88 1.88 0 0 0 2.58.8l.66-.38a1.88 1.88 0 0 0 .77-2.47 19.9 19.9 0 0 1-.63-1.6c1.92.26 3.76.75 5.5 1.44A21 21 0 0 0 18 11.25c0-2.41-.39-4.74-1.12-6.9Z"/><path fill="currentColor" d="M18.26 3.74a21.3 21.3 0 0 1 1.63 5.43 2.25 2.25 0 0 1 0 4.16 21.3 21.3 0 0 1-1.63 5.43.75.75 0 1 0 1.41.5c.14-.38.27-.77.39-1.16.52-1.69.87-3.45 1.02-5.27A2.25 2.25 0 0 0 21.75 11.25c0-.81-.32-1.54-.84-2.08a21.1 21.1 0 0 0-1.02-5.27 31 31 0 0 0-.39-1.16.75.75 0 1 0-1.41.5Z"/></symbol>
+    <symbol id="icon-shield" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M12.52 2.17a.75.75 0 0 0-1.04 0A12.1 12.1 0 0 1 3.75 5.25h-.14a.75.75 0 0 0-.72.52 14.3 14.3 0 0 0 8.92 16.33.75.75 0 0 0 .38 0 14.3 14.3 0 0 0 8.92-16.33.75.75 0 0 0-.72-.52h-.14a12.1 12.1 0 0 1-7.73-3.08Zm3.09 8.02a.75.75 0 0 0-1.22-.87l-3.24 4.53-1.62-1.63a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.1l3.75-5.25Z" clip-rule="evenodd"/></symbol>
+    <symbol id="icon-plus" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M12 3.75c.41 0 .75.34.75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5c0-.41.34-.75.75-.75Z" clip-rule="evenodd"/></symbol>
+    <symbol id="icon-chevron-left" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clip-rule="evenodd"/></symbol>
+    <symbol id="icon-chevron-right" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 1 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 1 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd"/></symbol>
+    <symbol id="icon-sun" viewBox="0 0 24 24"><path fill="currentColor" d="M12 7.5A4.5 4.5 0 1 0 12 16.5 4.5 4.5 0 0 0 12 7.5ZM12 2.25a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM12 18.75a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-1.5a.75.75 0 0 1 .75-.75ZM21.75 12a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM4.5 12a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 4.5 12ZM18.9 5.1a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0ZM7.22 16.78a.75.75 0 0 1 0 1.06L6.16 18.9a.75.75 0 0 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0ZM18.9 18.9a.75.75 0 0 1-1.06 0l-1.06-1.06a.75.75 0 0 1 1.06-1.06l1.06 1.06a.75.75 0 0 1 0 1.06ZM7.22 7.22a.75.75 0 0 1-1.06 0L5.1 6.16A.75.75 0 0 1 6.16 5.1l1.06 1.06a.75.75 0 0 1 0 1.06Z"/></symbol>
+    <symbol id="icon-moon" viewBox="0 0 24 24"><path fill="currentColor" d="M9.53 2.32a.75.75 0 0 1 .33.83 8.25 8.25 0 0 0 10.99 10.99.75.75 0 0 1 .83.33.76.76 0 0 1-.06.9A10.5 10.5 0 1 1 8.63 2.38a.76.76 0 0 1 .9-.06Z"/></symbol>
+    <symbol id="icon-user" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M8.25 7.5a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM3 20.25a9 9 0 0 1 18 0 .75.75 0 0 1-.75.75H3.75a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></symbol>
+    <symbol id="icon-check-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></symbol>
+    <symbol id="icon-external-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></symbol>
+    <symbol id="icon-star" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></symbol>
+    <symbol id="icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></symbol>
+    <symbol id="icon-sparkle" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L14.09 8.26L20 9.27L15.55 13.97L16.91 20.02L12 16.77L7.09 20.02L8.45 13.97L4 9.27L9.91 8.26L12 2Z"></path></symbol>
+    <symbol id="icon-lock" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3v-6.75a3 3 0 0 0-3-3v-3c0-2.9-2.35-5.25-5.25-5.25Zm3.75 8.25v-3a3.75 3.75 0 1 0-7.5 0v3h7.5Z" clip-rule="evenodd"/></symbol>
+    <symbol id="icon-bed" viewBox="0 0 24 24"><path fill="currentColor" d="M2 19v-2h20v2h-2v-4a2 2 0 0 0-2-2h-8v-2h5a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v8H2v3Zm5-12a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v1H7V7Zm0 3h10v3h-2a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2H7v-3Z"/></symbol>
+    <symbol id="icon-trash" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.364 6.474a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5a.75.75 0 0 1 .75-.75Zm4.5 0a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd"/></symbol>
+    <symbol id="icon-cog" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 0 0-.986.57c-.166.115-.311.127-.417.067L6.2 5.176c-.792-.452-1.802-.27-2.387.426L2.477 7.205c-.585.696-.514 1.74.16 2.342l1.02.912c.11.098.156.244.135.39a7.429 7.429 0 0 0 0 1.292c.021.146-.025.292-.135.39l-1.02.912c-.674.602-.745 1.646-.16 2.342l1.336 1.603c.585.696 1.595.878 2.387.426l1.15-.698c.106-.06.251-.048.417.067.314.218.644.41.986.57.182.088.277.228.297.349l.178 1.071c.151.905.933 1.568 1.85 1.568h2.044c.917 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.115-.26.297-.349.342-.16.672-.351.986-.57.166-.114.311-.126.417-.066l1.15.698c.792.452 1.802.27 2.387-.426l1.336-1.603c.585-.696.514-1.74-.16-2.342l-1.02-.912c-.11-.098-.156-.244-.135-.39a7.429 7.429 0 0 0 0-1.292c-.021-.146.025-.292.135-.39l1.02-.912c.674-.602.745-1.646.16-2.342l-1.336-1.603c-.585-.696-1.595-.878-2.387-.426l-1.15.698c-.106.06-.251.048-.417-.067a7.493 7.493 0 0 0-.986-.57c-.182-.088-.277-.228-.297-.349l-.178-1.071A1.875 1.875 0 0 0 13.122 2.25h-2.044Zm1.022 6.75a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z" clip-rule="evenodd"/></symbol>
+  </svg>
+
+  <!-- Universal Top Navigation Bar -->
+  <nav id="universal-nav-bar" class="universal-nav-bar" style="display: none;">
+    <div class="universal-nav-container">
+      <div class="nav-left">
+        <div id="nav-user-pill" class="nav-user-pill" style="display: none;">
+          <span class="user-avatar" id="nav-user-avatar"><svg class="ui-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span>
+          <span class="user-name" id="nav-user-name">Guest</span>
+          <span class="user-role-badge" id="nav-user-role">user</span>
+        </div>
+        <div class="nav-menu-tabs" role="tablist" aria-label="Page Navigation Tabs">
+          <button id="nav-events-btn" class="nav-tab-btn" data-target="events" role="tab" aria-selected="true">
+            <svg class="ui-icon" aria-hidden="true"><use href="#icon-calendar"></use></svg><span class="nav-tab-label">Calendar</span>
+          </button>
+          <button id="nav-schedule-btn" class="nav-tab-btn" data-target="schedule" role="tab" aria-selected="false">
+            <svg class="ui-icon" aria-hidden="true"><use href="#icon-plus"></use></svg><span class="nav-tab-label">Schedule Event</span>
+          </button>
+          <button id="nav-my-events-btn" class="nav-tab-btn" data-target="my-events" role="tab" aria-selected="false">
+            <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkle"></use></svg><span class="nav-tab-label">Evenimentele mele</span>
+            <span id="nav-my-events-count-badge" class="badge-subtle" style="font-size: 0.68rem; padding: 2px 6px; margin-left: 4px;">0</span>
+          </button>
+          <button id="nav-social-btn" class="nav-tab-btn" data-target="social" role="tab" aria-selected="false">
+            <svg class="ui-icon" aria-hidden="true"><use href="#icon-megaphone"></use></svg><span class="nav-tab-label">Social Calendar</span>
+          </button>
+        </div>
+      </div>
+      <div class="nav-right">
+        <!-- Admin Panel Icon Button (Cogwheel on the right) -->
+        <button id="nav-admin-btn" class="nav-icon-btn nav-admin-icon-btn" data-target="admin" title="Panou de Administrare" aria-label="Panou de Administrare" style="display: none;">
+          <svg class="ui-icon" aria-hidden="true"><use href="#icon-cog"></use></svg>
+          <span id="nav-admin-quota-badge" class="nav-quota-badge" style="display: none;" title="Storage quota alert">!</span>
+        </button>
+
+        <!-- Language Switcher (RO / EN - Default RO) -->
+        <div class="lang-switcher-pill" role="group" aria-label="Comută limba / Switch language">
+          <button type="button" class="lang-btn active" data-lang="ro" title="Română">RO</button>
+          <span class="lang-divider">|</span>
+          <button type="button" class="lang-btn" data-lang="en" title="English">EN</button>
+        </div>
+        <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to light theme" title="Switch to light theme">
+          <svg class="ui-icon theme-icon-dark" aria-hidden="true"><use href="#icon-moon"></use></svg>
+          <svg class="ui-icon theme-icon-light" aria-hidden="true"><use href="#icon-sun"></use></svg>
+        </button>
+
+        <button id="nav-logout-btn" class="btn btn-danger btn-sm" title="Sign out">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========================================================================= -->
+  <!-- 0. DIRECT LOGIN VIEW (Default Screen for Unauthenticated Users)           -->
+  <!-- ========================================================================= -->
+  <section id="direct-login-view" class="direct-login-container">
+    <div class="direct-login-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to light theme" title="Switch to light theme">
+          <svg class="ui-icon theme-icon-dark" aria-hidden="true"><use href="#icon-moon"></use></svg>
+          <svg class="ui-icon theme-icon-light" aria-hidden="true"><use href="#icon-sun"></use></svg>
+        </button>
+        <div class="lang-switcher-pill" role="group" aria-label="Comută limba / Switch language">
+          <button type="button" class="lang-btn active" data-lang="ro" title="Română">RO</button>
+          <span class="lang-divider">|</span>
+          <button type="button" class="lang-btn" data-lang="en" title="English">EN</button>
+        </div>
+      </div>
+      <div class="direct-login-brand">
+        <h1 class="direct-login-title">Event Manager Sign In</h1>
+      </div>
+
+      <form id="direct-login-form" class="direct-login-form">
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label for="direct-login-username">Username *</label>
+          <input type="text" id="direct-login-username" class="form-input form-input-lg" placeholder="e.g. admin or demo" required autocomplete="username">
+        </div>
+        <div class="form-group" style="margin-bottom: 18px;">
+          <label for="direct-login-password">Password *</label>
+          <input type="password" id="direct-login-password" class="form-input form-input-lg" placeholder="Enter password" required autocomplete="current-password">
+        </div>
+
+        <div id="direct-login-error-msg" class="auth-error-msg" style="display: none;"></div>
+
+
+        <!-- Quick 1-Click Demo Accounts (Read-Only Preview) -->
+        <div class="quick-demo-logins" style="margin-top: 18px; margin-bottom: 22px;">
+          <span style="font-size: 0.76rem; color: var(--text-muted); display: block; margin-bottom: 8px; font-weight: 600;">Conturi demonstrative (Doar vizualizare / Read-Only):</span>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button type="button" class="btn-demo-chip direct-demo-chip" data-user="demo" title="Previzualizare ca utilizator standard (fără salvare)">Demo Utilizator</button>
+            <button type="button" class="btn-demo-chip direct-demo-chip" data-user="demo_admin" title="Previzualizare ca administrator (fără salvare)">Demo Administrator</button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center; font-size: 1rem; padding: 14px;">
+          Conectare →
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+
+
+  <!-- ========================================================================= -->
+  <!-- ========================================================================= -->
+  <!-- 2. SOCIAL CALENDAR SUB-APP (Direct Access)                                -->
+  <!-- ========================================================================= -->
+  <div id="social-calendar-app" class="app-subview" style="display: none;">
+    <!-- App Header -->
+    <header class="app-header social-header-bar">
+      <div class="header-top social-header-top">
+        <div class="brand-group">
+          <div class="brand-logo" title="Social Planner"><svg class="ui-icon ui-icon-logo" aria-hidden="true"><use href="#icon-megaphone"></use></svg></div>
+          <div class="brand-info">
+            <h1 class="header-main-title">Social Calendar</h1>
+          </div>
+        </div>
+
+        <!-- Unified Month Nav & View Menu Block -->
+        <div class="calendar-unified-nav-block social-unified-nav" role="toolbar" aria-label="Social Calendar Period and View Navigation">
+          <!-- Month Navigation -->
+          <div class="nav-block-period">
+            <button id="prev-month-btn" class="nav-block-icon-btn" title="Previous Month" aria-label="Previous Month">
+              <svg class="ui-icon" aria-hidden="true"><use href="#icon-chevron-left"></use></svg>
+            </button>
+            <span id="current-month-label" class="nav-block-period-label">September 2026</span>
+            <button id="next-month-btn" class="nav-block-icon-btn" title="Next Month" aria-label="Next Month">
+              <svg class="ui-icon" aria-hidden="true"><use href="#icon-chevron-right"></use></svg>
+            </button>
+            <button id="today-btn" class="nav-block-today-btn">Today</button>
+          </div>
+
+          <!-- Divider -->
+          <div class="nav-block-divider" aria-hidden="true"></div>
+
+          <!-- View Toggle (Year / Month / Feed) -->
+          <div class="nav-block-zoom" role="group" aria-label="Calendar view switcher">
+            <div class="nav-block-zoom-tabs">
+              <button id="view-year-btn" type="button" class="nav-block-zoom-btn zoom-level-btn" title="Year overview">Year</button>
+              <button id="view-month-btn" type="button" class="nav-block-zoom-btn zoom-level-btn active" title="Month Calendar Grid">Month</button>
+              <button id="view-feed-btn" type="button" class="nav-block-zoom-btn zoom-level-btn" title="Feed List View">Feed</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Header Action Controls -->
+        <div class="header-actions">
+          <!-- Platforms Button -->
+          <button id="open-control-panel-btn" class="btn btn-secondary" title="Platforme">
+            <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkle"></use></svg>
+            <span id="lbl-open-control-panel">Platforme</span>
+          </button>
+
+          <!-- Promotion queue for mentor events -->
+          <button id="btn-social-event-notifications" class="btn btn-secondary btn-event-notifications" title="Coadă promovare">
+            <svg class="ui-icon" aria-hidden="true"><use href="#icon-megaphone"></use></svg>
+            <span class="event-alerts-label" id="lbl-social-event-notifications">Coadă promovare</span>
+            <span id="social-notifications-count" class="notifications-badge">0</span>
+          </button>
+
+          <!-- Add Post Button -->
+          <button id="open-add-post-btn" class="btn btn-primary" title="Postare Nouă">
+            <svg class="ui-icon" aria-hidden="true"><use href="#icon-plus"></use></svg>
+            <span id="lbl-open-add-post">Postare Nouă</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main View Container (Centered, same alignment as Evenimentele Mele) -->
+    <main class="app-main social-main-shell">
+      <!-- Toolbar: Platform Filter Tabs & Search Box (Same style as Evenimentele Mele) -->
+      <div class="my-events-toolbar social-toolbar">
+        <div class="my-events-filter-tabs social-platform-filter-tabs" id="platform-filter-bar" role="radiogroup" aria-label="Filter posts by platform">
+          <!-- Injected via JavaScript with .btn-filter-tab buttons matching Evenimentele Mele -->
+        </div>
+        <div class="my-events-search-box social-search-box">
+          <input type="text" id="social-search-input" class="form-input" placeholder="Caută postări după titlu, platformă, conținut...">
+        </div>
+      </div>
+
+      <!-- Live Status Banner -->
+      <section class="status-banner" id="status-banner">
+        <div class="status-summary">
+          <span class="status-stat"><span id="banner-active-platform">All Platforms</span></span>
+          <span class="status-stat">• <strong id="banner-post-count">8</strong> posts scheduled for <span id="banner-month-name">September 2026</span></span>
+        </div>
+      </section>
+
+    <!-- Calendar View (Month-by-month grid) -->
+    <div id="calendar-view" class="calendar-container">
+      <div class="calendar-weekdays">
+        <div class="weekday">Mon</div>
+        <div class="weekday">Tue</div>
+        <div class="weekday">Wed</div>
+        <div class="weekday">Thu</div>
+        <div class="weekday">Fri</div>
+        <div class="weekday weekend">Sat</div>
+        <div class="weekday weekend">Sun</div>
+      </div>
+      <div class="calendar-days-grid" id="calendar-days-grid">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <div id="social-year-view" class="yearly-overview-container" style="display: none;">
+      <div id="social-year-months-grid" class="yearly-months-grid"></div>
+    </div>
+
+    <!-- Feed / Chronological List View -->
+    <div id="feed-view" class="feed-view-container" style="display: none;">
+      <!-- Rendered dynamically -->
+    </div>
+
+    <!-- Footer with 2026 Specs Link -->
+    <footer class="social-app-footer" style="padding: 24px 0 12px; text-align: center; border-top: 1px solid var(--border-subtle); margin-top: 32px;">
+      <a href="#" id="link-footer-standards" style="color: var(--text-muted); font-size: 0.82rem; text-decoration: underline; transition: color 0.15s ease;">
+        View 2026 platform sizes and standards
+      </a>
+    </footer>
+  </main>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 3. TEAM EVENTS CALENDAR SUB-APP (Authenticated)                           -->
+  <!-- ========================================================================= -->
+  <div id="events-calendar-app" class="app-subview" style="display: none;">
+    <header class="app-header events-header-bar" id="events-header-bar">
+      <div class="header-top">
+        <div class="brand-group">
+          <div class="brand-logo" style="background: rgba(77, 163, 231, 0.12); border-color: rgba(77, 163, 231, 0.35); color: #72bdf5;" title="Calendar"><svg class="ui-icon ui-icon-logo" aria-hidden="true"><use href="#icon-calendar"></use></svg></div>
+          <div class="brand-info">
+            <h1 class="header-main-title">Calendar</h1>
+          </div>
+        </div>
+
+        <!-- Unified Month Nav & Zoom Menu Block -->
+        <div class="calendar-unified-nav-block" id="events-zoom-control" role="toolbar" aria-label="Calendar Period and Zoom Navigation">
+          <!-- Period Navigation -->
+          <div class="nav-block-period">
+            <button id="events-prev-month-btn" class="nav-block-icon-btn" title="Previous Period">
+              <svg class="ui-icon" aria-hidden="true"><use href="#icon-chevron-left"></use></svg>
+            </button>
+            <span id="events-current-month-label" class="nav-block-period-label">September 2026</span>
+            <button id="events-next-month-btn" class="nav-block-icon-btn" title="Next Period">
+              <svg class="ui-icon" aria-hidden="true"><use href="#icon-chevron-right"></use></svg>
+            </button>
+            <button id="events-today-btn" class="nav-block-today-btn">Today</button>
+          </div>
+
+          <!-- Subtle Divider -->
+          <div class="nav-block-divider" aria-hidden="true"></div>
+
+          <!-- Zoom Navigation (Semantically Ordered: Out [−] ➔ Year ➔ Month ➔ Day ➔ In [+]) -->
+          <div class="nav-block-zoom">
+            <button id="btn-zoom-out" type="button" class="nav-block-icon-btn" title="Zoom Out (Day → Month → Year)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+            <div class="nav-block-zoom-tabs">
+              <button id="btn-zoom-yearly" type="button" class="nav-block-zoom-btn zoom-level-btn" title="Zoom: Year (Overview & Quick Jump)">
+                Year
+              </button>
+              <button id="btn-zoom-monthly" type="button" class="nav-block-zoom-btn zoom-level-btn active" title="Zoom: Month (Calendar Grid)">
+                Month
+              </button>
+              <button id="btn-zoom-daily" type="button" class="nav-block-zoom-btn zoom-level-btn" title="Zoom: Day (Hourly Timeline 8:00 AM – 10:00 PM)">
+                Day
+              </button>
+            </div>
+            <button id="btn-zoom-in" type="button" class="nav-block-icon-btn" title="Zoom In (Year → Month → Day)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Header Actions: Schedule Event Toggle -->
+        <div class="header-actions">
+          <button id="open-add-event-btn" class="btn btn-primary" title="Programează Eveniment">
+            <svg class="ui-icon" aria-hidden="true"><use href="#icon-plus"></use></svg>
+            <span id="lbl-open-add-event">Programează Eveniment</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Events Filter By User Bar (Visible in Full Panel Mode) -->
+      <nav class="platform-bar" id="events-user-filter-bar" aria-label="Filter events by user" style="display: none;">
+        <!-- Injected via JavaScript -->
+      </nav>
+    </header>
+
+    <main class="app-main">
+      <!-- 3A. MENTOR SIMPLE DROP-IN & DEDICATED PAGES -->
+      <div id="events-simple-dropin-view" class="dropin-view-wrapper" style="display: none;">
+        <!-- Schedule Event Dedicated Page -->
+        <section id="schedule-page-shell" class="schedule-page-shell" style="display: none;" aria-label="Programează eveniment">
+          <div id="schedule-page-form-host"></div>
+        </section>
+
+        <!-- My Events Dedicated Page -->
+        <section id="my-events-page-shell" class="my-events-page-shell" style="display: none;" aria-labelledby="my-events-page-title">
+          <header class="my-events-header">
+            <div class="my-events-header-left">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <h2 id="my-events-page-title">Evenimentele mele</h2>
+                <span id="my-events-total-badge" class="badge-subtle">0</span>
+              </div>
+              <p id="my-events-subtitle">Gestionați evenimentele, blocajele de orar și rezervările de cazare create de dvs.</p>
+            </div>
+            <div class="my-events-header-actions">
+              <button type="button" class="btn btn-primary" id="btn-my-events-create-new">
+                <svg class="ui-icon" aria-hidden="true"><use href="#icon-plus"></use></svg>
+                <span id="lbl-my-events-create-new">Programează Eveniment</span>
+              </button>
+            </div>
+          </header>
+
+          <!-- Toolbar: Filter Tabs & Search -->
+          <div class="my-events-toolbar">
+            <div class="my-events-filter-tabs" id="my-events-filter-tabs" role="radiogroup" aria-label="Filtru tip evenimente">
+              <button type="button" class="btn-filter-tab active" data-filter="all" id="filter-my-events-all">Toate</button>
+              <button type="button" class="btn-filter-tab" data-filter="event" id="filter-my-events-public">Evenimente Publice</button>
+              <button type="button" class="btn-filter-tab" data-filter="room_only" id="filter-my-events-room">Doar Cazare</button>
+              <button type="button" class="btn-filter-tab" data-filter="locked" id="filter-my-events-locked">Blocări Interval</button>
+            </div>
+            <div class="my-events-search-box">
+              <input type="text" id="my-events-search-input" class="form-input" placeholder="Caută după titlu, sală sau cameră...">
+            </div>
+          </div>
+
+          <!-- My Events Cards Grid -->
+          <div id="my-events-list-container" class="my-events-grid">
+            <!-- Dynamically populated via JS -->
+          </div>
+        </section>
+      </div>
+
+      <!-- 3B. ADVANCED FULL CALENDAR PANEL (Daily Timeline, Monthly Grid, Yearly Overview) -->
+      <div id="events-advanced-panel-view" class="events-panel-wrapper" style="display: none;">
+        <!-- ZOOM LEVEL 1: Daily Timeline View (8:00 AM - 10:00 PM Columns) -->
+        <div id="events-daily-view" class="daily-timeline-container" style="display: none;">
+          <!-- Day Columns Header -->
+          <div class="daily-timeline-header-bar" id="daily-timeline-header-bar">
+            <!-- Injected dynamically via JS -->
+          </div>
+          <!-- Daily Timeline Body (Time markers + Day columns) -->
+          <div class="daily-timeline-scroll-wrap" id="daily-timeline-scroll-wrap">
+            <div class="daily-timeline-body" id="daily-timeline-body">
+              <!-- Injected dynamically via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ZOOM LEVEL 2: Events Calendar Grid View (Monthly) -->
+        <div id="events-grid-view" class="calendar-container">
+          <div class="calendar-weekdays">
+            <div class="weekday">Mon</div>
+            <div class="weekday">Tue</div>
+            <div class="weekday">Wed</div>
+            <div class="weekday">Thu</div>
+            <div class="weekday">Fri</div>
+            <div class="weekday weekend-header">Sat</div>
+            <div class="weekday weekend-header">Sun</div>
+          </div>
+          <div class="calendar-days-grid" id="events-days-grid">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+
+        <!-- ZOOM LEVEL 3: Yearly Overview View (12 Mini-Months with Event Circles) -->
+        <div id="events-yearly-view" class="yearly-overview-container" style="display: none;">
+          <div class="yearly-months-grid" id="yearly-months-grid">
+            <!-- Injected dynamically via JS -->
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 4. ADMIN CONTROL PANEL SUB-APP (Administrator Only)                       -->
+  <!-- ========================================================================= -->
+  <div id="admin-app" class="app-subview" style="display: none;">
+    <header class="app-header admin-header-bar">
+      <div class="header-top">
+        <div class="brand-group">
+          <div class="brand-logo" style="background: rgba(77, 163, 231, 0.12); border-color: rgba(77, 163, 231, 0.35); color: #72bdf5;" title="Administrator Dashboard"><svg class="ui-icon ui-icon-logo" aria-hidden="true"><use href="#icon-shield"></use></svg></div>
+          <div class="brand-info">
+            <h1 class="header-main-title">Administrare</h1>
+          </div>
+        </div>
+
+        <div class="admin-top-stats">
+          <div class="admin-stat-box">
+            <span class="admin-stat-num" id="admin-user-count">4</span>
+            <span class="admin-stat-label">Active Users</span>
+          </div>
+          <div class="admin-stat-box">
+            <span class="admin-stat-num" id="admin-event-count">5</span>
+            <span class="admin-stat-label">Total Events</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-main admin-content-layout">
+      <!-- Admin Category Filter Toolbar (Segmented tabs style matching Social Calendar & Evenimentele Mele) -->
+      <div class="my-events-toolbar admin-toolbar">
+        <div class="my-events-filter-tabs admin-category-filter-tabs" id="admin-category-nav-bar" role="radiogroup" aria-label="Admin Navigation Categories">
+          <button type="button" class="btn-filter-tab active" data-admin-cat="all" id="admin-cat-all">
+            <span data-i18n="admin_cat_all">Toate Secțiunile</span>
+            <span class="filter-tab-badge" id="admin-count-all">5</span>
+          </button>
+          <button type="button" class="btn-filter-tab" data-admin-cat="users" id="admin-cat-users">
+            <span data-i18n="admin_cat_users">Conturi Utilizatori</span>
+            <span class="filter-tab-badge" id="admin-count-users">4</span>
+          </button>
+          <button type="button" class="btn-filter-tab" data-admin-cat="events" id="admin-cat-events">
+            <span data-i18n="admin_cat_events">Toate Evenimentele</span>
+            <span class="filter-tab-badge" id="admin-count-events">5</span>
+          </button>
+          <button type="button" class="btn-filter-tab" data-admin-cat="spaces" id="admin-cat-spaces">
+            <span data-i18n="admin_cat_spaces">Săli & Spații</span>
+            <span class="filter-tab-badge" id="admin-count-spaces">3</span>
+          </button>
+          <button type="button" class="btn-filter-tab" data-admin-cat="rooms" id="admin-cat-rooms">
+            <span data-i18n="admin_cat_rooms">Camere Cazare</span>
+            <span class="filter-tab-badge" id="admin-count-rooms">4</span>
+          </button>
+          <button type="button" class="btn-filter-tab" data-admin-cat="storage" id="admin-cat-storage">
+            <span data-i18n="admin_cat_storage">Stocare & Mentenanță</span>
+            <span class="filter-tab-badge" id="admin-count-storage">8 GB</span>
+          </button>
+        </div>
+      </div>
+      <!-- Admin Storage Quota Warning Announcement Banner -->
+      <div id="admin-quota-alert-banner" class="admin-quota-banner" style="display: none;">
+        <div class="quota-banner-left">
+          <span class="quota-banner-icon" id="quota-banner-icon">!</span>
+          <div>
+            <strong class="quota-banner-title" id="quota-banner-title">Storage Quota Alert</strong>
+            <p class="quota-banner-desc" id="quota-banner-desc">
+              Your site storage is approaching the 8.00 GB threshold. Please clean up past events to prevent image upload issues.
+            </p>
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary btn-sm" id="btn-quota-banner-cleanup">
+          Clean up space now
+        </button>
+      </div>
+
+      <!-- Section 1: User Provisioning Form & User Directory -->
+      <section class="admin-card" id="admin-users-section">
+        <div class="admin-card-header">
+          <h2>User provisioning and accounts</h2>
+          <span class="badge-subtle">Add and manage authorized users</span>
+        </div>
+
+        <form id="create-user-form" class="admin-form-box">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="new-user-fullname">Full Name *</label>
+              <input type="text" id="new-user-fullname" class="form-input" placeholder="e.g. Maria Popescu" required>
+            </div>
+            <div class="form-group">
+              <label for="new-user-username">Username *</label>
+              <input type="text" id="new-user-username" class="form-input" placeholder="e.g. maria" required>
+            </div>
+            <div class="form-group">
+              <label for="new-user-password">Password *</label>
+              <input type="password" id="new-user-password" class="form-input" placeholder="Minimum 4 characters" required>
+            </div>
+            <div class="form-group">
+              <label for="new-user-role">Account Role *</label>
+              <select id="new-user-role" class="form-select">
+                <option value="user">Utilizator Standard (Programează evenimente proprii)</option>
+                <option value="moderator">Moderator (Rezervă cazare & gestionează sesiuni)</option>
+                <option value="admin">Administrator (Acces complet)</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
+            <button type="submit" class="btn btn-primary">+ Create User Account</button>
+          </div>
+        </form>
+
+        <div class="standards-table-wrapper" style="margin-top: 20px;">
+          <table class="standards-table">
+            <thead>
+              <tr>
+                <th data-i18n="admin_th_user">User</th>
+                <th data-i18n="admin_th_username">Username</th>
+                <th data-i18n="admin_th_role">Role</th>
+                <th data-i18n="admin_th_events_count">Events Scheduled</th>
+                <th data-i18n="admin_th_created">Created</th>
+                <th data-i18n="admin_th_actions">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-users-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section: Event Spaces & Venues (Admin Managed) -->
+      <section class="admin-card" id="admin-spaces-section" style="margin-top: 24px;">
+        <div class="admin-card-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <h2 id="admin-spaces-title">Spații și Săli de Evenimente</h2>
+            <span class="badge-subtle" id="admin-spaces-sub">Gestionați locațiile pentru organizarea sesiunilor</span>
+          </div>
+        </div>
+
+        <form id="create-space-form" class="admin-form-box">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="new-space-name">Nume Spațiu / Sală *</label>
+              <input type="text" id="new-space-name" class="form-input" placeholder="ex: Sala Mare (Conferințe)" required>
+            </div>
+            <div class="form-group">
+              <label for="new-space-capacity">Capacitate</label>
+              <input type="text" id="new-space-capacity" class="form-input" placeholder="ex: 50 persoane sau Nelimitat">
+            </div>
+            <div class="form-group">
+              <label for="new-space-color">Culoare Identificare</label>
+              <input type="color" id="new-space-color" class="form-input" value="#38bdf8" style="height: 38px; padding: 2px;">
+            </div>
+            <div class="form-group form-full">
+              <label for="new-space-desc">Dotări & Descriere</label>
+              <input type="text" id="new-space-desc" class="form-input" placeholder="ex: Proiector 4K laser, sonorizare surround, tablă interactivă">
+            </div>
+          </div>
+          <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
+            <button type="submit" class="btn btn-primary" id="btn-create-space">+ Adaugă Spațiu Nou</button>
+          </div>
+        </form>
+
+        <div class="standards-table-wrapper" style="margin-top: 20px;">
+          <table class="standards-table">
+            <thead>
+              <tr>
+                <th data-i18n="admin_th_space_name">Spațiu / Sală</th>
+                <th data-i18n="admin_th_space_cap">Capacitate</th>
+                <th data-i18n="admin_th_space_desc">Dotări & Descriere</th>
+                <th data-i18n="admin_th_space_events">Evenimente Programate</th>
+                <th data-i18n="admin_th_space_status">Stare</th>
+                <th data-i18n="admin_th_space_actions">Acțiuni</th>
+              </tr>
+            </thead>
+            <tbody id="admin-spaces-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section: Accommodation / Sleeping Rooms (Restricted to Moderator & Admin) -->
+      <section class="admin-card" id="admin-rooms-section" style="margin-top: 24px;">
+        <div class="admin-card-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <h2 id="admin-rooms-title">Camere de Cazare (Dormitoare Oaspeți & Traineri)</h2>
+            <span class="badge-subtle" id="admin-rooms-sub">Rezervabile în calendar exclusiv de Moderatori și Administratori</span>
+          </div>
+        </div>
+
+        <form id="create-room-form" class="admin-form-box">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="new-room-name">Denumire Cameră *</label>
+              <input type="text" id="new-room-name" class="form-input" placeholder="ex: Camera 1 (Matrimonială)" required>
+            </div>
+            <div class="form-group">
+              <label for="new-room-type">Tip Cameră</label>
+              <input type="text" id="new-room-type" class="form-input" placeholder="ex: Matrimonială, Twin, Single, Suită">
+            </div>
+            <div class="form-group">
+              <label for="new-room-capacity">Capacitate Oaspeți</label>
+              <input type="text" id="new-room-capacity" class="form-input" placeholder="ex: 2 oaspeți">
+            </div>
+            <div class="form-group">
+              <label for="new-room-beds">Configurație Paturi</label>
+              <input type="text" id="new-room-beds" class="form-input" placeholder="ex: 1 Pat King Size sau 2 Single">
+            </div>
+            <div class="form-group">
+              <label for="new-room-color">Culoare Identificare</label>
+              <input type="color" id="new-room-color" class="form-input" value="#ef4444" style="height: 38px; padding: 2px;">
+            </div>
+            <div class="form-group form-full">
+              <label for="new-room-notes">Observații & Facilități</label>
+              <input type="text" id="new-room-notes" class="form-input" placeholder="ex: Baie proprie, birou de lucru, vedere spre grădină, etaj 1">
+            </div>
+          </div>
+          <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
+            <button type="submit" class="btn btn-primary" id="btn-create-room">+ Adaugă Cameră Nouă</button>
+          </div>
+        </form>
+
+        <div class="standards-table-wrapper" style="margin-top: 20px;">
+          <table class="standards-table">
+            <thead>
+              <tr>
+                <th data-i18n="admin_th_room_name">Cameră Cazare</th>
+                <th data-i18n="admin_th_room_type">Tip</th>
+                <th data-i18n="admin_th_room_beds">Paturi & Oaspeți</th>
+                <th data-i18n="admin_th_room_notes">Observații & Facilități</th>
+                <th data-i18n="admin_th_room_bookings">Rezervări</th>
+                <th data-i18n="admin_th_room_status">Stare</th>
+                <th data-i18n="admin_th_room_actions">Acțiuni</th>
+              </tr>
+            </thead>
+            <tbody id="admin-rooms-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section 2: Master Events Audit (All Users) -->
+      <section class="admin-card" id="admin-events-section" style="margin-top: 24px;">
+        <div class="admin-card-header">
+          <h2>Master Events Audit (All Users)</h2>
+          <span class="badge-subtle">Admin can edit, reassign, or delete any event</span>
+        </div>
+        <div class="standards-table-wrapper">
+          <table class="standards-table">
+            <thead>
+              <tr>
+                <th data-i18n="admin_th_datetime">Date & Time</th>
+                <th data-i18n="admin_th_title">Event Title</th>
+                <th data-i18n="admin_th_social_status">Social Status</th>
+                <th data-i18n="admin_th_organizer">Organizer</th>
+                <th data-i18n="admin_th_enroll_price">Enrolment / Price</th>
+                <th data-i18n="admin_th_actions">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-events-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section 3: Cloud Storage Quota & Media Cleanup (8 GB) -->
+      <section class="admin-card" id="admin-storage-section" style="margin-top: 24px;">
+        <div class="admin-card-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <h2>Cloud Storage & Quota Management</h2>
+            <span class="badge-subtle" id="admin-quota-limit-badge">8.00 GB Cap</span>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-open-storage-cleanup">
+            Space cleanup tools
+          </button>
+        </div>
+
+        <div class="storage-dashboard-card">
+          <div class="storage-meter-info">
+            <div>
+              <span class="storage-meter-main-text" id="admin-storage-used-text">0.00 GB</span>
+              <span class="storage-meter-sub-text" id="admin-storage-total-text">of 8.00 GB used</span>
+            </div>
+            <span class="storage-pct-badge" id="admin-storage-pct-badge">0%</span>
+          </div>
+
+          <div class="storage-meter-track">
+            <div class="storage-meter-fill" id="admin-storage-meter-fill" style="width: 0%;"></div>
+          </div>
+
+          <div class="storage-breakdown-grid">
+            <div class="storage-breakdown-item">
+              <span class="breakdown-icon" aria-hidden="true"><svg class="ui-icon"><use href="#icon-calendar"></use></svg></span>
+              <div>
+                <span class="breakdown-label">Events & 16:9 Covers</span>
+                <strong class="breakdown-val" id="storage-events-size">0 MB</strong>
+                <span class="breakdown-sub" id="storage-events-count">(0 events)</span>
+              </div>
+            </div>
+            <div class="storage-breakdown-item">
+              <span class="breakdown-icon" aria-hidden="true"><svg class="ui-icon"><use href="#icon-megaphone"></use></svg></span>
+              <div>
+                <span class="breakdown-label">Social Media Posts</span>
+                <strong class="breakdown-val" id="storage-posts-size">0 MB</strong>
+                <span class="breakdown-sub" id="storage-posts-count">(0 posts)</span>
+              </div>
+            </div>
+            <div class="storage-breakdown-item">
+              <span class="breakdown-icon" aria-hidden="true"><svg class="ui-icon"><use href="#icon-shield"></use></svg></span>
+              <div>
+                <span class="breakdown-label">Free Storage Remaining</span>
+                <strong class="breakdown-val" id="storage-free-size">8.00 GB</strong>
+                <span class="breakdown-sub" id="storage-status-sub">Healthy</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Simulation / Testing Controls -->
+          <div class="storage-sim-toolbar">
+            <span style="font-size: 0.76rem; color: var(--text-muted); font-weight: 600;">Quota test simulator:</span>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              <button type="button" class="btn-demo-chip" id="btn-sim-normal">15% Normal</button>
+              <button type="button" class="btn-demo-chip" id="btn-sim-warning">84% Warning</button>
+              <button type="button" class="btn-demo-chip" id="btn-sim-critical">94% Critical</button>
+              <button type="button" class="btn-demo-chip" id="btn-sim-reset">Real live usage</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODALS & DIALOGS                                                          -->
+  <!-- ========================================================================= -->
+
+  <!-- DIALOG: Events awaiting social promotion -->
+  <dialog id="social-notifications-modal" aria-labelledby="social-notifications-title" style="max-width: 720px;">
+    <div class="dialog-header">
+      <div class="notifications-title-group">
+        <svg class="ui-icon notifications-title-icon" aria-hidden="true"><use href="#icon-megaphone"></use></svg>
+        <div>
+          <h2 id="social-notifications-title">Promotion queue</h2>
+          <p>Choose an event, then create its social post.</p>
+        </div>
+      </div>
+      <button class="dialog-close-btn" id="close-social-notifications-btn" aria-label="Close dialog">&times;</button>
+    </div>
+    <div class="dialog-body">
+      <!-- Filter tabs -->
+      <div class="notifications-filter-bar" id="notif-filter-bar">
+        <button type="button" class="notif-filter-pill" data-filter="all"><span data-notif-filter-label="all">All</span> <span id="notif-count-all">0</span></button>
+        <button type="button" class="notif-filter-pill active" data-filter="pending"><span data-notif-filter-label="pending">Needs promotion</span> <span id="notif-count-pending">0</span></button>
+        <button type="button" class="notif-filter-pill" data-filter="promoted"><span data-notif-filter-label="promoted">Posted</span> <span id="notif-count-promoted">0</span></button>
+      </div>
+
+      <div id="social-notifications-list" class="social-notifications-list">
+        <!-- Rendered dynamically via JS -->
+      </div>
+    </div>
+    <div class="dialog-footer" id="social-notifications-dialog-footer">
+      <button type="button" class="btn btn-secondary" id="close-social-notifications-done-btn">Close</button>
+    </div>
+  </dialog>
+
+  <!-- DIALOG: Edit User Account Modal (Admin Panel) -->
+  <dialog id="edit-user-dialog" aria-labelledby="edit-user-title" style="max-width: 480px;">
+    <div class="dialog-header">
+      <h2 id="edit-user-title" style="margin: 0; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
+        Edit User Account
+      </h2>
+      <button class="dialog-close-btn" id="close-edit-user-btn" aria-label="Close dialog">&times;</button>
+    </div>
+    <form id="edit-user-form" style="padding: 20px;">
+      <input type="hidden" id="edit-user-id">
+      <div class="form-group" style="margin-bottom: 14px;">
+        <label for="edit-user-fullname">Full Name *</label>
+        <input type="text" id="edit-user-fullname" class="form-input" required>
+      </div>
+      <div class="form-row-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+        <div class="form-group">
+          <label for="edit-user-username">Username *</label>
+          <input type="text" id="edit-user-username" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label for="edit-user-password">Password *</label>
+          <input type="password" id="edit-user-password" class="form-input" required>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom: 20px;">
+        <label for="edit-user-role">Account Role *</label>
+        <select id="edit-user-role" class="form-select" required>
+          <option value="user">Utilizator Standard (Programează evenimente proprii)</option>
+          <option value="moderator">Moderator (Rezervă cazare & gestionează sesiuni)</option>
+          <option value="admin">Administrator (Acces complet)</option>
+        </select>
+      </div>
+      <div class="dialog-actions" style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button type="button" class="btn btn-secondary" id="cancel-edit-user-btn">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- DIALOG: Storage Quota & Past Events Cleanup Modal (Admin Only) -->
+  <dialog id="storage-cleanup-dialog" aria-labelledby="storage-cleanup-title" style="max-width: 620px;">
+    <div class="dialog-header">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span class="modal-title-icon" aria-hidden="true"></span>
+        <div>
+          <h2 id="storage-cleanup-title" style="margin: 0; font-size: 1.15rem;">Storage Quota & Space Cleanup</h2>
+          <p style="font-size: 0.78rem; color: var(--text-secondary); margin: 0;">Reclaim space and manage your 8 GB storage allowance.</p>
+        </div>
+      </div>
+      <button class="dialog-close-btn" id="close-storage-cleanup-btn" aria-label="Close dialog">&times;</button>
+    </div>
+    <div class="dialog-body" style="padding: 20px;">
+      <!-- Current Storage Summary Card -->
+      <div class="cleanup-storage-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span style="font-size: 0.85rem; font-weight: 700;">Current Usage</span>
+          <span id="cleanup-modal-usage-label" style="font-size: 0.85rem; font-weight: 700; color: #38bdf8;">0.00 GB / 8.00 GB (0%)</span>
+        </div>
+        <div class="storage-meter-track" style="height: 10px;">
+          <div id="cleanup-modal-meter-fill" class="storage-meter-fill" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- Action 1: Bulk Delete Past Events -->
+      <div class="cleanup-action-box">
+        <div class="cleanup-action-header">
+          <span class="cleanup-icon" aria-hidden="true"></span>
+          <div style="flex: 1;">
+            <div style="font-weight: 700; font-size: 0.95rem;">Bulk Delete Past Events</div>
+            <p style="font-size: 0.78rem; color: var(--text-secondary); margin: 2px 0 0 0;">
+              Permanently removes concluded events along with their uploaded 16:9 Facebook cover images.
+            </p>
+          </div>
+        </div>
+
+        <div style="margin-top: 14px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary);">Filter Age:</label>
+          <select id="cleanup-event-age-select" class="form-select" style="max-width: 230px; font-size: 0.82rem; padding: 6px 10px;">
+            <option value="all-past">All past events (prior to today)</option>
+            <option value="14">Events older than 14 days</option>
+            <option value="30">Events older than 30 days</option>
+            <option value="60">Events older than 60 days</option>
+          </select>
+          <button type="button" class="btn btn-danger btn-sm" id="btn-execute-cleanup-events">Delete Past Events</button>
+        </div>
+        <div id="cleanup-preview-events" class="cleanup-preview-text" style="margin-top: 8px; font-size: 0.78rem; color: var(--accent-blue);">
+          Matches: 0 events (Est. 0.0 MB to free)
+        </div>
+      </div>
+
+      <!-- Action 2: Strip Heavy Images Only (Preserve Schedule History) -->
+      <div class="cleanup-action-box" style="margin-top: 16px;">
+        <div class="cleanup-action-header">
+          <span class="cleanup-icon" aria-hidden="true"></span>
+          <div style="flex: 1;">
+            <div style="font-weight: 700; font-size: 0.95rem;">Strip Images Only (Keep Event History)</div>
+            <p style="font-size: 0.78rem; color: var(--text-secondary); margin: 2px 0 0 0;">
+              Keeps workshop titles, trainers, and enrolment records in your archive, but removes heavy cover photos to immediately reclaim ~95% of storage.
+            </p>
+          </div>
+        </div>
+        <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center;">
+          <span id="cleanup-strip-preview" style="font-size: 0.78rem; color: var(--text-muted);">0 past events currently holding images</span>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-execute-strip-images">Strip Past Covers</button>
+        </div>
+      </div>
+
+      <!-- Action 3: Social Media Posts Media Purge -->
+      <div class="cleanup-action-box" style="margin-top: 16px;">
+        <div class="cleanup-action-header">
+          <span class="cleanup-icon" aria-hidden="true"></span>
+          <div style="flex: 1;">
+            <div style="font-weight: 700; font-size: 0.95rem;">Clear Published Social Media Attachments</div>
+            <p style="font-size: 0.78rem; color: var(--text-secondary); margin: 2px 0 0 0;">
+              Removes heavy image/video attachments from social posts marked as "Published" prior to current date.
+            </p>
+          </div>
+        </div>
+        <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center;">
+          <span id="cleanup-social-preview" style="font-size: 0.78rem; color: var(--text-muted);">0 published posts eligible</span>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-execute-cleanup-social">Purge Old Attachments</button>
+        </div>
+      </div>
+    </div>
+    <div class="dialog-footer">
+      <button type="button" class="btn btn-secondary" id="close-storage-cleanup-done-btn">Done</button>
+    </div>
+  </dialog>
+
+  <!-- DIALOG: User / Admin Login Modal -->
+  <dialog id="login-dialog" aria-labelledby="login-dialog-title" style="max-width: 450px;">
+    <div class="dialog-header">
+      <h2 id="login-dialog-title">Conectare</h2>
+      <button class="dialog-close-btn" id="close-login-dialog-btn" aria-label="Close dialog">&times;</button>
+    </div>
+    <form id="login-form" class="dialog-body" style="padding: 24px 22px;">
+      <p id="login-dialog-subtitle" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 18px;">
+        Conectați-vă pentru a programa evenimente.
+      </p>
+      <div class="form-group" style="margin-bottom: 14px;">
+        <label for="login-username">Username *</label>
+        <input type="text" id="login-username" class="form-input" placeholder="e.g. admin or demo" required>
+      </div>
+      <div class="form-group" style="margin-bottom: 16px;">
+        <label for="login-password">Password *</label>
+        <input type="password" id="login-password" class="form-input" placeholder="Enter password" required>
+      </div>
+      <div id="login-error-msg" class="auth-error-msg" style="display: none;"></div>
+
+      <!-- Quick Demo Login Switchers -->
+      <div class="quick-demo-logins">
+        <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Conturi demonstrative (Doar vizualizare / Read-Only):</span>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+          <button type="button" class="btn-demo-chip" data-user="demo">Demo Utilizator</button>
+          <button type="button" class="btn-demo-chip" data-user="demo_admin">Demo Administrator</button>
+        </div>
+      </div>
+
+      <div style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 10px;">
+        <button type="button" class="btn btn-secondary" id="cancel-login-btn">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="login-submit-btn" style="min-width: 110px;">Sign In</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- DIALOG: Add / Edit Event Modal -->
+  <dialog id="event-dialog" aria-labelledby="event-dialog-title" style="max-width: 680px; width: min(680px, 94vw);">
+    <div class="dialog-header event-dialog-header">
+      <div>
+        <h2 id="event-dialog-title">
+          <span id="event-dialog-action-text">Schedule New Team Event</span>
+        </h2>
+      </div>
+      <button class="dialog-close-btn" id="close-event-dialog-btn" aria-label="Close dialog">&times;</button>
+    </div>
+    <form id="event-form" class="dialog-body mode-schedule">
+      <input type="hidden" id="event-edit-id" value="">
+      
+      <!-- Entry Type Switcher (Top Centered Tabs matching other pages) -->
+      <div class="schedule-entry-type-toolbar" id="event-entry-type-group">
+        <div class="entry-type-segmented-nav my-events-filter-tabs" id="event-entry-type-segmented" role="radiogroup" aria-label="Tip Înregistrare">
+          <button type="button" class="btn-filter-tab btn-entry-type active" data-entry-type="event" id="btn-entry-type-event">
+            <svg class="ui-icon" aria-hidden="true"><use href="#icon-calendar"></use></svg>
+            <span class="entry-type-title" id="lbl-entry-type-event">Eveniment Public</span>
+          </button>
+          <button type="button" class="btn-filter-tab btn-entry-type" data-entry-type="locked" id="btn-entry-type-locked">
+            <svg class="ui-icon" aria-hidden="true"><use href="#icon-lock"></use></svg>
+            <span class="entry-type-title" id="lbl-entry-type-locked">Blocare Interval</span>
+          </button>
+          <button type="button" class="btn-filter-tab btn-entry-type" data-entry-type="room_only" id="btn-entry-type-room">
+            <svg class="ui-icon" aria-hidden="true"><use href="#icon-bed"></use></svg>
+            <span class="entry-type-title" id="lbl-entry-type-room">Doar Cazare</span>
+          </button>
+        </div>
+        <input type="hidden" id="event-entry-type" value="event">
+      </div>
+
+      <!-- Wizard Step Progress Indicator -->
+      <nav class="wizard-steps-indicator" id="wizard-steps-indicator" aria-label="Etape formular"></nav>
+
+      <!-- Date Conflict Warning Banner -->
+      <div id="event-date-warning" class="event-date-warning-box" style="display: none;">
+        <span class="warning-icon" aria-hidden="true"></span>
+        <div class="warning-content">
+          <strong>Schedule Notice:</strong>
+          <span id="event-date-warning-msg">This date already has scheduled event(s).</span>
+        </div>
+      </div>
+
+      <!-- Smart Scheduling Advisor (Conflict Detection & Proactive 1-Click Suggestions) -->
+      <div id="event-smart-suggestion-box" class="smart-suggestion-box" style="display: none;">
+        <div class="smart-suggestion-header">
+          <span class="smart-suggestion-icon" aria-hidden="true"></span>
+          <div style="flex: 1;">
+            <strong id="smart-suggestion-title">Schedule Assistant Suggestions</strong>
+            <div id="smart-conflict-details" class="smart-conflict-details">Detected an existing booking at this time. Here are recommended openings:</div>
+          </div>
+        </div>
+        <div class="smart-suggestions-list" id="smart-suggestions-list">
+          <!-- Suggestion pills / buttons inserted dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- WIZARD STEP 1: Detalii de Bază -->
+      <div class="wizard-step-pane is-active" id="wizard-step-pane-1">
+        <div class="form-grid">
+
+          <!-- Notice for Locked Hours -->
+          <div id="event-locked-info-notice" class="form-group form-full" style="display: none; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: var(--radius-md); padding: 12px 14px;">
+            <div style="display: flex; align-items: center; gap: 8px; color: #fbbf24; font-weight: 600; font-size: 0.85rem;">
+              <span>🔒 Mod Blocare Interval Activ:</span>
+            </div>
+            <p style="font-size: 0.78rem; color: var(--text-secondary); margin: 4px 0 0 0;">
+              Acest interval va fi blocat în orar pentru a împiedica alte rezervări. Nu generează notificări de promovare social media pentru administratori și nu necesită copertă Facebook 16:9.
+            </p>
+          </div>
+
+          <!-- Notice for Room Only (Accommodation) -->
+          <div id="event-room-only-info-notice" class="form-group form-full" style="display: none; background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: var(--radius-md); padding: 12px 14px;">
+            <div style="display: flex; align-items: center; gap: 8px; color: #c084fc; font-weight: 600; font-size: 0.85rem;">
+              <span>🛏️ Mod Doar Cazare Activ:</span>
+            </div>
+            <p style="font-size: 0.78rem; color: var(--text-secondary); margin: 4px 0 0 0;">
+              Rezervare spații de cazare (camere). Nu necesită sală de desfășurare, bilete cu preț sau copertă social media.
+            </p>
+          </div>
+
+          <!-- Title Input -->
+          <div class="form-group form-full" id="event-title-group">
+            <label for="event-title-input" id="lbl-event-title">Titlu Eveniment *</label>
+            <input type="text" id="event-title-input" class="form-input" placeholder="ex: Masterclass: Producție Video" required>
+          </div>
+
+          <!-- Space / Venue Selection (Public & Locked) -->
+          <div class="form-group form-full" id="event-space-group">
+            <label for="event-space-select" id="lbl-event-space">Spațiu / Sală Desfășurare *</label>
+            <select id="event-space-select" class="form-select" required>
+              <!-- Populated dynamically via JS -->
+            </select>
+          </div>
+
+          <!-- Accommodation Block (Rendered in Step 1 when in 'room_only' mode) -->
+          <div class="form-group form-full room-booking-category-block" id="event-room-category-block">
+            <div class="room-booking-category-header" id="event-room-category-header">
+              <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px; font-weight: 700; cursor: pointer; color: var(--text-primary); margin-bottom: 0;">
+                <input type="checkbox" id="event-needs-room" style="width: 16px; height: 16px; accent-color: var(--primary);">
+                <span style="display: flex; align-items: center; gap: 6px;">
+                  <svg class="ui-icon" style="color: #c084fc;" aria-hidden="true"><use href="#icon-bed"></use></svg>
+                  <span id="lbl-event-needs-room">Necesită cazare (camere)?</span>
+                </span>
+                <span class="badge-subtle" style="font-size: 0.65rem; color: #8b5cf6;">Doar Moderator / Admin</span>
+              </label>
+            </div>
+
+            <!-- Multi-room dynamic booking panel -->
+            <div id="event-room-booking-panel" style="display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-subtle);">
+              <div id="event-room-bookings-list" class="room-bookings-list">
+                <!-- Dynamically rendered room booking rows -->
+              </div>
+              <div style="margin-top: 10px; display: flex; justify-content: flex-start;">
+                <button type="button" class="btn btn-secondary btn-sm" id="btn-add-room-booking">
+                  <svg class="ui-icon" aria-hidden="true"><use href="#icon-plus"></use></svg>
+                  <span id="lbl-btn-add-room-booking">Adaugă cameră cazare</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WIZARD STEP 2: Programare & Orar -->
+      <div class="wizard-step-pane" id="wizard-step-pane-2">
+        <div class="form-grid">
+          <div class="form-group" id="event-date-group">
+            <label for="event-date-input" id="lbl-event-date">Data Desfășurării *</label>
+            <input type="date" id="event-date-input" class="form-input" required>
+          </div>
+
+          <div class="form-group" id="event-hour-group">
+            <label for="event-hour-input" id="lbl-event-hour">Ora de Început *</label>
+            <input type="time" id="event-hour-input" class="form-input" value="18:00" required>
+          </div>
+
+          <div class="form-group" id="event-duration-group">
+            <label for="event-duration-input" id="lbl-event-duration">Durată (Ore) *</label>
+            <input type="number" id="event-duration-input" class="form-input" min="0.5" max="24" step="0.5" value="2" placeholder="ex: 2" required>
+          </div>
+
+          <!-- Recurrent Event Option -->
+          <div class="form-group form-full recurrence-box" id="event-recurrence-group" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 6px;">
+            <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px; font-weight: 700; cursor: pointer; color: var(--text-primary); margin-bottom: 0;">
+              <input type="checkbox" id="event-is-recurrent" style="width: 16px; height: 16px; accent-color: var(--primary);">
+              <span>Recurrent Event</span>
+            </label>
+            <div id="event-recurrence-options" style="display: none; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border-subtle);">
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <label for="event-recurrence-months" style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0;">Repeat for:</label>
+                <select id="event-recurrence-months" class="form-select" style="max-width: 160px; font-size: 0.82rem; padding: 4px 8px;">
+                  <option value="2">2 Months</option>
+                  <option value="3" selected>3 Months</option>
+                  <option value="4">4 Months</option>
+                  <option value="5">5 Months</option>
+                  <option value="6">6 Months</option>
+                  <option value="9">9 Months</option>
+                  <option value="12">12 Months (1 Year)</option>
+                </select>
+                <span id="event-recurrence-preview-hint" style="font-size: 0.75rem; color: var(--accent-blue);">Schedules monthly on the same day</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Free Hours Availability On Selected Date -->
+          <div class="form-group form-full" id="event-timing-group">
+            <fieldset class="event-timing-mode" id="event-timing-mode">
+              <legend>Mod de programare</legend>
+              <label><input type="radio" name="event-timing-mode" value="consecutive" checked> Ore consecutive</label>
+              <label><input type="radio" name="event-timing-mode" value="async"> Ore separate</label>
+            </fieldset>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label style="margin-bottom: 0;">Full Day Schedule Matrix (08:00 – 20:00)</label>
+              <span id="event-hours-board-hint" style="font-size: 0.72rem; color: var(--text-muted);">Alegeți un interval verde pentru ora de început</span>
+            </div>
+            <div id="event-free-hours-board" class="free-hours-board">
+              <!-- Injected dynamically via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WIZARD STEP 3: Cazare & Camere Opțional (For Public Events) -->
+      <div class="wizard-step-pane" id="wizard-step-pane-3">
+        <div id="wizard-step-3-host">
+          <!-- Room booking category will be placed here dynamically in public event mode -->
+        </div>
+      </div>
+
+      <!-- WIZARD STEP 4: Înscriere, Preț & Copertă Social Media -->
+      <div class="wizard-step-pane" id="wizard-step-pane-4">
+        <div class="form-grid">
+          <!-- Pricing and Enrolment (Public Events) -->
+          <div class="form-group event-public-field" id="event-pricing-group">
+            <label for="event-price-input">Price *</label>
+            <div class="price-field-group">
+              <input type="text" id="event-price-input" class="form-input" placeholder="0 or Free">
+              <select id="event-price-currency" class="form-select" aria-label="Currency"><option value="RON">RON</option><option value="EUR">EUR</option></select>
+            </div>
+          </div>
+
+          <div class="form-group event-public-field" id="event-enroll-group">
+            <label for="event-enroll-input">Link for Enrolment *</label>
+            <input type="url" id="event-enroll-input" class="form-input" placeholder="https://example.com/register">
+          </div>
+
+          <div class="form-group form-full" id="event-creator-group">
+            <label for="event-creator-display">Scheduled By (Attached User)</label>
+            <input type="text" id="event-creator-display" class="form-input" readonly style="opacity: 0.8; background: var(--bg-card);">
+          </div>
+
+          <!-- Facebook Page Image (16:9 Landscape) -->
+          <div class="form-group form-full event-public-field" id="event-fb-cover-group">
+            <label for="event-fb-image-file">
+              Image for Facebook Page (Strict 16:9 Landscape Proportional Standard) *
+            </label>
+            <div class="fb-upload-container">
+              <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                <input type="file" id="event-fb-image-file" class="form-input" accept="image/*" style="flex: 1;">
+                <button type="button" id="btn-use-fb-sample" class="btn btn-secondary" style="font-size: 0.75rem; white-space: nowrap;">Use 16:9 Sample</button>
+              </div>
+              <input type="url" id="event-fb-image-url" class="form-input" placeholder="Or paste image URL (e.g. https://...)" style="margin-bottom: 8px;">
+              <input type="hidden" id="event-fb-image-data" value="">
+              
+              <!-- Dimension & Proportional Aspect Ratio Status -->
+              <div id="event-fb-validation-status" class="fb-dimension-status" style="display: none;">
+                <div id="fb-status-icon">Dimensions</div>
+                <div id="fb-status-text">Detecting dimensions...</div>
+              </div>
+
+              <!-- Preview Box -->
+              <div id="event-fb-preview-box" class="fb-preview-box" style="display: none;">
+                <img id="event-fb-preview-img" src="" alt="Facebook cover preview">
+                <span id="fb-preview-dims-badge" class="fb-dims-badge">1920 × 1080 (16:9)</span>
+              </div>
+            </div>
+            <small style="color: var(--text-muted); font-size: 0.72rem; display: block; margin-top: 5px;">
+              Facebook Page & Event requirement: 16:9 landscape aspect ratio (e.g. 1920×1080 or 1200×675). Non-proportional dimensions (square 1:1, vertical 9:16) will be strictly rejected.
+            </small>
+          </div>
+
+          <!-- Description / Notes -->
+          <div class="form-group form-full" id="event-desc-group">
+            <label for="event-desc-input" id="lbl-event-desc">Description Text</label>
+            <textarea id="event-desc-input" class="form-textarea" rows="4" placeholder="Provide full description, syllabus, session overview..."></textarea>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="dialog-footer wizard-dialog-footer" id="event-dialog-footer">
+      <button type="button" class="btn btn-secondary" id="wizard-prev-btn">Anulează</button>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <button type="button" class="btn btn-primary" id="wizard-next-btn">Pasul Următor →</button>
+        <button type="submit" form="event-form" class="btn btn-success" id="save-event-btn" style="display: none;">✓ Salvează Evenimentul</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- DIALOG: Event Detail Modal (With Permissions & Facebook Presentation) -->
+  <dialog id="event-detail-dialog" aria-labelledby="event-detail-title" style="max-width: 600px;">
+    <div class="dialog-header">
+      <h2 id="event-detail-title">Event Details</h2>
+      <button class="dialog-close-btn" id="close-event-detail-btn" aria-label="Close dialog">&times;</button>
+    </div>
+    <div class="dialog-body">
+      <!-- Facebook Cover Image Preview in Detail Modal -->
+      <div id="event-detail-fb-container" class="detail-fb-cover" style="display: none;">
+        <img id="event-detail-fb-image" src="" alt="Facebook Event Cover">
+        <span class="detail-fb-tag">Facebook Page Cover (16:9)</span>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; margin-top: 10px; flex-wrap: wrap;">
+        <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+          <span id="event-detail-type-badge" class="user-creator-tag" style="background: rgba(56, 189, 248, 0.18); color: #38bdf8; font-weight: 700;">Eveniment Public</span>
+          <span id="event-detail-space-badge" class="user-creator-tag" style="display: none; background: rgba(16, 185, 129, 0.18); color: #34d399;">📍 Spațiu</span>
+          <span id="event-detail-room-badge" class="user-creator-tag" style="display: none; background: rgba(139, 92, 246, 0.2); color: #c4b5fd;">🛏️ Cazare</span>
+          <span id="event-detail-days-badge" class="user-creator-tag" style="background: rgba(139, 92, 246, 0.2); color: #c4b5fd;">Single day</span>
+          <span id="event-detail-recurrent-badge" class="user-creator-tag" style="display: none; background: rgba(56, 189, 248, 0.2); color: #38bdf8;">Recurrent</span>
+        </div>
+        <span id="event-detail-creator-pill" class="user-creator-tag">Attached user</span>
+      </div>
+      <h3 id="event-detail-heading" style="font-size: 1.3rem; font-weight: 700; margin-bottom: 14px; line-height: 1.3;">Event Heading</h3>
+
+      <div class="detail-meta-grid" style="margin-bottom: 16px;">
+        <div class="detail-meta-item">
+          <span>Date, Time & Duration</span>
+          <strong id="event-detail-datetime">2026-09-14 at 18:00 (2 hrs)</strong>
+        </div>
+        <div class="detail-meta-item" id="event-detail-price-item">
+          <span>Price</span>
+          <strong id="event-detail-price" style="color: #10b981; font-size: 1.05rem;">Free</strong>
+        </div>
+        <div class="detail-meta-item" id="event-detail-space-item" style="display: none;">
+          <span>Spațiu / Sală</span>
+          <strong id="event-detail-space-text" style="color: #38bdf8;">-</strong>
+        </div>
+        <div class="detail-meta-item" id="event-detail-room-item" style="display: none;">
+          <span>Cameră Cazare</span>
+          <strong id="event-detail-room-text" style="color: #c4b5fd;">-</strong>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 6px;">Description:</span>
+        <div id="event-detail-desc" class="detail-desc-box"></div>
+      </div>
+
+      <!-- Enrolment Link Action -->
+      <div id="event-detail-enroll-wrap" style="margin-bottom: 16px;">
+        <a id="event-detail-enroll-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; width: 100%; justify-content: center; padding: 12px; font-weight: 600; border-radius: 8px;">
+          <span>Open enrolment link</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
+      </div>
+
+      <div id="event-permission-notice" class="permission-notice-box" style="display: none;">
+        <span>View only: you can only edit or delete events you created.</span>
+      </div>
+    </div>
+    <div class="dialog-footer" style="justify-content: space-between;">
+      <button type="button" class="btn btn-danger" id="event-detail-delete-btn">Delete Event</button>
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="btn btn-secondary" id="close-event-detail-done-btn">Close</button>
+        <button type="button" class="btn btn-primary" id="event-detail-edit-btn">Edit Event</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- DIALOG: Add / Edit Post Modal -->
+  <dialog id="post-dialog" aria-labelledby="post-dialog-title">
+    <div class="dialog-header">
+      <h2 id="post-dialog-title">
+        <span id="post-dialog-action-text">Schedule New Post</span>
+      </h2>
+      <button class="dialog-close-btn" id="close-post-dialog-btn" aria-label="Close dialog">&times;</button>
+    </div>
+    <form id="post-form" class="dialog-body">
+      <input type="hidden" id="post-edit-id" value="">
+      <div class="form-grid">
+        <!-- Platform Selection -->
+        <div class="form-group">
+          <label for="post-platform-select">Platform *</label>
+          <select id="post-platform-select" class="form-select" required>
+            <!-- Injected dynamically -->
+          </select>
+        </div>
+
+        <!-- Post Type (Dynamic 2026 Standards) -->
+        <div class="form-group">
+          <label for="post-type-select">Post Type & Format *</label>
+          <select id="post-type-select" class="form-select" required>
+            <!-- Injected dynamically -->
+          </select>
+        </div>
+
+        <!-- Live 2026 Size Guide Collapsible Menu -->
+        <div class="form-full">
+          <details class="spec-helper-details" open>
+            <summary class="spec-helper-summary">
+              <span id="spec-summary-title">Standard requirements (2026)</span>
+              <span class="spec-summary-badge" id="spec-summary-badge">Standard Spec</span>
+            </summary>
+            <div id="live-spec-helper" class="spec-helper-box">
+              <!-- Injected dynamically based on selected post type -->
+            </div>
+          </details>
+        </div>
+
+        <!-- Date & Time -->
+        <div class="form-group">
+          <label for="post-date-input">Publish Date *</label>
+          <input type="date" id="post-date-input" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label for="post-time-input">Publish Time *</label>
+          <input type="time" id="post-time-input" class="form-input" value="12:00" required>
+        </div>
+
+        <!-- Title -->
+        <div class="form-full form-group">
+          <label for="post-title-input">Post Title / Headline *</label>
+          <input type="text" id="post-title-input" class="form-input" placeholder="e.g. 5 Strategies for Organic Reach in 2026" required>
+        </div>
+
+        <!-- Media Upload & Selection -->
+        <div class="form-full form-group">
+          <label>Media Asset (Video / Photo / Photos) *</label>
+          
+          <div class="media-uploader-box" id="media-drop-zone">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            <div>
+              <strong>Click to upload</strong> or drag & drop files here
+              <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Supports MP4, MOV, JPG, PNG, WebP (Validated to selected standard)</p>
+            </div>
+            <input type="file" id="media-file-input" accept="image/*,video/*" style="display: none;" multiple>
+          </div>
+
+          <!-- Or Image URL Input -->
+          <div style="display: flex; gap: 8px; margin-top: 8px;">
+            <input type="url" id="media-url-input" class="form-input" style="flex: 1;" placeholder="Or paste media image/video URL...">
+            <button type="button" id="apply-url-btn" class="btn btn-secondary btn-sm">Load URL</button>
+          </div>
+
+          <!-- Live Preview -->
+          <div class="media-preview-container" id="media-preview-container">
+            <div class="preview-media-wrapper" id="preview-media-wrapper">
+              <img id="preview-img" src="" alt="Media Preview" style="display: none;">
+              <video id="preview-video" src="" controls style="display: none;"></video>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-secondary);">
+              <span id="preview-media-name">No media selected</span>
+              <span id="preview-aspect-pill" class="aspect-tag">Ratio: 9:16</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- File Share / Heavy Media Asset Link -->
+        <div class="form-full form-group share-link-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label for="post-share-link" style="margin-bottom: 0;">Asset / file share link (optional)</label>
+            <span class="badge-subtle" style="font-size: 0.72rem; color: #38bdf8; background: rgba(56, 189, 248, 0.1);">For 4K Videos, RAWs, Drive, Dropbox, Network Shares</span>
+          </div>
+          <div class="share-link-input-row" style="display: flex; gap: 8px;">
+            <input type="text" id="post-share-link" class="form-input" style="flex: 1;" placeholder="e.g. https://drive.google.com/..., Dropbox link, or \\share\assets\video.mp4">
+            <button type="button" id="btn-test-share-link" class="btn btn-secondary btn-sm" style="white-space: nowrap;">Test Link <svg class="ui-icon" style="width:11px;height:11px;vertical-align:middle"><use href="#icon-external-link"></use></svg></button>
+          </div>
+          <small style="color: var(--text-muted); font-size: 0.73rem; display: block; margin-top: 4px;">
+            Keep large video masters and raw assets on your share and have the link at hand directly inside the post.
+          </small>
+        </div>
+
+        <!-- Description & Caption -->
+        <div class="form-full form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <label for="post-desc-input">Post Description / Copy *</label>
+            <span id="caption-counter" style="font-size: 0.72rem; color: var(--text-muted);">0 / 2200 chars</span>
+          </div>
+          <textarea id="post-desc-input" class="form-textarea" rows="6" placeholder="Write caption, hashtags, mentions..." required></textarea>
+        </div>
+
+        <!-- Status -->
+        <div class="form-group">
+          <label for="post-status-select">Status</label>
+          <select id="post-status-select" class="form-select">
+            <option value="scheduled">Scheduled</option>
+            <option value="published">Published</option>
+            <option value="draft">Draft</option>
+          </select>
+        </div>
+      </div>
+    </form>
+    <div class="dialog-footer">
+      <button type="button" class="btn btn-secondary" id="cancel-post-dialog-btn">Cancel</button>
+      <button type="submit" form="post-form" class="btn btn-primary" id="save-post-btn">Save Post</button>
+    </div>
+  </dialog>
+
+  <!-- DIALOG: Post Detail View Modal -->
+  <dialog id="detail-dialog" aria-labelledby="detail-dialog-title">
+    <div class="dialog-header">
+      <h2 id="detail-dialog-title">Post Details</h2>
+      <button class="dialog-close-btn" id="close-detail-dialog-btn" aria-label="Close dialog">&times;</button>
+    </div>
+    <div class="dialog-body">
+      <div class="detail-view-container">
+        <!-- Media display -->
+        <div class="detail-media-box" id="detail-media-box">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Post Information -->
+        <div class="detail-info-col">
+          <div id="detail-platform-badge" class="detail-platform-badge">
+            <!-- Platform badge -->
+          </div>
+          <h3 id="detail-title" class="detail-title">Post Title</h3>
+          
+          <div class="detail-meta-grid">
+            <div class="detail-meta-item">
+              <span>Publish Date & Time</span>
+              <strong id="detail-date-time">2026-09-17 at 13:00</strong>
+            </div>
+            <div class="detail-meta-item">
+              <span>Post Type & Ratio</span>
+              <strong id="detail-post-type">Feed Photo (1:1)</strong>
+            </div>
+            <div class="detail-meta-item">
+              <span>Media Format</span>
+              <strong id="detail-media-format">Single Photo</strong>
+            </div>
+            <div class="detail-meta-item">
+              <span>Status</span>
+              <strong id="detail-status">Scheduled</strong>
+            </div>
+          </div>
+
+          <!-- Cloud / Network File Share Assets Section -->
+          <div id="detail-share-box" class="detail-share-box" style="margin-bottom: 16px; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: var(--radius-md); padding: 12px 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span style="font-size: 0.78rem; font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
+                Heavy media / video asset share link:
+              </span>
+              <span id="detail-share-status-badge" class="badge-subtle" style="font-size: 0.7rem; color: #38bdf8;">Linked</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
+              <a id="detail-share-link-text" href="#" target="_blank" style="color: var(--text-primary); font-family: monospace; font-size: 0.8rem; word-break: break-all; flex: 1; text-decoration: underline;">
+                https://...
+              </a>
+              <div style="display: flex; gap: 6px;">
+                <button type="button" id="btn-detail-copy-share" class="btn btn-secondary btn-sm" title="Copy link to clipboard" style="font-size: 0.76rem; font-weight: 700;">
+                  Copy share link
+                </button>
+                <a id="btn-detail-open-share" href="#" target="_blank" class="btn btn-primary btn-sm" title="Open share folder / file in new tab" style="font-size: 0.76rem; text-decoration: none; font-weight: 700;">
+                  Open Share <svg class="ui-icon" style="width:11px;height:11px;vertical-align:middle"><use href="#icon-external-link"></use></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 6px;">Caption / Description:</span>
+            <div id="detail-desc-box" class="detail-desc-box"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dialog-footer">
+      <button type="button" class="btn btn-danger" id="detail-delete-btn">Delete Post</button>
+      <button type="button" class="btn btn-secondary" id="detail-duplicate-btn">Duplicate</button>
+      <button type="button" class="btn btn-primary" id="detail-edit-btn">Edit Post</button>
+    </div>
+  </dialog>
+
+  <!-- DIALOG: Control Panel Modal -->
+  <dialog id="control-panel-dialog" aria-labelledby="cp-dialog-title">
+    <div class="dialog-header" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+      <h2 id="cp-dialog-title" style="margin: 0;">
+        <span>Control panel: platforms and 2026 size standards</span>
+      </h2>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <button type="button" class="btn btn-primary btn-sm" id="btn-cp-header-add-platform" style="white-space: nowrap; font-size: 0.8rem; font-weight: 700; padding: 6px 12px;">
+          + Adaugă o Nouă Platformă
+        </button>
+        <button class="dialog-close-btn" id="close-cp-dialog-btn" aria-label="Close control panel">&times;</button>
+      </div>
+    </div>
+    <div class="dialog-body">
+      <!-- Add New Platform Form -->
+      <details id="cp-add-platform-details" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 14px; margin-bottom: 20px;">
+        <summary style="font-weight: 700; cursor: pointer; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
+          + Add New Platform
+        </summary>
+        <form id="add-platform-form" style="margin-top: 14px; display: flex; flex-direction: column; gap: 12px;">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="new-platform-name">Platform Name *</label>
+              <input type="text" id="new-platform-name" class="form-input" placeholder="e.g. Threads, Pinterest, LinkedIn" required>
+            </div>
+            <div class="form-group">
+              <label for="new-platform-color">Brand Color</label>
+              <input type="color" id="new-platform-color" class="form-input" value="#8b5cf6" style="height: 38px; padding: 2px;">
+            </div>
+            <div class="form-group">
+              <label for="new-platform-domain">Website Domain (for Auto Favicon)</label>
+              <input type="text" id="new-platform-domain" class="form-input" placeholder="e.g. linkedin.com, threads.net, x.com">
+            </div>
+            <div class="form-group">
+              <label for="new-platform-desc">Description</label>
+              <input type="text" id="new-platform-desc" class="form-input" placeholder="e.g. Professional network or microblogging">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-sm" style="align-self: flex-start;">Add Platform</button>
+        </form>
+      </details>
+
+      <!-- Manage Platforms List -->
+      <div id="cp-platforms-list">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+    <div class="dialog-footer" style="justify-content: space-between;">
+      <button type="button" class="btn btn-danger btn-sm" id="cp-reset-defaults-btn">Reset All to 2026 Defaults</button>
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="btn btn-secondary btn-sm" id="cp-export-btn">Export JSON</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="cp-import-btn">Import JSON</button>
+        <input type="file" id="cp-import-file-input" accept=".json" style="display: none;">
+        <button type="button" class="btn btn-primary btn-sm" id="close-cp-done-btn">Done</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- DIALOG: 2026 Aggregated Standards Matrix Modal -->
+  <dialog id="standards-dialog" aria-labelledby="standards-dialog-title" style="max-width: 980px;">
+    <div class="dialog-header">
+      <h2 id="standards-dialog-title">
+        <span>2026 social media image and video standards</span>
+      </h2>
+      <button class="dialog-close-btn" id="close-standards-dialog-btn" aria-label="Close standards dialog">&times;</button>
+    </div>
+    <div class="dialog-body">
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 14px;">
+        Aggregated 2026 industry dimensions, vertical video mandates, mobile safe zones, and aspect ratios across all supported platforms.
+      </p>
+      <div class="standards-table-wrapper">
+        <table class="standards-table">
+          <thead>
+            <tr>
+              <th>Platform</th>
+              <th>Post Type</th>
+              <th>Aspect Ratio</th>
+              <th>Recommended Resolution</th>
+              <th>File Format</th>
+              <th>Safe Zone / Specs</th>
+            </tr>
+          </thead>
+          <tbody id="standards-table-body">
+            <!-- Injected dynamically from active specs -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="dialog-footer">
+      <button type="button" class="btn btn-primary" id="close-standards-done-btn">Close Matrix</button>
+    </div>
+  </dialog>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "name": "multi-platform-social-calendar-2026",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Multi-platform social media calendar with Control Panel, 2026 dimension standards, month-by-month views, and smart filters.",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "calendar",
+    "social-media",
+    "tiktok",
+    "instagram",
+    "facebook",
+    "youtube",
+    "reddit"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.7.0",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.3"
+  }
+}
