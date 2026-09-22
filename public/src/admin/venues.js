@@ -13,21 +13,21 @@ export const adminVenueMethods = {
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>
-          <div style="display: flex; align-items: center; gap: 8px; font-weight: 700;">
+          <div class="u-flex u-items-center u-gap-8 u-fw-700">
             <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background: ${space.color || '#38bdf8'}; flex-shrink: 0;"></span>
             <span>${this.escapeHtml(space.name)}</span>
           </div>
         </td>
         <td><strong>${space.capacity || '-'}</strong></td>
-        <td><span style="color: var(--text-muted); font-size: 0.8rem;">${this.escapeHtml(space.desc || '-')}</span></td>
-        <td><strong>${usageCount}</strong> <span style="font-size: 0.78rem; color: var(--text-muted);">${countLabel}</span></td>
+        <td><span class="u-color-muted u-text-xs">${this.escapeHtml(space.desc || '-')}</span></td>
+        <td><strong>${usageCount}</strong> <span class="u-text-2xs u-color-muted">${countLabel}</span></td>
         <td>
           <span class="user-role-badge ${isEnabled ? 'role-admin' : ''}" style="${isEnabled ? 'background: rgba(34, 197, 94, 0.15); color: #4ade80; border-color: rgba(34, 197, 94, 0.3);' : 'background: rgba(148, 163, 184, 0.15); color: #94a3b8;'}">
             ${isEnabled ? (this.t("cp_status_active")) : (this.t("cp_status_disabled"))}
           </span>
         </td>
         <td>
-          <div style="display: flex; gap: 6px; align-items: center;">
+          <div class="u-flex u-gap-6 u-items-center">
             <button class="btn btn-secondary btn-sm btn-toggle-space" data-id="${space.id}">${isEnabled ? (this.t("btn_disable")) : (this.t("btn_enable"))}</button>
             <button class="btn btn-danger btn-sm btn-del-space" data-id="${space.id}">${this.t("admin_delete_btn")}</button>
           </div>
@@ -102,22 +102,22 @@ export const adminVenueMethods = {
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>
-          <div style="display: flex; align-items: center; gap: 8px; font-weight: 700;">
+          <div class="u-flex u-items-center u-gap-8 u-fw-700">
             <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background: ${room.color || '#a855f7'}; flex-shrink: 0;"></span>
             <span>🛏️ ${this.escapeHtml(room.name)}</span>
           </div>
         </td>
         <td><span class="badge-subtle">${this.escapeHtml(room.type || 'Standard')}</span></td>
-        <td><strong>${room.capacity || 2}</strong> <span style="font-size: 0.78rem; color: var(--text-muted);">${this.currentLang === 'ro' ? 'oaspeți' : 'guests'} (${room.beds || 1} ${this.currentLang === 'ro' ? 'paturi' : 'beds'})</span></td>
-        <td><span style="color: var(--text-muted); font-size: 0.8rem;">${this.escapeHtml(room.notes || '-')}</span></td>
-        <td><strong>${usageCount}</strong> <span style="font-size: 0.78rem; color: var(--text-muted);">${this.t("admin_th_room_bookings")}</span></td>
+        <td><strong>${room.capacity || 2}</strong> <span class="u-text-2xs u-color-muted">${this.currentLang === 'ro' ? 'oaspeți' : 'guests'} (${room.beds || 1} ${this.currentLang === 'ro' ? 'paturi' : 'beds'})</span></td>
+        <td><span class="u-color-muted u-text-xs">${this.escapeHtml(room.notes || '-')}</span></td>
+        <td><strong>${usageCount}</strong> <span class="u-text-2xs u-color-muted">${this.t("admin_th_room_bookings")}</span></td>
         <td>
           <span class="user-role-badge ${isEnabled ? 'role-admin' : ''}" style="${isEnabled ? 'background: rgba(168, 85, 247, 0.15); color: #c084fc; border-color: rgba(168, 85, 247, 0.3);' : 'background: rgba(148, 163, 184, 0.15); color: #94a3b8;'}">
             ${isEnabled ? (this.t("cp_status_active")) : (this.t("cp_status_disabled"))}
           </span>
         </td>
         <td>
-          <div style="display: flex; gap: 6px; align-items: center;">
+          <div class="u-flex u-gap-6 u-items-center">
             <button class="btn btn-secondary btn-sm btn-toggle-room" data-id="${room.id}">${isEnabled ? (this.t("btn_disable")) : (this.t("btn_enable"))}</button>
             <button class="btn btn-danger btn-sm btn-del-room" data-id="${room.id}">${this.t("admin_delete_btn")}</button>
           </div>

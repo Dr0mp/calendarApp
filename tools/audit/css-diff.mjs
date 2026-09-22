@@ -1,5 +1,5 @@
-// Computed-style regression check: renders the app with the CSS from a git ref and with the
-// working-copy CSS, and compares getComputedStyle() of EVERY element (visible or not) in
+// Computed-style regression check: renders the app with HTML/JS/CSS from a git ref and with the
+// working copy, and compares getComputedStyle() of EVERY element (visible or not) in
 // several app states and both themes. Catches cascade changes the screenshots can't see
 // (closed dialogs, hidden panels, other breakpoints).
 // Usage: node tools/audit/css-diff.mjs [gitRef=HEAD]   (test server must run on :3100)
@@ -8,8 +8,6 @@ const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
 const ref = process.argv[2] || 'HEAD';
-const oldCss = execSync(`git show ${ref}:public/styles.css`, { cwd: ROOT, maxBuffer: 1e8 }).toString();
-const newCss = fs.readFileSync(path.join(ROOT, 'public/styles.css'), 'utf8');
 
 // The properties that decide what a user sees (layout, box, colour, type, effects).
 const PROPS = ['display','position','top','right','bottom','left','z-index','float','width','height','min-width','max-width','min-height','max-height',
@@ -38,14 +36,24 @@ const STATES = [
   ['notifications', async p => { await p.click('#nav-social-btn'); await p.click('#btn-social-event-notifications'); }],
 ];
 
-async function snapshot(css, theme, width) {
+async function snapshot(side, theme, width) {
   const b = await chromium.launch();
   const ctx = await b.newContext({ viewport: { width, height: 900 } });
   const page = await ctx.newPage();
   page.setDefaultTimeout(4000);
   await page.clock.setFixedTime(new Date('2026-09-15T10:00:00+03:00'));
   const freeze = '\n*,*::before,*::after{transition:none!important;animation:none!important;caret-color:transparent!important}';
-  await page.route('**/styles.css', r => r.fulfill({ contentType: 'text/css', body: css + freeze }));
+  // side = 'old' serves every static file (HTML, JS, CSS) from the git ref; 'new' the working copy.
+  await page.route(u => u.hostname === 'localhost' && !u.pathname.startsWith('/api/'), async r => {
+    const url = new URL(r.request().url()); let p = url.pathname === '/' ? '/index.html' : url.pathname;
+    const type = p.endsWith('.css') ? 'text/css' : p.endsWith('.js') ? 'text/javascript' : p.endsWith('.html') ? 'text/html' : null;
+    if (!type) return r.continue();
+    let body;
+    try { body = side === 'old' ? execSync(`git show ${ref}:public${p}`, { cwd: ROOT, maxBuffer: 1e8 }).toString() : fs.readFileSync(path.join(ROOT, 'public', p), 'utf8'); }
+    catch { return r.fulfill({ status: 404, body: '' }); }
+    if (type === 'text/css') body += freeze;
+    return r.fulfill({ contentType: type, body });
+  });
   await page.route(u => !u.hostname.startsWith('localhost'), r => r.fulfill({ status: 200, contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675"/>' }));
   page.on('dialog', d => d.accept());
   await page.addInitScript(t => { if (!sessionStorage.getItem('s')) { localStorage.clear(); localStorage.setItem('cal_suite_theme_v1', t); sessionStorage.setItem('s', 1); } }, theme);
@@ -77,7 +85,7 @@ async function snapshot(css, theme, width) {
 
 let total = 0; const summary = {};
 for (const [theme, width] of [['dark', 1280], ['light', 1280], ['dark', 390]]) {
-  const [a, b] = [await snapshot(oldCss, theme, width), await snapshot(newCss, theme, width)];
+  const [a, b] = [await snapshot('old', theme, width), await snapshot('new', theme, width)];
   for (const state of Object.keys(a)) {
     if (a[state].error || b[state].error) { console.log(`${theme}/${width}/${state}: ${a[state].error || b[state].error}`); continue; }
     const ka = Object.keys(a[state]), kb = Object.keys(b[state]);

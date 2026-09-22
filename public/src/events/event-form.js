@@ -324,7 +324,7 @@ export const eventFormMethods = {
     if (existingNotice) existingNotice.remove();
     const notice = document.createElement("div");
     notice.className = "suggestion-applied-notice";
-    notice.innerHTML = `<span><svg class="ui-icon" style="width:12px;height:12px;vertical-align:middle"><use href="#icon-check"></use></svg> ${this.tf("suggest_applied", { when: `<strong>${newDate}, ${newHour}</strong>` })}</span>`;
+    notice.innerHTML = `<span><svg class="ui-icon u-w-12 u-h-12 u-valign-middle"><use href="#icon-check"></use></svg> ${this.tf("suggest_applied", { when: `<strong>${newDate}, ${newHour}</strong>` })}</span>`;
     this.dom.eventSmartSuggestionBox.insertAdjacentElement("beforebegin", notice);
     setTimeout(() => notice.remove(), 4000);
   },
@@ -386,7 +386,7 @@ export const eventFormMethods = {
     if (this.dom.eventFbValidationStatus) {
       this.dom.eventFbValidationStatus.style.display = "flex";
       this.dom.eventFbValidationStatus.className = "fb-dimension-status";
-      this.dom.fbStatusIcon.innerHTML = '<svg class="ui-icon" style="width:14px;height:14px"><use href="#icon-clock"></use></svg>';
+      this.dom.fbStatusIcon.innerHTML = '<svg class="ui-icon u-w-14 u-h-14"><use href="#icon-clock"></use></svg>';
       this.dom.fbStatusText.textContent = this.t("fb_analyzing");
     }
 

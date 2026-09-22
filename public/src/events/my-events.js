@@ -73,10 +73,10 @@ export const myEventsMethods = {
       this.dom.myEventsListContainer.innerHTML = `
         <div class="my-events-empty-state">
           <div class="my-events-empty-icon">📅</div>
-          <h3 style="font-size: 1.1rem; font-weight: 700; margin: 0;">${isFiltered ? this.t("my_events_no_results") : this.t("my_events_empty_title")}</h3>
-          <p style="color: var(--text-muted); font-size: 0.85rem; max-width: 420px; margin: 0;">${isFiltered ? "" : this.t("my_events_empty_sub")}</p>
+          <h3 class="u-text-lg u-fw-700 u-mt-0 u-mr-0 u-mb-0 u-ml-0">${isFiltered ? this.t("my_events_no_results") : this.t("my_events_empty_title")}</h3>
+          <p class="u-color-muted u-text-sm u-maxw-420 u-mt-0 u-mr-0 u-mb-0 u-ml-0">${isFiltered ? "" : this.t("my_events_empty_sub")}</p>
           ${!isFiltered ? `
-            <button type="button" class="btn btn-primary" id="btn-empty-create-event" style="margin-top: 8px;">
+            <button type="button" class="btn btn-primary u-mt-8" id="btn-empty-create-event">
               <svg class="ui-icon" aria-hidden="true"><use href="#icon-plus"></use></svg>
               <span>${this.t("my_events_create_new")}</span>
             </button>
@@ -134,24 +134,24 @@ export const myEventsMethods = {
           <div class="my-event-card-header">
             <span class="my-event-card-type ${typeClass}">${typeLabel}</span>
             <span class="my-event-card-date">
-              <svg class="ui-icon" style="width: 13px; height: 13px;" aria-hidden="true"><use href="#icon-calendar"></use></svg>
+              <svg class="ui-icon u-w-13 u-h-13" aria-hidden="true"><use href="#icon-calendar"></use></svg>
               ${dateStr} ${type !== "room_only" ? `• ${hourStr} (${durationStr})` : ""}
             </span>
           </div>
 
           <h3 class="my-event-card-title">${this.escapeHtml(event.title)}</h3>
 
-          <div class="my-event-card-meta" style="margin-top: 10px;">
+          <div class="my-event-card-meta u-mt-10">
             ${spaceName ? `
               <div class="my-event-card-meta-item">
                 <span>📍</span>
-                <strong style="color: var(--text-primary);">${this.escapeHtml(spaceName)}</strong>
+                <strong class="u-color-primary">${this.escapeHtml(spaceName)}</strong>
               </div>
             ` : ""}
             ${roomsSummary ? `
               <div class="my-event-card-meta-item">
-                <svg class="ui-icon" style="width: 13px; height: 13px; color: #c084fc;" aria-hidden="true"><use href="#icon-bed"></use></svg>
-                <span style="color: #c084fc; font-weight: 600;">${this.escapeHtml(roomsSummary)}</span>
+                <svg class="ui-icon u-w-13 u-h-13 u-color-purple-400" aria-hidden="true"><use href="#icon-bed"></use></svg>
+                <span class="u-color-purple-400 u-fw-600">${this.escapeHtml(roomsSummary)}</span>
               </div>
             ` : ""}
             ${type === "event" && event.price ? `
@@ -163,12 +163,12 @@ export const myEventsMethods = {
           </div>
 
           ${event.description ? `
-            <div class="my-event-card-desc" style="margin-top: 8px;">${this.escapeHtml(event.description)}</div>
+            <div class="my-event-card-desc u-mt-8">${this.escapeHtml(event.description)}</div>
           ` : ""}
         </div>
 
         <div class="my-event-card-footer">
-          <div style="display: flex; gap: 6px;">
+          <div class="u-flex u-gap-6">
             <button type="button" class="btn btn-secondary btn-sm btn-my-event-edit">
               <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkle"></use></svg>
               <span>${this.t("event_detail_edit_btn")}</span>

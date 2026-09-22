@@ -157,7 +157,7 @@ export const postEditorMethods = {
     const postType = this.getPostType(platformId, postTypeId);
 
     if (!postType) {
-      this.dom.liveSpecHelper.innerHTML = `<span style="color: var(--text-muted)">${this.t("spec_select_type")}</span>`;
+      this.dom.liveSpecHelper.innerHTML = `<span class="u-color-muted">${this.t("spec_select_type")}</span>`;
       return;
     }
 
@@ -375,11 +375,11 @@ export const postEditorMethods = {
     // Media renderer
     if (post.mediaType === "video") {
       this.dom.detailMediaBox.innerHTML = `
-        <video src="${post.mediaUrl}" controls style="max-width: 100%; max-height: 420px;"></video>
+        <video class="u-maxw-100pct u-maxh-420" src="${post.mediaUrl}" controls></video>
       `;
     } else {
       this.dom.detailMediaBox.innerHTML = `
-        <img src="${post.mediaUrl}" alt="Post Media" style="max-width: 100%; max-height: 420px; object-fit: contain;">
+        <img class="u-maxw-100pct u-maxh-420 u-object-contain" src="${post.mediaUrl}" alt="Post Media">
       `;
     }
 
@@ -388,7 +388,7 @@ export const postEditorMethods = {
     this.dom.detailPlatformBadge.style.background = platform ? platform.color : "var(--primary)";
     this.dom.detailPlatformBadge.style.color = "#fff";
     this.dom.detailPlatformBadge.innerHTML = `
-      <img class="platform-favicon" src="${iconSrc}" alt="" data-fallback="hide" style="filter: brightness(1.2);">
+      <img class="platform-favicon u-brighten" src="${iconSrc}" alt="" data-fallback="hide">
       <span>${platform ? platform.name : post.platformId}</span>
     `;
 

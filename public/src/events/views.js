@@ -391,7 +391,7 @@ export const eventViewMethods = {
         uBtn.style.boxShadow = `0 0 12px ${theme.glow}`;
       }
       uBtn.innerHTML = `
-        <span style="display: inline-flex; align-items: center; gap: 6px;">
+        <span class="u-inline-flex u-items-center u-gap-6">
           <span style="width: 8px; height: 8px; border-radius: 50%; background: ${theme.accent}; box-shadow: 0 0 8px ${theme.accent};"></span>
           ${this.escapeHtml(user.name)}
         </span>
@@ -455,7 +455,7 @@ export const eventViewMethods = {
     let timeHtml = "";
     if (this.eventsOffHoursExpanded) {
       for (let h = 0; h < 8; h++) {
-        timeHtml += `<div class="timeline-hour-marker" style="opacity: 0.5;">${String(h).padStart(2, "0")}:00</div>`;
+        timeHtml += `<div class="timeline-hour-marker u-opacity-0_5">${String(h).padStart(2, "0")}:00</div>`;
       }
     }
 
@@ -465,7 +465,7 @@ export const eventViewMethods = {
 
     if (this.eventsOffHoursExpanded) {
       for (let h = 23; h <= 23; h++) {
-        timeHtml += `<div class="timeline-hour-marker" style="opacity: 0.5;">${String(h).padStart(2, "0")}:00</div>`;
+        timeHtml += `<div class="timeline-hour-marker u-opacity-0_5">${String(h).padStart(2, "0")}:00</div>`;
       }
     }
 
@@ -557,7 +557,7 @@ export const eventViewMethods = {
         card.style.boxShadow = `0 4px 16px ${theme.glow}`;
 
         const isOwn = this.currentUser && (evt.creatorId === this.currentUser.id || evt.creatorUsername === this.currentUser.username);
-        const recurrentTag = evt.isRecurrent ? `<span style="color: #38bdf8; font-weight: 600; font-size: 0.65rem;">${evt.recurrenceIndex || 1}/${evt.recurrenceTotal || 1}</span>` : "";
+        const recurrentTag = evt.isRecurrent ? `<span class="u-color-sky u-fw-600 u-text-3xs">${evt.recurrenceIndex || 1}/${evt.recurrenceTotal || 1}</span>` : "";
         const creatorTagBg = this.theme === "light" ? this.hexToRgba(theme.accent, 0.13) : theme.tagBg;
         const creatorTagColor = this.theme === "light" ? "#334155" : theme.tagColor;
 
@@ -569,9 +569,9 @@ export const eventViewMethods = {
             ${recurrentTag}
           </div>
           <div class="timeline-event-title">${isLocked ? '🔒 ' : (isRoomOnly ? '🛏️ ' : '')}${this.escapeHtml(evt.title)}</div>
-          <div class="timeline-event-meta" style="display: flex; gap: 4px; flex-wrap: wrap; align-items: center;">
-            <span class="user-creator-tag" style="background: ${creatorTagBg}; color: ${creatorTagColor}; font-weight: 500;">${this.escapeHtml(evt.creatorName || evt.creatorUsername)} ${isOwn ? '<svg class="ui-icon" style="width:10px;height:10px;vertical-align:middle;color:#34d399"><use href="#icon-star"></use></svg>' : ''}</span>
-            ${(!isLocked && !isRoomOnly && evt.price) ? `<strong style="color: #34d399; font-weight: 600;">${this.escapeHtml(evt.price)}</strong>` : ''}
+          <div class="timeline-event-meta u-flex u-gap-4 u-wrap u-items-center">
+            <span class="user-creator-tag" style="background: ${creatorTagBg}; color: ${creatorTagColor}; font-weight: 500;">${this.escapeHtml(evt.creatorName || evt.creatorUsername)} ${isOwn ? '<svg class="ui-icon u-w-10 u-h-10 u-valign-middle u-color-emerald-400"><use href="#icon-star"></use></svg>' : ''}</span>
+            ${(!isLocked && !isRoomOnly && evt.price) ? `<strong class="u-color-emerald-400 u-fw-600">${this.escapeHtml(evt.price)}</strong>` : ''}
             ${extraMeta}
           </div>
         `;
@@ -680,7 +680,7 @@ export const eventViewMethods = {
       const dayHeader = document.createElement("div");
       dayHeader.className = "day-header";
       dayHeader.innerHTML = `
-        <span class="day-number" title="Click date to zoom into Day Timeline" style="cursor: pointer;">${dayNumber}</span>
+        <span class="day-number u-cursor-pointer" title="Click date to zoom into Day Timeline">${dayNumber}</span>
         ${isCurrentMonthCell && !isPast ? `<button class="btn-add-day" title="${this.t("event_schedule_this_date")}" data-date="${cellDateString}">+</button>` : ""}
         ${isPast && isCurrentMonthCell ? `<span class="past-schedule-message" aria-live="polite">${this.t("event_past_create_unavailable")}</span>` : ""}
       `;
@@ -729,7 +729,7 @@ export const eventViewMethods = {
         eventPill.innerHTML = `
           <span class="event-card-time">${time} · ${durHours}</span>
           <div class="event-card-title">${isLocked ? '🔒 ' : (isRoomOnly ? '🛏️ ' : '')}${this.escapeHtml(event.title)}</div>
-          ${tagsHtml ? `<div style="display: flex; gap: 4px; flex-wrap: wrap; margin-top: 2px;">${tagsHtml}</div>` : ''}
+          ${tagsHtml ? `<div class="u-flex u-gap-4 u-wrap u-mt-2">${tagsHtml}</div>` : ''}
         `;
 
         eventPill.addEventListener("click", (e) => {

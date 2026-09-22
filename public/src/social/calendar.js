@@ -539,7 +539,7 @@ export const socialCalendarMethods = {
         <div class="feed-day-header">
           <div class="feed-day-title">
             <span class="day-date-tag">${dateFormatted}</span>
-            <span style="font-size: 0.78rem; font-weight: 500; color: var(--text-muted);">(${datePosts.length} ${datePosts.length === 1 ? 'post' : 'posts'})</span>
+            <span class="u-text-2xs u-fw-500 u-color-muted">(${datePosts.length} ${datePosts.length === 1 ? 'post' : 'posts'})</span>
           </div>
           <button class="btn btn-secondary btn-sm btn-feed-add" data-date="${dateStr}">+ Add Post</button>
         </div>
@@ -576,7 +576,7 @@ export const socialCalendarMethods = {
                 <img class="platform-favicon" src="${iconSrc}" alt="" data-fallback="hide">
                 ${platform ? platform.name : post.platformId}
               </span>
-              <span style="font-size: 0.72rem; color: var(--text-muted);">${post.time || "12:00"}</span>
+              <span class="u-text-2xs u-color-muted">${post.time || "12:00"}</span>
             </div>
             <h4 class="feed-post-title">${this.escapeHtml(post.title || this.t("post_untitled"))}</h4>
             ${post.description ? `<p class="feed-post-desc">${this.escapeHtml(post.description)}</p>` : ""}
@@ -588,12 +588,12 @@ export const socialCalendarMethods = {
             </div>
             ${post.shareLink ? `
               <div class="feed-share-row">
-                <span style="font-size: 0.74rem; color: #38bdf8; font-weight: 700; display: inline-flex; align-items: center; gap: 5px;">
-                  ${this.t("post_share_link_label")}: <span style="color: var(--text-primary); font-family: monospace; font-size: 0.72rem; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${this.escapeHtml(post.shareLink)}</span>
+                <span class="u-text-2xs u-color-sky u-fw-700 u-inline-flex u-items-center u-gap-5">
+                  ${this.t("post_share_link_label")}: <span class="u-color-primary u-font-mono u-text-2xs u-maxw-260 u-overflow-hidden u-truncate-ellipsis u-nowrap">${this.escapeHtml(post.shareLink)}</span>
                 </span>
-                <div style="display: inline-flex; gap: 6px;">
-                  <button type="button" class="btn btn-secondary btn-sm btn-feed-copy-share" data-link="${this.escapeHtml(post.shareLink)}" style="font-size: 0.72rem; padding: 3px 8px; font-weight: 700;">${this.t("post_detail_copy_share_btn")}</button>
-                  <a href="${post.shareLink.startsWith('http') ? this.escapeHtml(post.shareLink) : '#'}" target="_blank" class="btn btn-primary btn-sm btn-feed-open-share" data-link="${this.escapeHtml(post.shareLink)}" style="font-size: 0.72rem; padding: 3px 8px; text-decoration: none; font-weight: 700;">${this.t("post_open_share_btn")} <svg class="ui-icon" style="width:11px;height:11px;vertical-align:middle"><use href="#icon-external-link"></use></svg></a>
+                <div class="u-inline-flex u-gap-6">
+                  <button type="button" class="btn btn-secondary btn-sm btn-feed-copy-share u-text-2xs u-pt-3 u-pr-8 u-pb-3 u-pl-8 u-fw-700" data-link="${this.escapeHtml(post.shareLink)}">${this.t("post_detail_copy_share_btn")}</button>
+                  <a href="${post.shareLink.startsWith('http') ? this.escapeHtml(post.shareLink) : '#'}" target="_blank" class="btn btn-primary btn-sm btn-feed-open-share u-text-2xs u-pt-3 u-pr-8 u-pb-3 u-pl-8 u-decoration-none u-fw-700" data-link="${this.escapeHtml(post.shareLink)}">${this.t("post_open_share_btn")} <svg class="ui-icon u-w-11 u-h-11 u-valign-middle"><use href="#icon-external-link"></use></svg></a>
                 </div>
               </div>
             ` : ""}

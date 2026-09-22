@@ -10,9 +10,9 @@ export const eventModelMethods = {
     const room = event.roomId ? (this.rooms || []).find(r => r.id === event.roomId) : null;
     let html = "";
     if (entryType === "locked") {
-      html += `<span class="event-pill-space-tag" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24;">🔒 ${this.t("entry_type_locked")}</span>`;
+      html += `<span class="event-pill-space-tag u-bg-amber-500-20 u-color-amber-400">🔒 ${this.t("entry_type_locked")}</span>`;
     } else if (entryType === "room_only") {
-      html += `<span class="event-pill-room-tag" style="background: rgba(168, 85, 247, 0.2); color: #c084fc;">🛏️ ${this.t("entry_type_room_only")}</span>`;
+      html += `<span class="event-pill-room-tag u-bg-purple-500-20 u-color-purple-400">🛏️ ${this.t("entry_type_room_only")}</span>`;
     }
     if (space) {
       html += `<span class="event-pill-space-tag">📍 ${this.escapeHtml(space.name)}</span>`;

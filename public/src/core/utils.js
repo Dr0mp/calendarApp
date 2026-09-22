@@ -36,7 +36,7 @@ export const utilMethods = {
     const onSuccess = () => {
       if (btnElement) {
         const origText = btnElement.innerHTML;
-        btnElement.innerHTML = '<svg class="ui-icon" style="width:12px;height:12px;vertical-align:middle"><use href="#icon-check"></use></svg> ' + this.t("copied_label");
+        btnElement.innerHTML = '<svg class="ui-icon u-w-12 u-h-12 u-valign-middle"><use href="#icon-check"></use></svg> ' + this.t("copied_label");
         btnElement.classList.add("btn-copied");
         setTimeout(() => {
           btnElement.innerHTML = origText;

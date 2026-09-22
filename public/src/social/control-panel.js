@@ -24,7 +24,7 @@ export const controlPanelMethods = {
             <img class="platform-favicon-lg" src="${iconSrc}" alt="" data-fallback="hide">
             <span>${platform.name}</span>
           </div>
-          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <div class="u-flex u-items-center u-gap-10 u-wrap">
             <label class="cp-platform-toggle-label" title="${this.t("cp_toggle_title")}">
               <span class="cp-platform-status-text">${isEnabled ? this.t("cp_status_active") : this.t("cp_status_disabled")}</span>
               <div class="toggle-switch">
@@ -36,7 +36,7 @@ export const controlPanelMethods = {
             ${this.platforms.length > 1 ? `<button class="btn btn-danger btn-sm cp-delete-platform-btn" data-pid="${platform.id}">${this.t("cp_remove")}</button>` : ""}
           </div>
         </div>
-        <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 8px;">${platform.description || this.t("cp_default_description")}</p>
+        <p class="u-text-2xs u-color-muted u-mb-8">${platform.description || this.t("cp_default_description")}</p>
         <div class="cp-posttypes-container" id="cp-pt-container-${platform.id}"></div>
       `;
 
@@ -60,23 +60,23 @@ export const controlPanelMethods = {
 
         ptItem.innerHTML = `
           <div>
-            <label style="font-size: 0.68rem; color: var(--text-muted); display: block;">${this.t("cp_type_name")}</label>
+            <label class="u-text-3xs u-color-muted u-block">${this.t("cp_type_name")}</label>
             <input type="text" class="cp-input-sm cp-edit-pt-name" value="${this.escapeHtml(pt.name)}">
           </div>
           <div>
-            <label style="font-size: 0.68rem; color: var(--text-muted); display: block;">${this.t("cp_aspect_ratio")}</label>
+            <label class="u-text-3xs u-color-muted u-block">${this.t("cp_aspect_ratio")}</label>
             <input type="text" class="cp-input-sm cp-edit-pt-ratio" value="${this.escapeHtml(pt.aspectRatio)}">
           </div>
           <div>
-            <label style="font-size: 0.68rem; color: var(--text-muted); display: block;">${this.t("cp_width")}</label>
+            <label class="u-text-3xs u-color-muted u-block">${this.t("cp_width")}</label>
             <input type="number" class="cp-input-sm cp-edit-pt-width" value="${pt.recommendedWidth}">
           </div>
           <div>
-            <label style="font-size: 0.68rem; color: var(--text-muted); display: block;">${this.t("cp_height")}</label>
+            <label class="u-text-3xs u-color-muted u-block">${this.t("cp_height")}</label>
             <input type="number" class="cp-input-sm cp-edit-pt-height" value="${pt.recommendedHeight}">
           </div>
           <div>
-            <label style="font-size: 0.68rem; color: var(--text-muted); display: block;">${this.t("cp_action")}</label>
+            <label class="u-text-3xs u-color-muted u-block">${this.t("cp_action")}</label>
             <button type="button" class="btn btn-danger btn-sm cp-delete-pt-btn" title="${this.t("cp_delete_post_type")}">&times;</button>
           </div>
         `;
@@ -281,7 +281,7 @@ export const controlPanelMethods = {
     const enabledPlatforms = this.platforms.filter(p => p.enabled !== false);
     if (enabledPlatforms.length === 0) {
       const tr = document.createElement("tr");
-      tr.innerHTML = `<td colspan="6" style="text-align: center; color: var(--text-muted); padding: 24px;">${this.t("standards_no_platforms")}</td>`;
+      tr.innerHTML = `<td class="u-text-center u-color-muted u-pt-24 u-pr-24 u-pb-24 u-pl-24" colspan="6">${this.t("standards_no_platforms")}</td>`;
       this.dom.standardsTableBody.appendChild(tr);
       this.dom.standardsDialog.showModal();
       return;
@@ -300,9 +300,9 @@ export const controlPanelMethods = {
           </td>
           <td><strong>${pt.name}</strong></td>
           <td><span class="standards-badge-ratio">${pt.aspectRatio}</span></td>
-          <td><code style="color: var(--text-primary); font-family: var(--font-mono);">${pt.recommendedWidth} × ${pt.recommendedHeight} px</code></td>
-          <td style="color: var(--text-secondary); font-size: 0.75rem;">${pt.format}</td>
-          <td style="color: var(--text-muted); font-size: 0.75rem;">${pt.safeZone || "Centered"}</td>
+          <td><code class="u-color-primary u-font-mono">${pt.recommendedWidth} × ${pt.recommendedHeight} px</code></td>
+          <td class="u-color-secondary u-text-2xs">${pt.format}</td>
+          <td class="u-color-muted u-text-2xs">${pt.safeZone || "Centered"}</td>
         `;
         this.dom.standardsTableBody.appendChild(tr);
       });

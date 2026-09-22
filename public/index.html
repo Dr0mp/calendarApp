@@ -49,7 +49,7 @@
           </button>
           <button id="nav-my-events-btn" class="nav-tab-btn" data-target="my-events" role="tab" aria-selected="false">
             <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkle"></use></svg><span data-i18n="nav_my_events" class="nav-tab-label">Evenimentele mele</span>
-            <span id="nav-my-events-count-badge" class="badge-subtle" style="font-size: 0.68rem; padding: 2px 6px; margin-left: 4px;">0</span>
+            <span id="nav-my-events-count-badge" class="badge-subtle u-text-3xs u-pt-2 u-pr-6 u-pb-2 u-pl-6 u-ml-4">0</span>
           </button>
           <button id="nav-social-btn" class="nav-tab-btn" data-target="social" role="tab" aria-selected="false">
             <svg class="ui-icon" aria-hidden="true"><use href="#icon-megaphone"></use></svg><span data-i18n="nav_social" class="nav-tab-label">Social Calendar</span>
@@ -84,7 +84,7 @@
   <!-- ========================================================================= -->
   <section id="direct-login-view" class="direct-login-container">
     <div class="direct-login-card">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+      <div class="u-flex u-justify-between u-items-center u-mb-12">
         <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to light theme" title="Switch to light theme">
           <svg class="ui-icon theme-icon-dark" aria-hidden="true"><use href="#icon-moon"></use></svg>
           <svg class="ui-icon theme-icon-light" aria-hidden="true"><use href="#icon-sun"></use></svg>
@@ -100,11 +100,11 @@
       </div>
 
       <form id="direct-login-form" class="direct-login-form">
-        <div class="form-group" style="margin-bottom: 16px;">
+        <div class="form-group u-mb-16">
           <label data-i18n="direct_login_username_label" for="direct-login-username">Nume utilizator *</label>
           <input data-i18n-placeholder="direct_login_username_placeholder" type="text" id="direct-login-username" class="form-input form-input-lg" placeholder="ex: anca, alex sau admin" required autocomplete="username">
         </div>
-        <div class="form-group" style="margin-bottom: 18px;">
+        <div class="form-group u-mb-18">
           <label data-i18n="direct_login_password_label" for="direct-login-password">Parolă *</label>
           <input data-i18n-placeholder="direct_login_password_placeholder" type="password" id="direct-login-password" class="form-input form-input-lg" placeholder="Introduceți parola" required autocomplete="current-password">
         </div>
@@ -113,15 +113,15 @@
 
 
         <!-- Quick 1-Click Demo Accounts (Read-Only Preview) -->
-        <div class="quick-demo-logins" style="margin-top: 18px; margin-bottom: 22px;">
-          <span data-i18n="direct_login_demo_title" style="font-size: 0.76rem; color: var(--text-muted); display: block; margin-bottom: 8px; font-weight: 600;">Conturi demonstrative (Doar vizualizare / Read-Only):</span>
-          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <div class="quick-demo-logins u-mt-18 u-mb-22">
+          <span class="u-text-2xs u-color-muted u-block u-mb-8 u-fw-600" data-i18n="direct_login_demo_title">Conturi demonstrative (Doar vizualizare / Read-Only):</span>
+          <div class="u-flex u-gap-8 u-wrap">
             <button data-i18n-title="direct_login_demo_user_title" data-i18n="direct_login_demo_user" type="button" class="btn-demo-chip direct-demo-chip" data-user="demo" title="Previzualizare ca utilizator standard (fără salvare)">Demo Utilizator</button>
             <button data-i18n-title="direct_login_demo_admin_title" data-i18n="direct_login_demo_admin" type="button" class="btn-demo-chip direct-demo-chip" data-user="demo_admin" title="Previzualizare ca administrator (fără salvare)">Demo Administrator</button>
           </div>
         </div>
 
-        <button data-i18n="direct_login_submit" type="submit" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center; font-size: 1rem; padding: 14px;">Autentificare în Workspace →</button>
+        <button data-i18n="direct_login_submit" type="submit" class="btn btn-primary btn-lg u-w-full u-justify-center u-text-md u-pt-14 u-pr-14 u-pb-14 u-pl-14">Autentificare în Workspace →</button>
       </form>
     </div>
   </section>
@@ -241,8 +241,8 @@
     </div>
 
     <!-- Footer with 2026 Specs Link -->
-    <footer class="social-app-footer" style="padding: 24px 0 12px; text-align: center; border-top: 1px solid var(--border-subtle); margin-top: 32px;">
-      <a data-i18n="social_standards_footer_link" href="#" id="link-footer-standards" style="color: var(--text-muted); font-size: 0.82rem; text-decoration: underline; transition: color 0.15s ease;">Vizualizează Matricea Dimensiunilor și Standardelor 2026</a>
+    <footer class="social-app-footer u-pt-24 u-pr-0 u-pb-12 u-pl-0 u-text-center u-border-t u-mt-32">
+      <a class="u-color-muted u-text-xs u-decoration-underline u-transition-color" data-i18n="social_standards_footer_link" href="#" id="link-footer-standards">Vizualizează Matricea Dimensiunilor și Standardelor 2026</a>
     </footer>
   </main>
   </div>
@@ -254,7 +254,7 @@
     <header class="app-header events-header-bar" id="events-header-bar">
       <div class="header-top">
         <div class="brand-group">
-          <div class="brand-logo" style="background: rgba(77, 163, 231, 0.12); border-color: rgba(77, 163, 231, 0.35); color: #72bdf5;" title="Calendar"><svg class="ui-icon ui-icon-logo" aria-hidden="true"><use href="#icon-calendar"></use></svg></div>
+          <div class="brand-logo u-bg-primary-12 u-border-color-primary-35 u-color-primary-bright" title="Calendar"><svg class="ui-icon ui-icon-logo" aria-hidden="true"><use href="#icon-calendar"></use></svg></div>
           <div class="brand-info">
             <h1 data-i18n="events_title" class="header-main-title">Calendar</h1>
           </div>
@@ -320,7 +320,7 @@
         <section id="my-events-page-shell" class="my-events-page-shell" style="display: none;" aria-labelledby="my-events-page-title">
           <header class="my-events-header">
             <div class="my-events-header-left">
-              <div style="display: flex; align-items: center; gap: 10px;">
+              <div class="u-flex u-items-center u-gap-10">
                 <h2 data-i18n="my_events_title" id="my-events-page-title">Evenimentele mele</h2>
                 <span id="my-events-total-badge" class="badge-subtle">0</span>
               </div>
@@ -403,7 +403,7 @@
     <header class="app-header admin-header-bar">
       <div class="header-top">
         <div class="brand-group">
-          <div class="brand-logo" style="background: rgba(77, 163, 231, 0.12); border-color: rgba(77, 163, 231, 0.35); color: #72bdf5;" title="Administrator Dashboard"><svg class="ui-icon ui-icon-logo" aria-hidden="true"><use href="#icon-shield"></use></svg></div>
+          <div class="brand-logo u-bg-primary-12 u-border-color-primary-35 u-color-primary-bright" title="Administrator Dashboard"><svg class="ui-icon ui-icon-logo" aria-hidden="true"><use href="#icon-shield"></use></svg></div>
           <div class="brand-info">
             <h1 data-i18n="admin_title" class="header-main-title">Administrare Workspace</h1>
           </div>
@@ -494,12 +494,12 @@
               </select>
             </div>
           </div>
-          <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
+          <div class="u-mt-14 u-flex u-justify-end">
             <button data-i18n="admin_create_user_btn" type="submit" class="btn btn-primary">+ Creează Cont Utilizator</button>
           </div>
         </form>
 
-        <div class="standards-table-wrapper" style="margin-top: 20px;">
+        <div class="standards-table-wrapper u-mt-20">
           <table class="standards-table">
             <thead>
               <tr>
@@ -519,9 +519,9 @@
       </section>
 
       <!-- Section: Event Spaces & Venues (Admin Managed) -->
-      <section class="admin-card" id="admin-spaces-section" style="margin-top: 24px;">
+      <section class="admin-card u-mt-24" id="admin-spaces-section">
         <div class="admin-card-header">
-          <div style="display: flex; align-items: center; gap: 10px;">
+          <div class="u-flex u-items-center u-gap-10">
             <h2 data-i18n="admin_sec_audit_title" id="admin-spaces-title">Audit Centralizat Evenimente (Toți Utilizatorii)</h2>
             <span data-i18n="admin_sec_audit_sub" class="badge-subtle" id="admin-spaces-sub">Administratorul poate modifica, reatribui sau șterge orice eveniment din sistem</span>
           </div>
@@ -539,19 +539,19 @@
             </div>
             <div class="form-group">
               <label data-i18n="color_id_label" for="new-space-color">Culoare Identificare</label>
-              <input type="color" id="new-space-color" class="form-input" value="#38bdf8" style="height: 38px; padding: 2px;">
+              <input type="color" id="new-space-color" class="form-input u-h-38 u-pt-2 u-pr-2 u-pb-2 u-pl-2" value="#38bdf8">
             </div>
             <div class="form-group form-full">
               <label data-i18n="space_desc_label" for="new-space-desc">Dotări &amp; Descriere</label>
               <input data-i18n-placeholder="space_desc_placeholder" type="text" id="new-space-desc" class="form-input" placeholder="ex: Proiector 4K laser, sonorizare surround, tablă interactivă">
             </div>
           </div>
-          <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
+          <div class="u-mt-14 u-flex u-justify-end">
             <button data-i18n="space_add_btn" type="submit" class="btn btn-primary" id="btn-create-space">+ Adaugă Spațiu Nou</button>
           </div>
         </form>
 
-        <div class="standards-table-wrapper" style="margin-top: 20px;">
+        <div class="standards-table-wrapper u-mt-20">
           <table class="standards-table">
             <thead>
               <tr>
@@ -571,9 +571,9 @@
       </section>
 
       <!-- Section: Accommodation / Sleeping Rooms (Restricted to Moderator & Admin) -->
-      <section class="admin-card" id="admin-rooms-section" style="margin-top: 24px;">
+      <section class="admin-card u-mt-24" id="admin-rooms-section">
         <div class="admin-card-header">
-          <div style="display: flex; align-items: center; gap: 10px;">
+          <div class="u-flex u-items-center u-gap-10">
             <h2 data-i18n="rooms_title" id="admin-rooms-title">Camere de Cazare (Dormitoare Oaspeți &amp; Traineri)</h2>
             <span data-i18n="rooms_sub" class="badge-subtle" id="admin-rooms-sub">Rezervabile în calendar exclusiv de Moderatori și Administratori</span>
           </div>
@@ -599,19 +599,19 @@
             </div>
             <div class="form-group">
               <label data-i18n="color_id_label" for="new-room-color">Culoare Identificare</label>
-              <input type="color" id="new-room-color" class="form-input" value="#ef4444" style="height: 38px; padding: 2px;">
+              <input type="color" id="new-room-color" class="form-input u-h-38 u-pt-2 u-pr-2 u-pb-2 u-pl-2" value="#ef4444">
             </div>
             <div class="form-group form-full">
               <label data-i18n="room_notes_label" for="new-room-notes">Observații &amp; Facilități</label>
               <input data-i18n-placeholder="room_notes_placeholder" type="text" id="new-room-notes" class="form-input" placeholder="ex: Baie proprie, birou de lucru, vedere spre grădină, etaj 1">
             </div>
           </div>
-          <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
+          <div class="u-mt-14 u-flex u-justify-end">
             <button data-i18n="room_add_btn" type="submit" class="btn btn-primary" id="btn-create-room">+ Adaugă Cameră Nouă</button>
           </div>
         </form>
 
-        <div class="standards-table-wrapper" style="margin-top: 20px;">
+        <div class="standards-table-wrapper u-mt-20">
           <table class="standards-table">
             <thead>
               <tr>
@@ -632,7 +632,7 @@
       </section>
 
       <!-- Section 2: Master Events Audit (All Users) -->
-      <section class="admin-card" id="admin-events-section" style="margin-top: 24px;">
+      <section class="admin-card u-mt-24" id="admin-events-section">
         <div class="admin-card-header">
           <h2 data-i18n="admin_events_audit_title">Audit Evenimente (Toți Utilizatorii)</h2>
           <span data-i18n="admin_events_audit_sub" class="badge-subtle">Administratorul poate edita, realoca sau șterge orice eveniment</span>
@@ -657,9 +657,9 @@
       </section>
 
       <!-- Section 3: Cloud Storage Quota & Media Cleanup (8 GB) -->
-      <section class="admin-card" id="admin-storage-section" style="margin-top: 24px;">
+      <section class="admin-card u-mt-24" id="admin-storage-section">
         <div class="admin-card-header">
-          <div style="display: flex; align-items: center; gap: 10px;">
+          <div class="u-flex u-items-center u-gap-10">
             <h2 data-i18n="admin_sec_storage_title">Stocare în Cloud și Gestiune Cotă</h2>
             <span data-i18n="admin_storage_cap_badge" class="badge-subtle" id="admin-quota-limit-badge">Limită 8.00 GB</span>
           </div>
@@ -676,7 +676,7 @@
           </div>
 
           <div class="storage-meter-track">
-            <div class="storage-meter-fill" id="admin-storage-meter-fill" style="width: 0%;"></div>
+            <div class="storage-meter-fill u-w-0pct" id="admin-storage-meter-fill"></div>
           </div>
 
           <div class="storage-breakdown-grid">
@@ -708,8 +708,8 @@
 
           <!-- Simulation / Testing Controls -->
           <div class="storage-sim-toolbar">
-            <span data-i18n="admin_sim_toolbar" style="font-size: 0.76rem; color: var(--text-muted); font-weight: 600;">Simulator Test Cotă:</span>
-            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <span class="u-text-2xs u-color-muted u-fw-600" data-i18n="admin_sim_toolbar">Simulator Test Cotă:</span>
+            <div class="u-flex u-gap-6 u-wrap">
               <button data-i18n="admin_sim_normal" type="button" class="btn-demo-chip" id="btn-sim-normal">15% Normal</button>
               <button data-i18n="admin_sim_warning" type="button" class="btn-demo-chip" id="btn-sim-warning">84% Avertisment</button>
               <button data-i18n="admin_sim_critical" type="button" class="btn-demo-chip" id="btn-sim-critical">94% Critic</button>
@@ -726,7 +726,7 @@
   <!-- ========================================================================= -->
 
   <!-- DIALOG: Events awaiting social promotion -->
-  <dialog id="social-notifications-modal" aria-labelledby="social-notifications-title" style="max-width: 720px;">
+  <dialog class="u-maxw-720" id="social-notifications-modal" aria-labelledby="social-notifications-title">
     <div class="dialog-header">
       <div class="notifications-title-group">
         <svg class="ui-icon notifications-title-icon" aria-hidden="true"><use href="#icon-megaphone"></use></svg>
@@ -755,18 +755,18 @@
   </dialog>
 
   <!-- DIALOG: Edit User Account Modal (Admin Panel) -->
-  <dialog id="edit-user-dialog" aria-labelledby="edit-user-title" style="max-width: 480px;">
+  <dialog class="u-maxw-480" id="edit-user-dialog" aria-labelledby="edit-user-title">
     <div class="dialog-header">
-      <h2 data-i18n="edit_user_title" id="edit-user-title" style="margin: 0; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">Editare Cont Utilizator</h2>
+      <h2 class="u-mt-0 u-mr-0 u-mb-0 u-ml-0 u-text-lg u-flex u-items-center u-gap-8" data-i18n="edit_user_title" id="edit-user-title">Editare Cont Utilizator</h2>
       <button data-i18n-aria-label="close_dialog" class="dialog-close-btn" id="close-edit-user-btn" aria-label="Închide">&times;</button>
     </div>
-    <form id="edit-user-form" style="padding: 20px;">
+    <form class="u-pt-20 u-pr-20 u-pb-20 u-pl-20" id="edit-user-form">
       <input type="hidden" id="edit-user-id">
-      <div class="form-group" style="margin-bottom: 14px;">
+      <div class="form-group u-mb-14">
         <label data-i18n="edit_user_name_label" for="edit-user-fullname">Nume Complet *</label>
         <input type="text" id="edit-user-fullname" class="form-input" required>
       </div>
-      <div class="form-row-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+      <div class="form-row-2 u-d-grid u-grid-cols-2 u-gap-12 u-mb-14">
         <div class="form-group">
           <label data-i18n="edit_user_username_label" for="edit-user-username">Nume Utilizator *</label>
           <input type="text" id="edit-user-username" class="form-input" required>
@@ -776,7 +776,7 @@
           <input type="password" id="edit-user-password" class="form-input" required>
         </div>
       </div>
-      <div class="form-group" style="margin-bottom: 20px;">
+      <div class="form-group u-mb-20">
         <label data-i18n="edit_user_role_label" for="edit-user-role">Rol Cont *</label>
         <select id="edit-user-role" class="form-select" required>
           <option data-i18n="edit_user_role_user" value="user">Utilizator (Doar Calendar Evenimente)</option>
@@ -784,7 +784,7 @@
           <option data-i18n="role_option_admin_full" value="admin">Administrator (Acces complet)</option>
         </select>
       </div>
-      <div class="dialog-actions" style="display: flex; justify-content: flex-end; gap: 10px;">
+      <div class="dialog-actions u-flex u-justify-end u-gap-10">
         <button data-i18n="edit_user_cancel" type="button" class="btn btn-secondary" id="cancel-edit-user-btn">Anulare</button>
         <button data-i18n="edit_user_save" type="submit" class="btn btn-primary">Salvează Modificările</button>
       </div>
@@ -792,26 +792,26 @@
   </dialog>
 
   <!-- DIALOG: Storage Quota & Past Events Cleanup Modal (Admin Only) -->
-  <dialog id="storage-cleanup-dialog" aria-labelledby="storage-cleanup-title" style="max-width: 620px;">
+  <dialog class="u-maxw-620" id="storage-cleanup-dialog" aria-labelledby="storage-cleanup-title">
     <div class="dialog-header">
-      <div style="display: flex; align-items: center; gap: 10px;">
+      <div class="u-flex u-items-center u-gap-10">
         <span class="modal-title-icon" aria-hidden="true"></span>
         <div>
-          <h2 data-i18n="cleanup_modal_title" id="storage-cleanup-title" style="margin: 0; font-size: 1.15rem;">Curățare Spațiu &amp; Cotă de Stocare</h2>
-          <p data-i18n="cleanup_modal_desc" style="font-size: 0.78rem; color: var(--text-secondary); margin: 0;">Eliberați spațiu și administrați cota generoasă de 8 GB a site-ului.</p>
+          <h2 class="u-mt-0 u-mr-0 u-mb-0 u-ml-0 u-text-lg" data-i18n="cleanup_modal_title" id="storage-cleanup-title">Curățare Spațiu &amp; Cotă de Stocare</h2>
+          <p class="u-text-2xs u-color-secondary u-mt-0 u-mr-0 u-mb-0 u-ml-0" data-i18n="cleanup_modal_desc">Eliberați spațiu și administrați cota generoasă de 8 GB a site-ului.</p>
         </div>
       </div>
       <button data-i18n-aria-label="close_dialog" class="dialog-close-btn" id="close-storage-cleanup-btn" aria-label="Închide">&times;</button>
     </div>
-    <div class="dialog-body" style="padding: 20px;">
+    <div class="dialog-body u-pt-20 u-pr-20 u-pb-20 u-pl-20">
       <!-- Current Storage Summary Card -->
       <div class="cleanup-storage-card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-          <span data-i18n="cleanup_current_usage" style="font-size: 0.85rem; font-weight: 700;">Utilizare Curentă</span>
-          <span id="cleanup-modal-usage-label" style="font-size: 0.85rem; font-weight: 700; color: #38bdf8;">0.00 GB / 8.00 GB (0%)</span>
+        <div class="u-flex u-justify-between u-items-center u-mb-8">
+          <span class="u-text-sm u-fw-700" data-i18n="cleanup_current_usage">Utilizare Curentă</span>
+          <span class="u-text-sm u-fw-700 u-color-sky" id="cleanup-modal-usage-label">0.00 GB / 8.00 GB (0%)</span>
         </div>
-        <div class="storage-meter-track" style="height: 10px;">
-          <div id="cleanup-modal-meter-fill" class="storage-meter-fill" style="width: 0%;"></div>
+        <div class="storage-meter-track u-h-10">
+          <div id="cleanup-modal-meter-fill" class="storage-meter-fill u-w-0pct"></div>
         </div>
       </div>
 
@@ -819,15 +819,15 @@
       <div class="cleanup-action-box">
         <div class="cleanup-action-header">
           <span class="cleanup-icon" aria-hidden="true"></span>
-          <div style="flex: 1;">
-            <div data-i18n="cleanup_bulk_title" style="font-weight: 700; font-size: 0.95rem;">Șterge în bloc evenimentele trecute</div>
-            <p data-i18n="cleanup_bulk_desc" style="font-size: 0.78rem; color: var(--text-secondary); margin: 2px 0 0 0;">Șterge definitiv evenimentele încheiate împreună cu imaginile de copertă Facebook 16:9 încărcate.</p>
+          <div class="u-flex-1">
+            <div class="u-fw-700 u-text-base" data-i18n="cleanup_bulk_title">Șterge în bloc evenimentele trecute</div>
+            <p class="u-text-2xs u-color-secondary u-mt-2 u-mr-0 u-mb-0 u-ml-0" data-i18n="cleanup_bulk_desc">Șterge definitiv evenimentele încheiate împreună cu imaginile de copertă Facebook 16:9 încărcate.</p>
           </div>
         </div>
 
-        <div style="margin-top: 14px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-          <label data-i18n="cleanup_filter_age" style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary);">Filtru vechime:</label>
-          <select id="cleanup-event-age-select" class="form-select" style="max-width: 230px; font-size: 0.82rem; padding: 6px 10px;">
+        <div class="u-mt-14 u-flex u-gap-10 u-items-center u-wrap">
+          <label class="u-text-xs u-fw-600 u-color-secondary" data-i18n="cleanup_filter_age">Filtru vechime:</label>
+          <select id="cleanup-event-age-select" class="form-select u-maxw-230 u-text-xs u-pt-6 u-pr-10 u-pb-6 u-pl-10">
             <option data-i18n="cleanup_age_all" value="all-past">Toate evenimentele trecute (înainte de azi)</option>
             <option data-i18n="cleanup_age_14" value="14">Evenimente mai vechi de 14 zile</option>
             <option data-i18n="cleanup_age_30" value="30">Evenimente mai vechi de 30 de zile</option>
@@ -835,37 +835,37 @@
           </select>
           <button data-i18n="cleanup_btn_del_events" type="button" class="btn btn-danger btn-sm" id="btn-execute-cleanup-events">Șterge Evenimentele Trecute</button>
         </div>
-        <div id="cleanup-preview-events" class="cleanup-preview-text" style="margin-top: 8px; font-size: 0.78rem; color: var(--accent-blue);">
+        <div id="cleanup-preview-events" class="cleanup-preview-text u-mt-8 u-text-2xs u-color-info">
           Matches: 0 events (Est. 0.0 MB to free)
         </div>
       </div>
 
       <!-- Action 2: Strip Heavy Images Only (Preserve Schedule History) -->
-      <div class="cleanup-action-box" style="margin-top: 16px;">
+      <div class="cleanup-action-box u-mt-16">
         <div class="cleanup-action-header">
           <span class="cleanup-icon" aria-hidden="true"></span>
-          <div style="flex: 1;">
-            <div data-i18n="cleanup_strip_title" style="font-weight: 700; font-size: 0.95rem;">Elimină doar imaginile (păstrează istoricul)</div>
-            <p data-i18n="cleanup_strip_desc" style="font-size: 0.78rem; color: var(--text-secondary); margin: 2px 0 0 0;">Păstrează titlurile atelierelor, trainerii și înscrierile în arhivă, dar elimină fotografiile de copertă pentru a elibera imediat ~95% din spațiu.</p>
+          <div class="u-flex-1">
+            <div class="u-fw-700 u-text-base" data-i18n="cleanup_strip_title">Elimină doar imaginile (păstrează istoricul)</div>
+            <p class="u-text-2xs u-color-secondary u-mt-2 u-mr-0 u-mb-0 u-ml-0" data-i18n="cleanup_strip_desc">Păstrează titlurile atelierelor, trainerii și înscrierile în arhivă, dar elimină fotografiile de copertă pentru a elibera imediat ~95% din spațiu.</p>
           </div>
         </div>
-        <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center;">
-          <span id="cleanup-strip-preview" style="font-size: 0.78rem; color: var(--text-muted);">0 past events currently holding images</span>
+        <div class="u-mt-12 u-flex u-justify-between u-items-center">
+          <span class="u-text-2xs u-color-muted" id="cleanup-strip-preview">0 past events currently holding images</span>
           <button data-i18n="cleanup_btn_strip_images" type="button" class="btn btn-secondary btn-sm" id="btn-execute-strip-images">Curăță Coperțile Vechi</button>
         </div>
       </div>
 
       <!-- Action 3: Social Media Posts Media Purge -->
-      <div class="cleanup-action-box" style="margin-top: 16px;">
+      <div class="cleanup-action-box u-mt-16">
         <div class="cleanup-action-header">
           <span class="cleanup-icon" aria-hidden="true"></span>
-          <div style="flex: 1;">
-            <div data-i18n="cleanup_social_title" style="font-weight: 700; font-size: 0.95rem;">Golește atașamentele postărilor publicate</div>
-            <p data-i18n="cleanup_social_desc" style="font-size: 0.78rem; color: var(--text-secondary); margin: 2px 0 0 0;">Elimină atașamentele foto/video mari din postările marcate „Publicat” înainte de data curentă.</p>
+          <div class="u-flex-1">
+            <div class="u-fw-700 u-text-base" data-i18n="cleanup_social_title">Golește atașamentele postărilor publicate</div>
+            <p class="u-text-2xs u-color-secondary u-mt-2 u-mr-0 u-mb-0 u-ml-0" data-i18n="cleanup_social_desc">Elimină atașamentele foto/video mari din postările marcate „Publicat” înainte de data curentă.</p>
           </div>
         </div>
-        <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center;">
-          <span id="cleanup-social-preview" style="font-size: 0.78rem; color: var(--text-muted);">0 published posts eligible</span>
+        <div class="u-mt-12 u-flex u-justify-between u-items-center">
+          <span class="u-text-2xs u-color-muted" id="cleanup-social-preview">0 published posts eligible</span>
           <button data-i18n="cleanup_btn_purge_social" type="button" class="btn btn-secondary btn-sm" id="btn-execute-cleanup-social">Curăță Atașamentele Vechi</button>
         </div>
       </div>
@@ -876,7 +876,7 @@
   </dialog>
 
   <!-- DIALOG: Add / Edit Event Modal -->
-  <dialog id="event-dialog" aria-labelledby="event-dialog-title" style="max-width: 680px; width: min(680px, 94vw);">
+  <dialog class="u-maxw-680 u-w-min-680-94vw" id="event-dialog" aria-labelledby="event-dialog-title">
     <div class="dialog-header event-dialog-header">
       <div>
         <h2 id="event-dialog-title">
@@ -923,7 +923,7 @@
       <div id="event-smart-suggestion-box" class="smart-suggestion-box" style="display: none;">
         <div class="smart-suggestion-header">
           <span class="smart-suggestion-icon" aria-hidden="true"></span>
-          <div style="flex: 1;">
+          <div class="u-flex-1">
             <strong data-i18n="smart_suggestion_title" id="smart-suggestion-title">Sugestii asistent de programare</strong>
             <div id="smart-conflict-details" class="smart-conflict-details">Detected an existing booking at this time. Here are recommended openings:</div>
           </div>
@@ -938,19 +938,19 @@
         <div class="form-grid">
 
           <!-- Notice for Locked Hours -->
-          <div id="event-locked-info-notice" class="form-group form-full" style="display: none; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: var(--radius-md); padding: 12px 14px;">
-            <div style="display: flex; align-items: center; gap: 8px; color: #fbbf24; font-weight: 600; font-size: 0.85rem;">
+          <div id="event-locked-info-notice" class="form-group form-full u-bg-amber-500-8 u-border-amber-500-25 u-rounded-md u-pt-12 u-pr-14 u-pb-12 u-pl-14" style="display: none;">
+            <div class="u-flex u-items-center u-gap-8 u-color-amber-400 u-fw-600 u-text-sm">
               <span data-i18n="locked_mode_notice_title">🔒 Mod Blocare Interval Activ:</span>
             </div>
-            <p data-i18n="locked_mode_notice_desc" style="font-size: 0.78rem; color: var(--text-secondary); margin: 4px 0 0 0;">Acest interval va fi blocat în orar pentru a împiedica alte rezervări. Nu generează notificări de promovare social media pentru administratori.</p>
+            <p class="u-text-2xs u-color-secondary u-mt-4 u-mr-0 u-mb-0 u-ml-0" data-i18n="locked_mode_notice_desc">Acest interval va fi blocat în orar pentru a împiedica alte rezervări. Nu generează notificări de promovare social media pentru administratori.</p>
           </div>
 
           <!-- Notice for Room Only (Accommodation) -->
-          <div id="event-room-only-info-notice" class="form-group form-full" style="display: none; background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: var(--radius-md); padding: 12px 14px;">
-            <div style="display: flex; align-items: center; gap: 8px; color: #c084fc; font-weight: 600; font-size: 0.85rem;">
+          <div id="event-room-only-info-notice" class="form-group form-full u-bg-purple-500-8 u-border-purple-500-25 u-rounded-md u-pt-12 u-pr-14 u-pb-12 u-pl-14" style="display: none;">
+            <div class="u-flex u-items-center u-gap-8 u-color-purple-400 u-fw-600 u-text-sm">
               <span data-i18n="room_mode_notice_title">🛏️ Mod Doar Cazare Activ:</span>
             </div>
-            <p data-i18n="room_mode_notice_desc" style="font-size: 0.78rem; color: var(--text-secondary); margin: 4px 0 0 0;">Rezervare spații de cazare (camere). Nu necesită sală de desfășurare, bilete cu preț sau copertă social media.</p>
+            <p class="u-text-2xs u-color-secondary u-mt-4 u-mr-0 u-mb-0 u-ml-0" data-i18n="room_mode_notice_desc">Rezervare spații de cazare (camere). Nu necesită sală de desfășurare, bilete cu preț sau copertă social media.</p>
           </div>
 
           <!-- Title Input -->
@@ -970,22 +970,22 @@
           <!-- Accommodation Block (Rendered in Step 1 when in 'room_only' mode) -->
           <div class="form-group form-full room-booking-category-block" id="event-room-category-block">
             <div class="room-booking-category-header" id="event-room-category-header">
-              <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px; font-weight: 700; cursor: pointer; color: var(--text-primary); margin-bottom: 0;">
-                <input type="checkbox" id="event-needs-room" style="width: 16px; height: 16px; accent-color: var(--primary);">
-                <span style="display: flex; align-items: center; gap: 6px;">
-                  <svg class="ui-icon" style="color: #c084fc;" aria-hidden="true"><use href="#icon-bed"></use></svg>
+              <label class="checkbox-label u-flex u-items-center u-gap-8 u-fw-700 u-cursor-pointer u-color-primary u-mb-0">
+                <input class="u-w-16 u-h-16 u-accent-primary" type="checkbox" id="event-needs-room">
+                <span class="u-flex u-items-center u-gap-6">
+                  <svg class="ui-icon u-color-purple-400" aria-hidden="true"><use href="#icon-bed"></use></svg>
                   <span data-i18n="event_needs_room_label" id="lbl-event-needs-room">Necesită cazare (camere)?</span>
                 </span>
-                <span data-i18n="moderator_admin_only" class="badge-subtle" style="font-size: 0.65rem; color: #8b5cf6;">Doar Moderator / Admin</span>
+                <span data-i18n="moderator_admin_only" class="badge-subtle u-text-3xs u-color-violet">Doar Moderator / Admin</span>
               </label>
             </div>
 
             <!-- Multi-room dynamic booking panel -->
-            <div id="event-room-booking-panel" style="display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-subtle);">
+            <div class="u-mt-12 u-pt-12 u-border-t" id="event-room-booking-panel" style="display: none;">
               <div id="event-room-bookings-list" class="room-bookings-list">
                 <!-- Dynamically rendered room booking rows -->
               </div>
-              <div style="margin-top: 10px; display: flex; justify-content: flex-start;">
+              <div class="u-mt-10 u-flex u-justify-start">
                 <button type="button" class="btn btn-secondary btn-sm" id="btn-add-room-booking">
                   <svg class="ui-icon" aria-hidden="true"><use href="#icon-plus"></use></svg>
                   <span data-i18n="add_room_booking_btn" id="lbl-btn-add-room-booking">Adaugă cameră cazare</span>
@@ -1015,15 +1015,15 @@
           </div>
 
           <!-- Recurrent Event Option -->
-          <div class="form-group form-full recurrence-box" id="event-recurrence-group" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 6px;">
-            <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px; font-weight: 700; cursor: pointer; color: var(--text-primary); margin-bottom: 0;">
-              <input type="checkbox" id="event-is-recurrent" style="width: 16px; height: 16px; accent-color: var(--primary);">
+          <div class="form-group form-full recurrence-box u-bg-white-3 u-border u-rounded-md u-pt-10 u-pr-14 u-pb-10 u-pl-14 u-mb-6" id="event-recurrence-group">
+            <label class="checkbox-label u-flex u-items-center u-gap-8 u-fw-700 u-cursor-pointer u-color-primary u-mb-0">
+              <input class="u-w-16 u-h-16 u-accent-primary" type="checkbox" id="event-is-recurrent">
               <span data-i18n="dropin_recurrent_label">Eveniment Recurent</span>
             </label>
-            <div id="event-recurrence-options" style="display: none; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border-subtle);">
-              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                <label data-i18n="dropin_recurrent_repeat" for="event-recurrence-months" style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0;">Se repetă timp de:</label>
-                <select id="event-recurrence-months" class="form-select" style="max-width: 160px; font-size: 0.82rem; padding: 4px 8px;">
+            <div class="u-mt-10 u-pt-8 u-border-t" id="event-recurrence-options" style="display: none;">
+              <div class="u-flex u-items-center u-gap-10 u-wrap">
+                <label class="u-text-xs u-color-secondary u-mb-0" data-i18n="dropin_recurrent_repeat" for="event-recurrence-months">Se repetă timp de:</label>
+                <select id="event-recurrence-months" class="form-select u-maxw-160 u-text-xs u-pt-4 u-pr-8 u-pb-4 u-pl-8">
                   <option data-i18n="recurrence_months_2" value="2">2 luni</option>
                   <option data-i18n="recurrence_months_3" value="3" selected>3 luni</option>
                   <option data-i18n="recurrence_months_4" value="4">4 luni</option>
@@ -1032,7 +1032,7 @@
                   <option data-i18n="recurrence_months_9" value="9">9 luni</option>
                   <option data-i18n="recurrence_months_12" value="12">12 luni (1 an)</option>
                 </select>
-                <span data-i18n="recurrence_hint_default" id="event-recurrence-preview-hint" style="font-size: 0.75rem; color: var(--accent-blue);">Se programează lunar, în aceeași zi</span>
+                <span class="u-text-2xs u-color-info" data-i18n="recurrence_hint_default" id="event-recurrence-preview-hint">Se programează lunar, în aceeași zi</span>
               </div>
             </div>
           </div>
@@ -1044,9 +1044,9 @@
               <label><input type="radio" name="event-timing-mode" value="consecutive" checked> Ore consecutive</label>
               <label><input type="radio" name="event-timing-mode" value="async"> Ore separate</label>
             </fieldset>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <label data-i18n="event_matrix_label" style="margin-bottom: 0;">Matrice Disponibilitate Zilnică (08:00 – 20:00)</label>
-              <span id="event-hours-board-hint" style="font-size: 0.72rem; color: var(--text-muted);">Alegeți un interval verde pentru ora de început</span>
+            <div class="u-flex u-justify-between u-items-center u-mb-6">
+              <label class="u-mb-0" data-i18n="event_matrix_label">Matrice Disponibilitate Zilnică (08:00 – 20:00)</label>
+              <span class="u-text-2xs u-color-muted" id="event-hours-board-hint">Alegeți un interval verde pentru ora de început</span>
             </div>
             <div id="event-free-hours-board" class="free-hours-board">
               <!-- Injected dynamically via JS -->
@@ -1081,18 +1081,18 @@
 
           <div class="form-group form-full" id="event-creator-group">
             <label data-i18n="event_scheduled_by_label" for="event-creator-display">Programat de (Utilizator Asignat)</label>
-            <input type="text" id="event-creator-display" class="form-input" readonly style="opacity: 0.8; background: var(--bg-card);">
+            <input type="text" id="event-creator-display" class="form-input u-opacity-0_8 u-bg-card" readonly>
           </div>
 
           <!-- Facebook Page Image (16:9 Landscape) -->
           <div class="form-group form-full event-public-field" id="event-fb-cover-group">
             <label data-i18n="dropin_fb_image_label" for="event-fb-image-file">Imagine Copertă pentru Pagina de Facebook &amp; Social (Format Strict 16:9) *</label>
             <div class="fb-upload-container">
-              <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                <input type="file" id="event-fb-image-file" class="form-input" accept="image/*" style="flex: 1;">
-                <button data-i18n="dropin_use_sample_btn" type="button" id="btn-use-fb-sample" class="btn btn-secondary" style="font-size: 0.75rem; white-space: nowrap;">Folosește Model 16:9</button>
+              <div class="u-flex u-gap-8 u-mb-8">
+                <input type="file" id="event-fb-image-file" class="form-input u-flex-1" accept="image/*">
+                <button data-i18n="dropin_use_sample_btn" type="button" id="btn-use-fb-sample" class="btn btn-secondary u-text-2xs u-nowrap">Folosește Model 16:9</button>
               </div>
-              <input data-i18n-placeholder="event_fb_url_placeholder" type="url" id="event-fb-image-url" class="form-input" placeholder="Sau lipiți URL-ul imaginii (ex: https://...)" style="margin-bottom: 8px;">
+              <input data-i18n-placeholder="event_fb_url_placeholder" type="url" id="event-fb-image-url" class="form-input u-mb-8" placeholder="Sau lipiți URL-ul imaginii (ex: https://...)">
               <input type="hidden" id="event-fb-image-data" value="">
               
               <!-- Dimension & Proportional Aspect Ratio Status -->
@@ -1107,7 +1107,7 @@
                 <span id="fb-preview-dims-badge" class="fb-dims-badge">1920 × 1080 (16:9)</span>
               </div>
             </div>
-            <small data-i18n="event_fb_requirement" style="color: var(--text-muted); font-size: 0.72rem; display: block; margin-top: 5px;">Cerință Facebook pentru pagini și evenimente: format peisaj 16:9 (ex: 1920×1080 sau 1200×675). Dimensiunile neproporționale (pătrat 1:1, vertical) sunt respinse.</small>
+            <small class="u-color-muted u-text-2xs u-block u-mt-5" data-i18n="event_fb_requirement">Cerință Facebook pentru pagini și evenimente: format peisaj 16:9 (ex: 1920×1080 sau 1200×675). Dimensiunile neproporționale (pătrat 1:1, vertical) sunt respinse.</small>
           </div>
 
           <!-- Description / Notes -->
@@ -1120,7 +1120,7 @@
     </form>
     <div class="dialog-footer wizard-dialog-footer" id="event-dialog-footer">
       <button type="button" class="btn btn-secondary" id="wizard-prev-btn">Anulează</button>
-      <div style="display: flex; gap: 8px; align-items: center;">
+      <div class="u-flex u-gap-8 u-items-center">
         <button type="button" class="btn btn-primary" id="wizard-next-btn">Pasul Următor →</button>
         <button type="submit" form="event-form" class="btn btn-success" id="save-event-btn" style="display: none;">✓ Salvează Evenimentul</button>
       </div>
@@ -1128,7 +1128,7 @@
   </dialog>
 
   <!-- DIALOG: Event Detail Modal (With Permissions & Facebook Presentation) -->
-  <dialog id="event-detail-dialog" aria-labelledby="event-detail-title" style="max-width: 600px;">
+  <dialog class="u-maxw-600" id="event-detail-dialog" aria-labelledby="event-detail-title">
     <div class="dialog-header">
       <h2 data-i18n="event_detail_title" id="event-detail-title">Detalii Eveniment</h2>
       <button data-i18n-aria-label="close_dialog" class="dialog-close-btn" id="close-event-detail-btn" aria-label="Închide">&times;</button>
@@ -1140,45 +1140,45 @@
         <span data-i18n="event_detail_fb_cover" class="detail-fb-tag">Copertă pagină Facebook (16:9)</span>
       </div>
 
-      <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; margin-top: 10px; flex-wrap: wrap;">
-        <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-          <span id="event-detail-type-badge" class="user-creator-tag" style="background: rgba(56, 189, 248, 0.18); color: #38bdf8; font-weight: 700;">Eveniment Public</span>
-          <span id="event-detail-space-badge" class="user-creator-tag" style="display: none; background: rgba(16, 185, 129, 0.18); color: #34d399;">📍 Spațiu</span>
-          <span id="event-detail-room-badge" class="user-creator-tag" style="display: none; background: rgba(139, 92, 246, 0.2); color: #c4b5fd;">🛏️ Cazare</span>
-          <span data-i18n="event_detail_single_day" id="event-detail-days-badge" class="user-creator-tag" style="background: rgba(139, 92, 246, 0.2); color: #c4b5fd;">O singură zi</span>
-          <span id="event-detail-recurrent-badge" class="user-creator-tag" style="display: none; background: rgba(56, 189, 248, 0.2); color: #38bdf8;">Recurrent</span>
+      <div class="u-flex u-items-center u-justify-between u-gap-8 u-mb-12 u-mt-10 u-wrap">
+        <div class="u-flex u-gap-6 u-items-center u-wrap">
+          <span id="event-detail-type-badge" class="user-creator-tag u-bg-sky-400-18 u-color-sky u-fw-700">Eveniment Public</span>
+          <span id="event-detail-space-badge" class="user-creator-tag u-bg-emerald-500-18 u-color-emerald-400" style="display: none;">📍 Spațiu</span>
+          <span id="event-detail-room-badge" class="user-creator-tag u-bg-violet-500-20 u-color-violet-300" style="display: none;">🛏️ Cazare</span>
+          <span data-i18n="event_detail_single_day" id="event-detail-days-badge" class="user-creator-tag u-bg-violet-500-20 u-color-violet-300">O singură zi</span>
+          <span id="event-detail-recurrent-badge" class="user-creator-tag u-bg-sky-400-20 u-color-sky" style="display: none;">Recurrent</span>
         </div>
         <span id="event-detail-creator-pill" class="user-creator-tag">Attached user</span>
       </div>
-      <h3 id="event-detail-heading" style="font-size: 1.3rem; font-weight: 700; margin-bottom: 14px; line-height: 1.3;">Event Heading</h3>
+      <h3 class="u-text-xl u-fw-700 u-mb-14 u-leading-1_3" id="event-detail-heading">Event Heading</h3>
 
-      <div class="detail-meta-grid" style="margin-bottom: 16px;">
+      <div class="detail-meta-grid u-mb-16">
         <div class="detail-meta-item">
           <span data-i18n="event_detail_meta_dt">Data, Ora &amp; Durata</span>
           <strong id="event-detail-datetime">2026-09-14 at 18:00 (2 hrs)</strong>
         </div>
         <div class="detail-meta-item" id="event-detail-price-item">
           <span data-i18n="event_detail_meta_price">Preț</span>
-          <strong id="event-detail-price" style="color: #10b981; font-size: 1.05rem;">Free</strong>
+          <strong class="u-color-emerald-500 u-text-md" id="event-detail-price">Free</strong>
         </div>
         <div class="detail-meta-item" id="event-detail-space-item" style="display: none;">
           <span data-i18n="event_detail_space_label">Spațiu / Sală</span>
-          <strong id="event-detail-space-text" style="color: #38bdf8;">-</strong>
+          <strong class="u-color-sky" id="event-detail-space-text">-</strong>
         </div>
         <div class="detail-meta-item" id="event-detail-room-item" style="display: none;">
           <span data-i18n="event_detail_room_label">Cameră Cazare</span>
-          <strong id="event-detail-room-text" style="color: #c4b5fd;">-</strong>
+          <strong class="u-color-violet-300" id="event-detail-room-text">-</strong>
         </div>
       </div>
 
-      <div style="margin-bottom: 16px;">
-        <span data-i18n="event_detail_desc_heading" style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 6px;">Descriere:</span>
+      <div class="u-mb-16">
+        <span class="u-text-2xs u-fw-600 u-color-secondary u-block u-mb-6" data-i18n="event_detail_desc_heading">Descriere:</span>
         <div id="event-detail-desc" class="detail-desc-box"></div>
       </div>
 
       <!-- Enrolment Link Action -->
-      <div id="event-detail-enroll-wrap" style="margin-bottom: 16px;">
-        <a id="event-detail-enroll-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; width: 100%; justify-content: center; padding: 12px; font-weight: 600; border-radius: 8px;">
+      <div class="u-mb-16" id="event-detail-enroll-wrap">
+        <a id="event-detail-enroll-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary u-inline-flex u-items-center u-gap-8 u-decoration-none u-w-full u-justify-center u-pt-12 u-pr-12 u-pb-12 u-pl-12 u-fw-600 u-rounded-btn">
           <span data-i18n="event_detail_enroll_link">Deschide linkul de înscriere</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
         </a>
@@ -1188,9 +1188,9 @@
         <span data-i18n="event_detail_view_only">Doar vizualizare: puteți edita sau șterge doar evenimentele create de dvs.</span>
       </div>
     </div>
-    <div class="dialog-footer" style="justify-content: space-between;">
+    <div class="dialog-footer u-justify-between">
       <button data-i18n="event_detail_delete_btn" type="button" class="btn btn-danger" id="event-detail-delete-btn">Șterge Evenimentul</button>
-      <div style="display: flex; gap: 8px;">
+      <div class="u-flex u-gap-8">
         <button data-i18n="event_detail_close_btn" type="button" class="btn btn-secondary" id="close-event-detail-done-btn">Închide</button>
         <button data-i18n="event_detail_edit_btn" type="button" class="btn btn-primary" id="event-detail-edit-btn">Modifică Evenimentul</button>
       </div>
@@ -1261,14 +1261,14 @@
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
             <div>
               <strong data-i18n="post_click_upload">Click pentru încărcare</strong> <span data-i18n="post_drop_hint">sau trageți fișierele aici</span>
-              <p data-i18n="post_supported_formats" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Acceptă MP4, MOV, JPG, PNG, WebP (validate conform standardului ales)</p>
+              <p class="u-text-2xs u-color-muted u-mt-4" data-i18n="post_supported_formats">Acceptă MP4, MOV, JPG, PNG, WebP (validate conform standardului ales)</p>
             </div>
             <input type="file" id="media-file-input" accept="image/*,video/*" style="display: none;" multiple>
           </div>
 
           <!-- Or Image URL Input -->
-          <div style="display: flex; gap: 8px; margin-top: 8px;">
-            <input data-i18n-placeholder="post_media_url_placeholder" type="url" id="media-url-input" class="form-input" style="flex: 1;" placeholder="Sau lipiți URL-ul imaginii/video...">
+          <div class="u-flex u-gap-8 u-mt-8">
+            <input data-i18n-placeholder="post_media_url_placeholder" type="url" id="media-url-input" class="form-input u-flex-1" placeholder="Sau lipiți URL-ul imaginii/video...">
             <button data-i18n="post_load_url_btn" type="button" id="apply-url-btn" class="btn btn-secondary btn-sm">Încarcă URL</button>
           </div>
 
@@ -1278,7 +1278,7 @@
               <img id="preview-img" src="" alt="Media Preview" style="display: none;">
               <video id="preview-video" src="" controls style="display: none;"></video>
             </div>
-            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-secondary);">
+            <div class="u-flex u-justify-between u-text-2xs u-color-secondary">
               <span id="preview-media-name">No media selected</span>
               <span id="preview-aspect-pill" class="aspect-tag">Ratio: 9:16</span>
             </div>
@@ -1287,22 +1287,22 @@
 
         <!-- File Share / Heavy Media Asset Link -->
         <div class="form-full form-group share-link-group">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <label data-i18n="post_share_label" for="post-share-link" style="margin-bottom: 0;">Link partajare fișiere / fișiere mari (opțional)</label>
-            <span data-i18n="post_share_hint_title" class="badge-subtle" style="font-size: 0.72rem; color: #38bdf8; background: rgba(56, 189, 248, 0.1);">Pentru video 4K, RAW, Drive, Dropbox, share-uri de rețea</span>
+          <div class="u-flex u-justify-between u-items-center u-mb-6">
+            <label class="u-mb-0" data-i18n="post_share_label" for="post-share-link">Link partajare fișiere / fișiere mari (opțional)</label>
+            <span data-i18n="post_share_hint_title" class="badge-subtle u-text-2xs u-color-sky u-bg-sky-400-10">Pentru video 4K, RAW, Drive, Dropbox, share-uri de rețea</span>
           </div>
-          <div class="share-link-input-row" style="display: flex; gap: 8px;">
-            <input data-i18n-placeholder="post_share_placeholder" type="text" id="post-share-link" class="form-input" style="flex: 1;" placeholder="ex: https://drive.google.com/..., link Dropbox sau \sharessetsideo.mp4">
-            <button type="button" id="btn-test-share-link" class="btn btn-secondary btn-sm" style="white-space: nowrap;">Test Link <svg class="ui-icon" style="width:11px;height:11px;vertical-align:middle"><use href="#icon-external-link"></use></svg></button>
+          <div class="share-link-input-row u-flex u-gap-8">
+            <input data-i18n-placeholder="post_share_placeholder" type="text" id="post-share-link" class="form-input u-flex-1" placeholder="ex: https://drive.google.com/..., link Dropbox sau \sharessetsideo.mp4">
+            <button type="button" id="btn-test-share-link" class="btn btn-secondary btn-sm u-nowrap">Test Link <svg class="ui-icon u-w-11 u-h-11 u-valign-middle"><use href="#icon-external-link"></use></svg></button>
           </div>
-          <small data-i18n="post_share_help" style="color: var(--text-muted); font-size: 0.73rem; display: block; margin-top: 4px;">Păstrați masterele video mari și fișierele RAW pe share și aveți linkul la îndemână direct în postare.</small>
+          <small class="u-color-muted u-text-2xs u-block u-mt-4" data-i18n="post_share_help">Păstrați masterele video mari și fișierele RAW pe share și aveți linkul la îndemână direct în postare.</small>
         </div>
 
         <!-- Description & Caption -->
         <div class="form-full form-group">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div class="u-flex u-justify-between u-items-center">
             <label data-i18n="post_desc_label" for="post-desc-input">Descriere / Text Postare *</label>
-            <span id="caption-counter" style="font-size: 0.72rem; color: var(--text-muted);">0 / 2200 chars</span>
+            <span class="u-text-2xs u-color-muted" id="caption-counter">0 / 2200 chars</span>
           </div>
           <textarea data-i18n-placeholder="post_caption_placeholder" id="post-desc-input" class="form-textarea" rows="6" placeholder="Scrieți textul, hashtag-urile, mențiunile..." required></textarea>
         </div>
@@ -1364,26 +1364,26 @@
           </div>
 
           <!-- Cloud / Network File Share Assets Section -->
-          <div id="detail-share-box" class="detail-share-box" style="margin-bottom: 16px; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: var(--radius-md); padding: 12px 14px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <span data-i18n="post_detail_share_heading" style="font-size: 0.78rem; font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 6px;">Link material media / video mare:</span>
-              <span id="detail-share-status-badge" class="badge-subtle" style="font-size: 0.7rem; color: #38bdf8;">Linked</span>
+          <div id="detail-share-box" class="detail-share-box u-mb-16 u-bg-sky-400-8 u-border-sky-400-25 u-rounded-md u-pt-12 u-pr-14 u-pb-12 u-pl-14">
+            <div class="u-flex u-justify-between u-items-center u-mb-6">
+              <span class="u-text-2xs u-fw-700 u-color-sky u-flex u-items-center u-gap-6" data-i18n="post_detail_share_heading">Link material media / video mare:</span>
+              <span id="detail-share-status-badge" class="badge-subtle u-text-3xs u-color-sky">Linked</span>
             </div>
-            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
-              <a id="detail-share-link-text" href="#" target="_blank" style="color: var(--text-primary); font-family: monospace; font-size: 0.8rem; word-break: break-all; flex: 1; text-decoration: underline;">
+            <div class="u-flex u-items-center u-justify-between u-gap-10 u-wrap">
+              <a class="u-color-primary u-font-mono u-text-xs u-break-break-all u-flex-1 u-decoration-underline" id="detail-share-link-text" href="#" target="_blank">
                 https://...
               </a>
-              <div style="display: flex; gap: 6px;">
-                <button data-i18n-title="copy_link_title" data-i18n="post_detail_copy_share_btn" type="button" id="btn-detail-copy-share" class="btn btn-secondary btn-sm" title="Copiază linkul" style="font-size: 0.76rem; font-weight: 700;">Copiază linkul</button>
-                <a data-i18n-title="open_share_title" id="btn-detail-open-share" href="#" target="_blank" class="btn btn-primary btn-sm" title="Deschide folderul / fișierul într-un tab nou" style="font-size: 0.76rem; text-decoration: none; font-weight: 700;">
-                  Open Share <svg class="ui-icon" style="width:11px;height:11px;vertical-align:middle"><use href="#icon-external-link"></use></svg>
+              <div class="u-flex u-gap-6">
+                <button data-i18n-title="copy_link_title" data-i18n="post_detail_copy_share_btn" type="button" id="btn-detail-copy-share" class="btn btn-secondary btn-sm u-text-2xs u-fw-700" title="Copiază linkul">Copiază linkul</button>
+                <a data-i18n-title="open_share_title" id="btn-detail-open-share" href="#" target="_blank" class="btn btn-primary btn-sm u-text-2xs u-decoration-none u-fw-700" title="Deschide folderul / fișierul într-un tab nou">
+                  Open Share <svg class="ui-icon u-w-11 u-h-11 u-valign-middle"><use href="#icon-external-link"></use></svg>
                 </a>
               </div>
             </div>
           </div>
 
           <div>
-            <span data-i18n="post_detail_caption_heading" style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 6px;">Text / Descriere:</span>
+            <span class="u-text-2xs u-fw-600 u-color-secondary u-block u-mb-6" data-i18n="post_detail_caption_heading">Text / Descriere:</span>
             <div id="detail-desc-box" class="detail-desc-box"></div>
           </div>
         </div>
@@ -1398,20 +1398,20 @@
 
   <!-- DIALOG: Control Panel Modal -->
   <dialog id="control-panel-dialog" aria-labelledby="cp-dialog-title">
-    <div class="dialog-header" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
-      <h2 id="cp-dialog-title" style="margin: 0;">
+    <div class="dialog-header u-flex u-items-center u-justify-between u-gap-12 u-wrap">
+      <h2 class="u-mt-0 u-mr-0 u-mb-0 u-ml-0" id="cp-dialog-title">
         <span>Control panel: platforms and 2026 size standards</span>
       </h2>
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <button data-i18n="cp_add_title" type="button" class="btn btn-primary btn-sm" id="btn-cp-header-add-platform" style="white-space: nowrap; font-size: 0.8rem; font-weight: 700; padding: 6px 12px;">+ Adaugă o Nouă Platformă</button>
+      <div class="u-flex u-items-center u-gap-10">
+        <button data-i18n="cp_add_title" type="button" class="btn btn-primary btn-sm u-nowrap u-text-xs u-fw-700 u-pt-6 u-pr-12 u-pb-6 u-pl-12" id="btn-cp-header-add-platform">+ Adaugă o Nouă Platformă</button>
         <button data-i18n-aria-label="cp_close_aria" class="dialog-close-btn" id="close-cp-dialog-btn" aria-label="Închide panoul de control">&times;</button>
       </div>
     </div>
     <div class="dialog-body">
       <!-- Add New Platform Form -->
-      <details id="cp-add-platform-details" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 14px; margin-bottom: 20px;">
-        <summary data-i18n="cp_add_title" style="font-weight: 700; cursor: pointer; color: #38bdf8; display: flex; align-items: center; gap: 6px;">+ Adaugă o Nouă Platformă</summary>
-        <form id="add-platform-form" style="margin-top: 14px; display: flex; flex-direction: column; gap: 12px;">
+      <details class="u-bg-card u-border u-rounded-md u-pt-14 u-pr-14 u-pb-14 u-pl-14 u-mb-20" id="cp-add-platform-details">
+        <summary class="u-fw-700 u-cursor-pointer u-color-sky u-flex u-items-center u-gap-6" data-i18n="cp_add_title">+ Adaugă o Nouă Platformă</summary>
+        <form class="u-mt-14 u-flex u-col u-gap-12" id="add-platform-form">
           <div class="form-grid">
             <div class="form-group">
               <label data-i18n="cp_platform_name" for="new-platform-name">Nume Platformă *</label>
@@ -1419,7 +1419,7 @@
             </div>
             <div class="form-group">
               <label data-i18n="cp_brand_color" for="new-platform-color">Culoare Brand</label>
-              <input type="color" id="new-platform-color" class="form-input" value="#8b5cf6" style="height: 38px; padding: 2px;">
+              <input type="color" id="new-platform-color" class="form-input u-h-38 u-pt-2 u-pr-2 u-pb-2 u-pl-2" value="#8b5cf6">
             </div>
             <div class="form-group">
               <label data-i18n="cp_domain" for="new-platform-domain">Domeniu Web (pentru favicon automat)</label>
@@ -1430,7 +1430,7 @@
               <input data-i18n-placeholder="platform_desc_placeholder" type="text" id="new-platform-desc" class="form-input" placeholder="ex: Rețea profesională sau microblogging">
             </div>
           </div>
-          <button data-i18n="cp_add_btn" type="submit" class="btn btn-primary btn-sm" style="align-self: flex-start;">Adaugă Platforma</button>
+          <button data-i18n="cp_add_btn" type="submit" class="btn btn-primary btn-sm u-self-start">Adaugă Platforma</button>
         </form>
       </details>
 
@@ -1439,9 +1439,9 @@
         <!-- Rendered dynamically -->
       </div>
     </div>
-    <div class="dialog-footer" style="justify-content: space-between;">
+    <div class="dialog-footer u-justify-between">
       <button data-i18n="cp_reset_btn" type="button" class="btn btn-danger btn-sm" id="cp-reset-defaults-btn">Resetează Tot la Valorile Implicite 2026</button>
-      <div style="display: flex; gap: 8px;">
+      <div class="u-flex u-gap-8">
         <button data-i18n="cp_export_btn" type="button" class="btn btn-secondary btn-sm" id="cp-export-btn">Exportă JSON</button>
         <button data-i18n="cp_import_btn" type="button" class="btn btn-secondary btn-sm" id="cp-import-btn">Importă JSON</button>
         <input type="file" id="cp-import-file-input" accept=".json" style="display: none;">
@@ -1451,7 +1451,7 @@
   </dialog>
 
   <!-- DIALOG: 2026 Aggregated Standards Matrix Modal -->
-  <dialog id="standards-dialog" aria-labelledby="standards-dialog-title" style="max-width: 980px;">
+  <dialog class="u-maxw-980" id="standards-dialog" aria-labelledby="standards-dialog-title">
     <div class="dialog-header">
       <h2 id="standards-dialog-title">
         <span>2026 social media image and video standards</span>
@@ -1459,7 +1459,7 @@
       <button data-i18n-aria-label="standards_close_aria" class="dialog-close-btn" id="close-standards-dialog-btn" aria-label="Închide dialogul de standarde">&times;</button>
     </div>
     <div class="dialog-body">
-      <p data-i18n="standards_desc" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 14px;">Dimensiuni actualizate pentru 2026, cerințe video verticale, zone sigure pentru mobil și rapoarte de aspect pe toate platformele.</p>
+      <p class="u-text-sm u-color-secondary u-mb-14" data-i18n="standards_desc">Dimensiuni actualizate pentru 2026, cerințe video verticale, zone sigure pentru mobil și rapoarte de aspect pe toate platformele.</p>
       <div class="standards-table-wrapper">
         <table class="standards-table">
           <thead>

@@ -110,10 +110,10 @@ export const adminPanelMethods = {
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>
-          <div style="display: flex; align-items: center; gap: 8px; font-weight: 700;">
+          <div class="u-flex u-items-center u-gap-8 u-fw-700">
             <span class="user-avatar" aria-hidden="true"><svg class="ui-icon"><use href="#icon-user"></use></svg></span>
             <span>${this.escapeHtml(user.name)}</span>
-            ${isSelf ? `<span class="badge-subtle" style="color: #38bdf8;">(${this.t("admin_you")})</span>` : ''}
+            ${isSelf ? `<span class="badge-subtle u-color-sky">(${this.t("admin_you")})</span>` : ''}
           </div>
         </td>
         <td><code>@${this.escapeHtml(user.username)}</code></td>
@@ -121,12 +121,12 @@ export const adminPanelMethods = {
           <span class="user-role-badge ${user.role === 'admin' ? 'role-admin' : ''}">${this.t(`role_${user.role}`)}</span>
         </td>
         <td>${this.tn("count_events", userEventCount, { count: `<strong>${userEventCount}</strong>` })}</td>
-        <td style="color: var(--text-muted); font-size: 0.75rem;">${user.createdAt || '—'}</td>
+        <td class="u-color-muted u-text-2xs">${user.createdAt || '—'}</td>
         <td>
-          <div style="display: flex; gap: 6px; align-items: center;">
+          <div class="u-flex u-gap-6 u-items-center">
             <button class="btn btn-secondary btn-sm btn-edit-user" data-uid="${user.id}" title="${this.t(isSystemAdmin ? "admin_edit_root_title" : "admin_edit_user_title")}">${this.t("admin_edit_btn")}</button>
             ${(isSystemAdmin || isSelf) ? '' : `<button class="btn btn-danger btn-sm btn-del-user" data-uid="${user.id}">${this.t("admin_delete_btn")}</button>`}
-            ${isSystemAdmin ? `<span class="badge-subtle" style="color: #ef4444; font-size: 0.72rem; font-weight: 600;">${this.t("admin_root_badge")}</span>` : ''}
+            ${isSystemAdmin ? `<span class="badge-subtle u-color-red-500 u-text-2xs u-fw-600">${this.t("admin_root_badge")}</span>` : ''}
           </div>
         </td>
       `;
@@ -156,30 +156,30 @@ export const adminPanelMethods = {
       if (Array.isArray(evt.roomBookings) && evt.roomBookings.length > 0) {
         roomsBadgeHtml = evt.roomBookings.map(b => {
           const rm = (this.rooms || []).find(r => r.id === b.roomId);
-          return `<span class="badge-subtle" style="color: #c084fc; font-size: 0.68rem;">🛏️ ${this.escapeHtml(rm ? rm.name : b.roomId)} (${b.startDate.slice(5)} – ${b.endDate.slice(5)})</span>`;
+          return `<span class="badge-subtle u-color-purple-400 u-text-3xs">🛏️ ${this.escapeHtml(rm ? rm.name : b.roomId)} (${b.startDate.slice(5)} – ${b.endDate.slice(5)})</span>`;
         }).join(" ");
       } else if (evt.roomId) {
         const room = (this.rooms || []).find(r => r.id === evt.roomId);
-        roomsBadgeHtml = `<span class="badge-subtle" style="color: #c084fc; font-size: 0.68rem;">🛏️ ${this.escapeHtml(room ? room.name : evt.roomId)}</span>`;
+        roomsBadgeHtml = `<span class="badge-subtle u-color-purple-400 u-text-3xs">🛏️ ${this.escapeHtml(room ? room.name : evt.roomId)}</span>`;
       }
 
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>
           <strong>${evt.startDate}</strong>
-          <span style="display: block; font-size: 0.72rem; color: var(--text-muted);">${evt.hour || '18:00'} (${evt.durationHours || 2}h)</span>
+          <span class="u-block u-text-2xs u-color-muted">${evt.hour || '18:00'} (${evt.durationHours || 2}h)</span>
         </td>
         <td>
-          <div style="font-weight: 700; color: var(--text-primary);">
+          <div class="u-fw-700 u-color-primary">
             ${isLocked ? '🔒 ' : (isRoomOnly ? '🛏️ ' : '')}${this.escapeHtml(evt.title)}
-            ${isLocked ? `<span class="badge-subtle" style="color: #fbbf24; font-size: 0.68rem; margin-left: 4px;">${this.t("badge_locked_hours")}</span>` : ''}
-            ${isRoomOnly ? `<span class="badge-subtle" style="color: #c084fc; font-size: 0.68rem; margin-left: 4px;">${this.t("badge_room_booking")}</span>` : ''}
-            ${evt.isRecurrent ? `<span class="badge-subtle" style="color: #38bdf8; font-size: 0.68rem; margin-left: 4px;">${this.tf("recurrence_badge", { index: evt.recurrenceIndex, total: evt.recurrenceTotal })}</span>` : ''}
+            ${isLocked ? `<span class="badge-subtle u-color-amber-400 u-text-3xs u-ml-4">${this.t("badge_locked_hours")}</span>` : ''}
+            ${isRoomOnly ? `<span class="badge-subtle u-color-purple-400 u-text-3xs u-ml-4">${this.t("badge_room_booking")}</span>` : ''}
+            ${evt.isRecurrent ? `<span class="badge-subtle u-color-sky u-text-3xs u-ml-4">${this.tf("recurrence_badge", { index: evt.recurrenceIndex, total: evt.recurrenceTotal })}</span>` : ''}
           </div>
-          <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-top: 3px;">
-            ${space ? `<span class="badge-subtle" style="color: #38bdf8; font-size: 0.68rem;">📍 ${this.escapeHtml(space.name)}</span>` : ''}
+          <div class="u-flex u-gap-4 u-wrap u-mt-3">
+            ${space ? `<span class="badge-subtle u-color-sky u-text-3xs">📍 ${this.escapeHtml(space.name)}</span>` : ''}
             ${roomsBadgeHtml}
-            ${(evt.facebookImage && !isLocked && !isRoomOnly) ? `<span style="font-size: 0.7rem; color: var(--status-info);">${this.t("admin_cover_attached")}</span>` : ''}
+            ${(evt.facebookImage && !isLocked && !isRoomOnly) ? `<span class="u-text-3xs u-color-info">${this.t("admin_cover_attached")}</span>` : ''}
           </div>
         </td>
         <td>
@@ -190,12 +190,12 @@ export const adminPanelMethods = {
         <td>
           <span class="user-creator-tag">${this.escapeHtml(evt.creatorName || evt.creatorUsername)}</span>
         </td>
-        <td style="font-size: 0.8rem;">
+        <td class="u-text-xs">
           <div><strong>${(isLocked || isRoomOnly) ? '-' : this.formatEventPrice(evt)}</strong></div>
-          ${(!isLocked && !isRoomOnly && evt.enrollLink) ? `<a href="${evt.enrollLink}" target="_blank" style="color: var(--primary); font-size: 0.75rem; text-decoration: underline;">${this.t("admin_enrol_link")}</a>` : `<span style="color: var(--text-muted); font-size: 0.75rem;">${this.t("admin_none")}</span>`}
+          ${(!isLocked && !isRoomOnly && evt.enrollLink) ? `<a class="u-color-accent u-text-2xs u-decoration-underline" href="${evt.enrollLink}" target="_blank">${this.t("admin_enrol_link")}</a>` : `<span class="u-color-muted u-text-2xs">${this.t("admin_none")}</span>`}
         </td>
         <td>
-          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+          <div class="u-flex u-gap-6 u-wrap">
             <button class="btn btn-secondary btn-sm btn-admin-edit-evt" data-id="${evt.id}">${this.t("admin_edit_btn")}</button>
             <button class="btn btn-danger btn-sm btn-admin-del-evt" data-id="${evt.id}">${this.t("admin_delete_btn")}</button>
           </div>
