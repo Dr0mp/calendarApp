@@ -6354,7 +6354,7 @@ class SocialCalendarApp {
           <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-top: 3px;">
             ${space ? `<span class="badge-subtle" style="color: #38bdf8; font-size: 0.68rem;">📍 ${this.escapeHtml(space.name)}</span>` : ''}
             ${roomsBadgeHtml}
-            ${(evt.facebookImage && !isLocked && !isRoomOnly) ? '<span style="font-size: 0.7rem; color: var(--accent-blue);">16:9 cover attached</span>' : ''}
+            ${(evt.facebookImage && !isLocked && !isRoomOnly) ? '<span style="font-size: 0.7rem; color: var(--status-info);">16:9 cover attached</span>' : ''}
           </div>
         </td>
         <td>

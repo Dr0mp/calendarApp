@@ -178,19 +178,9 @@ body {
 
 /* Tabular Lining Numbers for Consistent Alignment across all data displays */
 .day-number,
-.hour-label,
-.calendar-cell-date,
 .admin-stat-num,
-.timeline-slot,
 .timeline-event-time,
-.event-card-time,
-.storage-breakdown-val,
-.storage-meter-pct,
-.admin-quota-limit,
-.zoom-level-badge,
-.pill-count,
-.table-num,
-.cell-day-num {
+.event-card-time {
   font-variant-numeric: tabular-nums lining-nums;
 }
 
@@ -261,78 +251,12 @@ body {
   line-height: 1.2;
 }
 
-.brand-badge {
-  font-size: 0.7rem;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: rgba(59, 130, 246, 0.2);
-  color: #60a5fa;
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
 .brand-info p {
   font-size: 0.8rem;
   color: var(--text-secondary);
 }
 
 /* Month Navigation */
-.month-nav-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--bg-card);
-  padding: 4px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-subtle);
-}
-
-.btn-nav-icon {
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s ease;
-}
-
-.btn-nav-icon:hover {
-  background: var(--bg-card-hover);
-  color: var(--text-primary);
-}
-
-.current-month-display {
-  font-size: 1rem;
-  font-weight: 600;
-  min-width: 170px;
-  text-align: center;
-  color: var(--text-primary);
-  user-select: none;
-}
-
-.btn-today {
-  padding: 4px 10px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  border-radius: var(--radius-sm);
-  background: var(--bg-input);
-  color: var(--text-secondary);
-  border: 1px solid var(--border-subtle);
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.btn-today:hover {
-  color: var(--text-primary);
-  background: var(--bg-card-hover);
-}
 
 /* Header Actions */
 .header-actions {
@@ -470,16 +394,6 @@ input:checked + .slider:before {
 }
 
 /* Tier 3: Tertiary / Ghost Action */
-.btn-ghost {
-  background: transparent;
-  color: var(--text-secondary);
-  border-color: transparent;
-}
-
-.btn-ghost:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--text-primary);
-}
 
 /* Tier 4: Destructive / Danger Action */
 .btn-danger {
@@ -529,48 +443,6 @@ input:checked + .slider:before {
   scrollbar-width: thin;
 }
 
-.platform-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 5px 12px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  border-radius: 999px;
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  white-space: nowrap;
-}
-
-.platform-pill:hover {
-  background: var(--bg-card-hover);
-  color: var(--text-primary);
-  border-color: var(--border-strong);
-}
-
-.platform-pill.active {
-  background: var(--primary);
-  color: #fff;
-  border-color: transparent;
-  box-shadow: 0 2px 8px var(--primary-glow);
-}
-
-.platform-pill-count {
-  font-size: 0.7rem;
-  padding: 1px 6px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
-  color: currentColor;
-}
-
-.platform-pill.active .platform-pill-count {
-  background: rgba(255, 255, 255, 0.25);
-  color: #fff;
-}
-
 .platform-dot {
   width: 8px;
   height: 8px;
@@ -608,11 +480,6 @@ input:checked + .slider:before {
 }
 
 /* Platform-specific indicator pills */
-.platform-pill[data-platform="tiktok"].active { background: #fe2c55; }
-.platform-pill[data-platform="instagram"].active { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
-.platform-pill[data-platform="facebook"].active { background: #1877f2; }
-.platform-pill[data-platform="youtube"].active { background: #ff0000; }
-.platform-pill[data-platform="reddit"].active { background: #ff4500; }
 
 /* Main App Body */
 .app-main {
@@ -1372,12 +1239,6 @@ dialog::backdrop {
   object-fit: contain;
 }
 
-.preset-thumb-btn img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
 /* Control Panel Drawer / Modal Styles */
 .cp-platform-card {
   background: var(--bg-card);
@@ -1872,14 +1733,6 @@ dialog::backdrop {
   z-index: 10;
 }
 
-.event-card-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: var(--text-2xs);
-  gap: 6px;
-}
-
 .user-creator-tag {
   display: inline-flex;
   align-items: center;
@@ -2089,16 +1942,6 @@ dialog::backdrop {
 }
 
 /* Multi-day Event Pill Enhancements */
-.multiday-tag {
-  display: inline-block;
-  font-size: 0.6rem;
-  font-weight: 800;
-  padding: 1px 5px;
-  border-radius: 4px;
-  background: rgba(139, 92, 246, 0.25);
-  color: #c4b5fd;
-  margin-left: 4px;
-}
 
 /* Date Conflict Warning Box */
 .event-date-warning-box {
@@ -2489,22 +2332,6 @@ dialog::backdrop {
   color: var(--text-muted);
 }
 
-.schedule-page-event-row strong {
-  font-size: 0.85rem;
-  color: var(--text-primary);
-}
-
-.schedule-page-event-row span {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-}
-
-@media (max-width: 900px) {
-  .schedule-page-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 /* ========================================================================= */
 /* ADMIN CONTROL PANEL STYLES                                                */
 /* ========================================================================= */
@@ -2620,15 +2447,6 @@ dialog::backdrop {
   text-align: center;
 }
 
-.quick-hint-box {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  background: var(--bg-input);
-  padding: 6px 10px;
-  border-radius: var(--radius-sm);
-  display: inline-block;
-}
-
 .quick-demo-logins {
   margin-top: 14px;
   padding-top: 12px;
@@ -2713,37 +2531,6 @@ dialog::backdrop {
   color: var(--text-secondary);
   font-size: 0.86rem;
   line-height: 1.45;
-}
-
-.direct-login-role-guide {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 12px 14px;
-  margin-top: 14px;
-  margin-bottom: 14px;
-}
-
-.role-guide-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 0.77rem;
-  color: var(--text-secondary);
-  line-height: 1.4;
-}
-
-.role-guide-item strong {
-  color: var(--text-primary);
-}
-
-.role-guide-icon {
-  font-size: 1.1rem;
-  line-height: 1.2;
-  flex-shrink: 0;
 }
 
 .form-input-lg {
@@ -3254,38 +3041,6 @@ dialog::backdrop {
   border-left: 4px solid #10b981;
 }
 
-.notif-card-thumb {
-  width: 108px;
-  height: 61px;
-  border-radius: 6px;
-  object-fit: cover;
-  flex-shrink: 0;
-  background: #090d16;
-  border: 1px solid var(--border-subtle);
-}
-
-.notif-card-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.notif-card-title {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 4px;
-  line-height: 1.3;
-}
-
-.notif-card-meta {
-  font-size: 0.76rem;
-  color: var(--text-secondary);
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
 .promo-status-badge {
   font-size: 0.68rem;
   font-weight: 800;
@@ -3349,7 +3104,7 @@ dialog::backdrop {
 .notifications-title-icon {
   width: 18px;
   height: 18px;
-  color: var(--accent-primary);
+  color: var(--primary-bright);
   margin-top: 3px;
 }
 
@@ -4483,12 +4238,6 @@ button.timeline-time-header-spacer:hover {
   gap: 8px;
 }
 
-#social-calendar-app .filter-toggle-container {
-  background: transparent;
-  border-color: transparent;
-  padding: 5px 6px;
-}
-
 #social-calendar-app .platform-bar {
   min-height: 42px;
   gap: 6px;
@@ -4496,26 +4245,6 @@ button.timeline-time-header-spacer:hover {
   background: var(--bg-main);
   border-top-color: var(--border-subtle);
   border-bottom: 1px solid var(--border-subtle);
-}
-
-#social-calendar-app .platform-pill {
-  padding: 5px 9px;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  background: transparent;
-  border-color: transparent;
-}
-
-#social-calendar-app .platform-pill.active,
-#social-calendar-app .platform-pill[data-platform="tiktok"].active,
-#social-calendar-app .platform-pill[data-platform="instagram"].active,
-#social-calendar-app .platform-pill[data-platform="facebook"].active,
-#social-calendar-app .platform-pill[data-platform="youtube"].active,
-#social-calendar-app .platform-pill[data-platform="reddit"].active {
-  background: rgba(77, 163, 231, 0.14);
-  border-color: rgba(114, 189, 245, 0.32);
-  box-shadow: none;
-  color: var(--text-primary);
 }
 
 #social-calendar-app .platform-favicon {
@@ -4552,9 +4281,7 @@ button.timeline-time-header-spacer:hover {
   min-height: 200px;
 }
 
-.form-group small,
-.form-group .form-hint,
-.form-group .input-help {
+.form-group small {
   font-size: 0.8125rem;
   line-height: 1.5;
   color: var(--text-secondary);
@@ -4992,7 +4719,6 @@ button.timeline-time-header-spacer:hover {
 }
 
 :root[data-theme="light"] .btn-secondary:hover { color: var(--text-primary); }
-:root[data-theme="light"] .btn-ghost:hover { background: rgba(15, 23, 42, 0.05); }
 
 :root[data-theme="light"] dialog::backdrop { background: rgba(15, 23, 42, 0.38); }
 
@@ -5006,8 +4732,7 @@ button.timeline-time-header-spacer:hover {
 
 :root[data-theme="light"] .calendar-day-cell,
 :root[data-theme="light"] .event-notification-card,
-:root[data-theme="light"] .admin-card,
-:root[data-theme="light"] .mentor-session-card {
+:root[data-theme="light"] .admin-card {
   box-shadow: var(--shadow-sm);
 }
 
@@ -5029,74 +4754,18 @@ button.timeline-time-header-spacer:hover {
 }
 
 /* Scheduled sessions: scanable work rows, with event details available in Edit. */
-.mentor-session-card {
-  display: block;
-  padding: 13px 14px;
-  border-left: 1px solid var(--border-subtle) !important;
-  box-shadow: none !important;
-}
-
-.session-content { min-width: 0; }
-
-.session-top {
-  margin: 0 0 4px;
-  gap: 6px;
-}
-
-.session-date-badge {
-  font-size: var(--type-meta);
-  font-weight: 500;
-  color: var(--text-secondary);
-}
-
-.session-title {
-  margin: 0;
-  font-size: var(--type-body);
-  font-weight: 600;
-  line-height: 1.35;
-}
-
-.session-meta {
-  margin: 5px 0 0;
-  gap: 8px;
-  font-size: var(--type-supporting);
-  line-height: 1.4;
-}
-
-.session-price {
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
-.session-actions {
-  margin-top: 10px;
-  justify-content: flex-start;
-}
-
-.session-actions .btn {
-  min-height: 32px;
-  padding: 5px 9px;
-  font-size: var(--type-supporting);
-  font-weight: 600;
-}
 
 /* Typography normalization for shared UI: headings, body, support, and metadata. */
 .app-header h1,
-.header-main-title,
-.social-header h1,
-.events-header h1,
-.admin-header h1 { font-size: var(--type-page); font-weight: 650; line-height: 1.3; }
+.header-main-title { font-size: var(--type-page); font-weight: 650; line-height: 1.3; }
 
 .admin-card-header h2,
-.section-title,
 .dialog-header h2 { font-size: var(--type-section); font-weight: 600; line-height: 1.35; }
 
 .form-group label,
 .btn { font-size: var(--type-supporting); }
 
 .form-group small,
-.help-text,
-.field-help,
 .calendar-day-cell .day-number { font-size: var(--type-meta); line-height: 1.45; }
 
 /* In light mode weekends are merely grouped; they are never a dark visual block. */
@@ -5400,8 +5069,7 @@ button.timeline-time-header-spacer:hover {
 
 /* Segmented Entry Type Switcher */
 /* Segmented Entry Type Switcher */
-.entry-type-segmented-nav,
-.entry-type-segmented {
+.entry-type-segmented-nav {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 6px;
@@ -5539,21 +5207,6 @@ button.timeline-time-header-spacer:hover {
 }
 
 /* Locked Hours Event Notice Box */
-.event-locked-notice {
-  background: rgba(245, 158, 11, 0.12);
-  border: 1px solid rgba(245, 158, 11, 0.35);
-  border-radius: 8px;
-  padding: 10px 14px;
-  color: #fbbf24;
-  font-size: 0.82rem;
-  line-height: 1.45;
-}
-
-:root[data-theme="light"] .event-locked-notice {
-  background: #fef3c7;
-  border-color: #fcd34d;
-  color: #92400e;
-}
 
 /* Locked Pill & Timeline Card Visual Styling */
 .event-card-pill.is-locked-pill {
@@ -5649,41 +5302,6 @@ button.timeline-time-header-spacer:hover {
 }
 
 /* Detail Modal Badges */
-.badge-locked-hours {
-  background: rgba(245, 158, 11, 0.2);
-  color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.4);
-}
-
-:root[data-theme="light"] .badge-locked-hours {
-  background: #fef3c7;
-  color: #92400e;
-  border-color: #fcd34d;
-}
-
-.badge-space {
-  background: rgba(14, 165, 233, 0.15);
-  color: #38bdf8;
-  border: 1px solid rgba(14, 165, 233, 0.3);
-}
-
-:root[data-theme="light"] .badge-space {
-  background: #e0f2fe;
-  color: #0284c7;
-  border-color: #bae6fd;
-}
-
-.badge-room {
-  background: rgba(168, 85, 247, 0.15);
-  color: #c084fc;
-  border: 1px solid rgba(168, 85, 247, 0.3);
-}
-
-:root[data-theme="light"] .badge-room {
-  background: #f3e8ff;
-  color: #7e22ce;
-  border-color: #e9d5ff;
-}
 
 /* ========================================================================= */
 /* UNIFIED SOCIAL MEDIA CALENDAR SHELL & TOOLBAR (Matching Evenimentele Mele)*/
@@ -5826,8 +5444,7 @@ button.timeline-time-header-spacer:hover {
 .social-main-shell,
 .my-events-page-shell,
 .schedule-page-shell,
-.admin-content-layout,
-.admin-main-shell {
+.admin-content-layout {
   max-width: 1200px !important;
   margin: 0 auto !important;
   width: 100% !important;
