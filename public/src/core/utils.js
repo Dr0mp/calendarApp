@@ -1,7 +1,24 @@
 // Small helpers shared by every feature.
 // Mixed into SocialCalendarApp.prototype by src/app.js; `this` is the app instance.
 
+// JSON call to the app's own API (session cookie included). Resolves to { res, data }.
+export async function apiRequest(method, url, body) {
+  const res = await fetch(url, {
+    method,
+    credentials: "include",
+    headers: body ? { "Content-Type": "application/json" } : undefined,
+    body: body ? JSON.stringify(body) : undefined
+  });
+  let data = {};
+  try { data = await res.json(); } catch (e) { /* empty or non-JSON body */ }
+  return { res, data };
+}
+
 export const utilMethods = {
+  // Weekday initials row for the year-overview mini calendars (Sat/Sun muted).
+  renderMiniWeekdayRow(weekdaysMin) {
+    return weekdaysMin.map((d, i) => `<div class="yearly-mini-weekday"${i >= 5 ? ' style="color: #64748b;"' : ""}>${d}</div>`).join("\n");
+  },
   hexToRgba(hex, alpha = 1) {
     if (!hex || typeof hex !== "string" || !hex.startsWith("#")) return `rgba(244, 63, 94, ${alpha})`;
     const cleanHex = hex.replace("#", "");

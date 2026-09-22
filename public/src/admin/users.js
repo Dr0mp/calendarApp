@@ -1,6 +1,8 @@
 // Admin: user accounts (server API).
 // Mixed into SocialCalendarApp.prototype by src/app.js; `this` is the app instance.
 
+import { apiRequest } from "../core/utils.js";
+
 export const adminUserMethods = {
   async handleCreateUser(e) {
     e.preventDefault();
@@ -16,14 +18,7 @@ export const adminUserMethods = {
     if (!name || !username || !password) return;
 
     try {
-      const res = await fetch("/api/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ name, username, password, role })
-      });
-
-      const data = await res.json();
+      const { res, data } = await apiRequest("POST", "/api/users", { name, username, password, role });
       if (!res.ok) {
         alert(data.error || this.t("alert_username_taken").replace("${username}", username));
         return;
@@ -82,14 +77,7 @@ export const adminUserMethods = {
     }
 
     try {
-      const res = await fetch(`/api/users/${userId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ name, username, password, role })
-      });
-
-      const data = await res.json();
+      const { res, data } = await apiRequest("PUT", `/api/users/${userId}`, { name, username, password, role });
       if (!res.ok) {
         alert(data.error || this.t("alert_username_in_use").replace("${username}", username));
         return;
@@ -141,12 +129,7 @@ export const adminUserMethods = {
 
     if (confirm(this.t("confirm_delete_user").replace("${name}", user.name))) {
       try {
-        const res = await fetch(`/api/users/${userId}`, {
-          method: "DELETE",
-          credentials: "include"
-        });
-
-        const data = await res.json();
+        const { res, data } = await apiRequest("DELETE", `/api/users/${userId}`);
         if (!res.ok) {
           alert(data.error || (this.t("alert_delete_user_failed")));
           return;

@@ -117,7 +117,7 @@ export const storageQuotaMethods = {
     today.setHours(0, 0, 0, 0);
 
     return this.events.filter(e => {
-      const eventDateStr = e.endDate || e.startDate || e.date;
+      const eventDateStr = e.endDate;
       if (!eventDateStr) return false;
       const [y, m, d] = eventDateStr.split("-").map(Number);
       const eventDate = new Date(y, m - 1, d);

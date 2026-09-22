@@ -5,7 +5,6 @@ export const domRefsMethods = {
   initElements() {
     this.dom = {
       adminQuotaLimitBadge: document.getElementById("admin-quota-limit-badge"),
-      loginSubmitBtn: document.getElementById("login-submit-btn"),
       savePostBtn: document.getElementById("save-post-btn"),
       // Universal Top Navigation Bar
       universalNavBar: document.getElementById("universal-nav-bar"),
@@ -143,14 +142,6 @@ export const domRefsMethods = {
       standardsTableBody: document.getElementById("standards-table-body"),
 
       // Login Dialog
-      loginDialog: document.getElementById("login-dialog"),
-      closeLoginDialogBtn: document.getElementById("close-login-dialog-btn"),
-      cancelLoginBtn: document.getElementById("cancel-login-btn"),
-      loginForm: document.getElementById("login-form"),
-      loginSubtitle: document.getElementById("login-dialog-subtitle"),
-      loginUsername: document.getElementById("login-username"),
-      loginPassword: document.getElementById("login-password"),
-      loginErrorMsg: document.getElementById("login-error-msg"),
 
       // Events Calendar App Elements
       eventsZoomControl: document.getElementById("events-zoom-control"),

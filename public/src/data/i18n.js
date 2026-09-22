@@ -221,14 +221,6 @@ export const TRANSLATIONS = {
     cleanup_btn_purge_social: "Curăță Atașamentele Vechi",
     cleanup_done_btn: "Finalizat",
 
-    // 3. Login Dialog
-    login_modal_title: "Autentificare Workspace",
-    login_modal_sub: "Autentificați-vă pentru a programa evenimente și a accesa uneltele echipei.",
-    login_username_label: "Nume Utilizator *",
-    login_password_label: "Parolă *",
-    login_cancel_btn: "Anulează",
-    login_submit_btn: "Autentificare",
-
     // 5. Add/Edit Event Dialog
     event_dialog_create_title: "Programează eveniment",
     event_dialog_edit_title: "Modificare Eveniment de Echipă",
@@ -393,9 +385,6 @@ export const TRANSLATIONS = {
 
     // === Login & Auth ===
     login_error_invalid: "Nume de utilizator sau parolă incorectă. Verificați datele.",
-    login_error_no_admin: "Acces refuzat: \"${name}\" nu are privilegii de administrator.",
-    login_subtitle_admin: "Sunt necesare date de administrator pentru accesul la setările de sistem.",
-    login_subtitle_events: "Conectați-vă pentru a programa evenimente și gestiona rezervările.",
     demo_badge: "Demo",
     demo_no_save_event: "Mod demonstrativ: Sunteți conectat(ă) cu un cont demo pentru vizualizare. Evenimentele nu pot fi create, salvate sau modificate.",
     demo_no_save_post: "Mod demonstrativ: Sunteți conectat(ă) cu un cont demo pentru vizualizare. Postările nu pot fi create, salvate sau modificate.",
@@ -664,14 +653,6 @@ export const TRANSLATIONS = {
     cleanup_btn_purge_social: "Purge Old Attachments",
     cleanup_done_btn: "Done",
 
-    // 3. Login Dialog
-    login_modal_title: "Workspace Sign In",
-    login_modal_sub: "Sign in to schedule events and access your workspace tools.",
-    login_username_label: "Username *",
-    login_password_label: "Password *",
-    login_cancel_btn: "Cancel",
-    login_submit_btn: "Sign In",
-
     // 5. Add/Edit Event Dialog
     event_dialog_create_title: "Schedule Event",
     event_dialog_edit_title: "Edit Team Event",
@@ -836,9 +817,6 @@ export const TRANSLATIONS = {
 
     // === Login & Auth ===
     login_error_invalid: "Invalid username or password. Please check credentials.",
-    login_error_no_admin: "Access denied: \"${name}\" does not have administrator privileges.",
-    login_subtitle_admin: "Administrator credentials required to access system settings.",
-    login_subtitle_events: "Sign in to schedule events and manage your personal bookings.",
     demo_badge: "Demo",
     demo_no_save_event: "Demo mode: You are viewing with a demo account. Events cannot be created, saved, or modified.",
     demo_no_save_post: "Demo mode: You are viewing with a demo account. Posts cannot be created, saved, or modified.",

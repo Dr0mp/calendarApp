@@ -40,7 +40,7 @@ export const notificationMethods = {
     }
 
     // Sort newest / upcoming first
-    list.sort((a, b) => new Date(`${b.date}T${b.time || '00:00'}`) - new Date(`${a.date}T${a.time || '00:00'}`));
+    list.sort((a, b) => new Date(`${b.startDate}T${b.hour || '00:00'}`) - new Date(`${a.startDate}T${a.hour || '00:00'}`));
 
     if (list.length === 0) {
       this.dom.socialNotificationsList.innerHTML = `
@@ -57,8 +57,8 @@ export const notificationMethods = {
       const card = document.createElement("div");
       card.className = `event-notification-card ${isPromoted ? 'is-promoted' : 'is-pending'}`;
       
-      const eventDate = evt.startDate || evt.date;
-      const eventTime = evt.hour || evt.time;
+      const eventDate = evt.startDate;
+      const eventTime = evt.hour;
       const eventLength = evt.durationHours ? `${evt.durationHours}h` : "";
       const dateParts = [eventDate, eventTime, eventLength].filter(Boolean).join(" · ");
       const creator = evt.creatorName || evt.creatorUsername || "Mentor";
@@ -112,8 +112,8 @@ export const notificationMethods = {
 
     // Prepare campaign marketing copy
     const title = `🚀 Upcoming Session: ${evt.title}`;
-    const dateStr = evt.startDate || evt.date;
-    const timeStr = evt.hour || evt.time || "18:00";
+    const dateStr = evt.startDate;
+    const timeStr = evt.hour || "18:00";
     const priceStr = evt.price ? this.formatEventPrice(evt) : "Free Access";
     const enrollStr = evt.enrollLink ? `\n\n🔗 Reserve your spot: ${evt.enrollLink}` : "";
     const mentorStr = evt.creatorName ? `Hosted by ${evt.creatorName}` : "";

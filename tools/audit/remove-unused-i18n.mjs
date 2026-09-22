@@ -2,7 +2,7 @@
 import fs from 'fs'; import path from 'path'; import { fileURLToPath, pathToFileURL } from 'url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../public');
 const walk = d => fs.readdirSync(d).flatMap(f => { const p = path.join(d, f); return fs.statSync(p).isDirectory() ? walk(p) : [p]; });
-const i18nFile = walk(root).find(f => f.endsWith('i18n.js'));
+const i18nFile = walk(root).find(f => f.endsWith(path.join('data', 'i18n.js'))) || walk(root).find(f => f.endsWith('i18n.js'));
 const sources = walk(root).filter(f => /\.(js|html)$/.test(f) && f !== i18nFile).map(f => fs.readFileSync(f, 'utf8')).join('\n');
 const { TRANSLATIONS } = await import(pathToFileURL(i18nFile) + '?t=' + Date.now());
 const keys = Object.keys(TRANSLATIONS.ro);

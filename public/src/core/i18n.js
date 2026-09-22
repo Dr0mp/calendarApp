@@ -110,7 +110,7 @@ export const i18nMethods = {
       demo: "direct_login_demo_user",
       demo_admin: "direct_login_demo_admin"
     };
-    document.querySelectorAll("#direct-login-view .direct-demo-chip, #login-dialog .btn-demo-chip").forEach(btn => {
+    document.querySelectorAll("#direct-login-view .direct-demo-chip").forEach(btn => {
       const userKey = btn.dataset.user;
       if (demoLabels[userKey]) {
         btn.textContent = this.t(demoLabels[userKey]);
@@ -277,20 +277,6 @@ export const i18nMethods = {
     if (this.dom.btnExecuteStripImages) this.dom.btnExecuteStripImages.textContent = this.t("cleanup_btn_strip_images");
     if (this.dom.btnExecuteCleanupSocial) this.dom.btnExecuteCleanupSocial.textContent = this.t("cleanup_btn_purge_social");
     if (this.dom.closeStorageCleanupDoneBtn) this.dom.closeStorageCleanupDoneBtn.textContent = this.t("cleanup_done_btn");
-
-    // Login Dialog
-    const loginTitle = document.getElementById("login-dialog-title");
-    if (loginTitle) loginTitle.innerHTML = `<span>${this.t("login_modal_title")}</span>`;
-    const loginSub = document.getElementById("login-dialog-subtitle");
-    if (loginSub) loginSub.textContent = this.t("login_modal_sub");
-    const loginUnLabel = document.querySelector("label[for='login-username']");
-    if (loginUnLabel) loginUnLabel.textContent = this.t("login_username_label");
-    const loginPwLabel = document.querySelector("label[for='login-password']");
-    if (loginPwLabel) loginPwLabel.textContent = this.t("login_password_label");
-    const loginDemoSpan = document.querySelector("#login-dialog .quick-demo-logins span");
-    if (loginDemoSpan) loginDemoSpan.textContent = this.t("direct_login_demo_title");
-    if (this.dom.cancelLoginBtn) this.dom.cancelLoginBtn.textContent = this.t("login_cancel_btn");
-    if (this.dom.loginSubmitBtn) this.dom.loginSubmitBtn.textContent = this.t("login_submit_btn");
 
     // Schedule Page & My Events Page
     if (this.dom.myEventsPageTitle) this.dom.myEventsPageTitle.textContent = this.t("my_events_title");

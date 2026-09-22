@@ -2,6 +2,41 @@
 // Mixed into SocialCalendarApp.prototype by src/app.js; `this` is the app instance.
 
 export const adminPanelMethods = {
+  // User edit and storage cleanup dialogs.
+  bindAdminDialogs() {
+    // =========================================================================
+    // 5. USER EDIT & STORAGE CLEANUP DIALOGS
+    // =========================================================================
+    this.dom.closeEditUserBtn?.addEventListener("click", () => this.dom.editUserDialog?.close());
+    this.dom.cancelEditUserBtn?.addEventListener("click", () => this.dom.editUserDialog?.close());
+    this.dom.editUserForm?.addEventListener("submit", (e) => this.handleEditUserSubmit(e));
+
+    this.dom.btnQuotaBannerCleanup?.addEventListener("click", () => this.openStorageCleanupModal());
+    this.dom.btnOpenStorageCleanup?.addEventListener("click", () => this.openStorageCleanupModal());
+    this.dom.closeStorageCleanupBtn?.addEventListener("click", () => this.dom.storageCleanupDialog?.close());
+    this.dom.closeStorageCleanupDoneBtn?.addEventListener("click", () => this.dom.storageCleanupDialog?.close());
+    this.dom.cleanupEventAgeSelect?.addEventListener("change", () => this.updateCleanupModalPreviews());
+    this.dom.btnExecuteCleanupEvents?.addEventListener("click", () => this.executeCleanupPastEvents());
+    this.dom.btnExecuteStripImages?.addEventListener("click", () => this.executeStripPastImages());
+    this.dom.btnExecuteCleanupSocial?.addEventListener("click", () => this.executeCleanupSocialMedia());
+
+    this.dom.btnSimNormal?.addEventListener("click", () => {
+      this.saveSimulatedStorage(0.15);
+      this.updateStorageQuotaDisplay();
+    });
+    this.dom.btnSimWarning?.addEventListener("click", () => {
+      this.saveSimulatedStorage(0.84);
+      this.updateStorageQuotaDisplay();
+    });
+    this.dom.btnSimCritical?.addEventListener("click", () => {
+      this.saveSimulatedStorage(0.94);
+      this.updateStorageQuotaDisplay();
+    });
+    this.dom.btnSimReset?.addEventListener("click", () => {
+      this.saveSimulatedStorage(null);
+      this.updateStorageQuotaDisplay();
+    });
+  },
   // =========================================================================
   // ADMIN PANEL LOGIC (User Provisioning & Master Events Audit)
   // =========================================================================
@@ -110,7 +145,7 @@ export const adminPanelMethods = {
 
     // Master Events Table (All users)
     this.dom.adminEventsTableBody.innerHTML = "";
-    const sorted = [...this.events].sort((a, b) => new Date(`${a.date}T${a.time || '00:00'}`) - new Date(`${b.date}T${b.time || '00:00'}`));
+    const sorted = [...this.events].sort((a, b) => new Date(`${a.startDate}T${a.hour || '00:00'}`) - new Date(`${b.startDate}T${b.hour || '00:00'}`));
 
     sorted.forEach(evt => {
       const isPromoted = evt.socialStatus === "promoted";
@@ -131,8 +166,8 @@ export const adminPanelMethods = {
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>
-          <strong>${evt.startDate || evt.date}</strong>
-          <span style="display: block; font-size: 0.72rem; color: var(--text-muted);">${evt.hour || evt.time || '18:00'} (${evt.durationHours || 2}h)</span>
+          <strong>${evt.startDate}</strong>
+          <span style="display: block; font-size: 0.72rem; color: var(--text-muted);">${evt.hour || '18:00'} (${evt.durationHours || 2}h)</span>
         </td>
         <td>
           <div style="font-weight: 700; color: var(--text-primary);">

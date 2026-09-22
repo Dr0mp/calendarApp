@@ -59,10 +59,10 @@ export const myEventsMethods = {
 
     // 4. Sort: Chronological (Upcoming first, then past)
     ownEvents.sort((a, b) => {
-      const dateA = a.startDate || a.date || "";
-      const dateB = b.startDate || b.date || "";
-      const timeA = a.hour || a.time || "00:00";
-      const timeB = b.hour || b.time || "00:00";
+      const dateA = a.startDate || "";
+      const dateB = b.startDate || "";
+      const timeA = a.hour || "00:00";
+      const timeB = b.hour || "00:00";
       return `${dateA} ${timeA}`.localeCompare(`${dateB} ${timeB}`);
     });
 
@@ -106,8 +106,8 @@ export const myEventsMethods = {
         typeClass = "type-locked";
       }
 
-      const dateStr = event.startDate || event.date;
-      const hourStr = event.hour || event.time || "18:00";
+      const dateStr = event.startDate;
+      const hourStr = event.hour || "18:00";
       const durationStr = event.durationHours ? `${event.durationHours}h` : "2h";
       
       const spaceObj = (this.spaces || []).find(s => s.id === event.spaceId);
@@ -207,7 +207,7 @@ export const myEventsMethods = {
 
     const isMultiDay = event.startDate && event.endDate && event.startDate !== event.endDate;
     if (this.dom.eventDetailDaysBadge) {
-      this.dom.eventDetailDaysBadge.textContent = isMultiDay ? `${this.t("event_detail_multi_day")} (${event.startDate} – ${event.endDate})` : `${this.t("event_detail_single_day")} (${event.startDate || event.date})`;
+      this.dom.eventDetailDaysBadge.textContent = isMultiDay ? `${this.t("event_detail_multi_day")} (${event.startDate} – ${event.endDate})` : `${this.t("event_detail_single_day")} (${event.startDate})`;
     }
 
     const isLocked = event.entryType === "locked";
@@ -264,9 +264,9 @@ export const myEventsMethods = {
     this.dom.eventDetailCreatorPill.textContent = `${this.t("event_scheduled_by_label")}: ${event.creatorName || event.creatorUsername}`;
     this.dom.eventDetailHeading.textContent = event.title;
 
-    const dateRangeStr = isMultiDay ? `${event.startDate} to ${event.endDate}` : `${event.startDate || event.date}`;
+    const dateRangeStr = isMultiDay ? `${event.startDate} to ${event.endDate}` : `${event.startDate}`;
     const durStr = `${event.durationHours || 2} ${event.durationHours === 1 ? 'hr' : 'hrs'}`;
-    this.dom.eventDetailDatetime.textContent = `${dateRangeStr} at ${event.hour || event.time || '18:00'} (${durStr})`;
+    this.dom.eventDetailDatetime.textContent = `${dateRangeStr} at ${event.hour || '18:00'} (${durStr})`;
 
     if (this.dom.eventDetailPriceItem) {
       this.dom.eventDetailPriceItem.style.display = (isLocked || isRoomOnly) ? "none" : "flex";
@@ -361,7 +361,7 @@ export const myEventsMethods = {
       const related = this.events.filter(e => e.recurrenceGroupId === event.recurrenceGroupId);
       if (related.length > 1) {
         const deleteAll = confirm(
-          this.t("confirm_delete_recurring_series").replace("${title}", event.title).replace("${total}", event.recurrenceTotal).replace("${count}", related.length).replace("${date}", event.startDate || event.date)
+          this.t("confirm_delete_recurring_series").replace("${title}", event.title).replace("${total}", event.recurrenceTotal).replace("${count}", related.length).replace("${date}", event.startDate)
         );
         if (deleteAll) {
           this.events = this.events.filter(e => e.recurrenceGroupId !== event.recurrenceGroupId);

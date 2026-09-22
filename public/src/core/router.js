@@ -3,6 +3,77 @@
 import { STORAGE_ACTIVE_APP_KEY, warnStorage } from "../constants.js";
 
 export const routerMethods = {
+  // Top navigation bar.
+  bindNavigation() {
+    // =========================================================================
+    // 4. TOP UNIVERSAL NAVIGATION BAR
+    // =========================================================================
+    if (this.dom.navEventsBtn) {
+      this.dom.navEventsBtn.addEventListener("click", () => {
+        this.eventsLayoutMode = "panel";
+        this.setAppView("events");
+      });
+    }
+    if (this.dom.navScheduleBtn) {
+      this.dom.navScheduleBtn.addEventListener("click", () => {
+        this.eventsLayoutMode = "schedule";
+        this.setAppView("events");
+        this.openScheduleEventPage();
+      });
+    }
+    if (this.dom.navMyEventsBtn) {
+      this.dom.navMyEventsBtn.addEventListener("click", () => {
+        this.eventsLayoutMode = "my-events";
+        this.setAppView("events");
+      });
+    }
+    if (this.dom.btnMyEventsCreateNew) {
+      this.dom.btnMyEventsCreateNew.addEventListener("click", () => {
+        this.eventsLayoutMode = "schedule";
+        this.setAppView("events");
+        this.openScheduleEventPage();
+      });
+    }
+    if (this.dom.myEventsFilterTabs) {
+      this.dom.myEventsFilterTabs.querySelectorAll(".btn-filter-tab").forEach(btn => {
+        btn.addEventListener("click", () => {
+          this.dom.myEventsFilterTabs.querySelectorAll(".btn-filter-tab").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          this.myEventsActiveFilter = btn.dataset.filter || "all";
+          this.renderMyEventsPage();
+        });
+      });
+    }
+    if (this.dom.myEventsSearchInput) {
+      this.dom.myEventsSearchInput.addEventListener("input", () => {
+        this.renderMyEventsPage();
+      });
+    }
+    if (this.dom.navSocialBtn) {
+      this.dom.navSocialBtn.addEventListener("click", () => {
+        if (this.currentUser && this.currentUser.role === "admin") {
+          this.setAppView("social");
+        }
+      });
+    }
+    if (this.dom.navAdminBtn) {
+      this.dom.navAdminBtn.addEventListener("click", () => {
+        if (this.currentUser && this.currentUser.role === "admin") {
+          this.setAppView("admin");
+        }
+      });
+    }
+    if (this.dom.navLogoutBtn) {
+      this.dom.navLogoutBtn.addEventListener("click", () => this.handleLogout());
+    }
+
+    if (this.dom.linkFooterStandards) {
+      this.dom.linkFooterStandards.addEventListener("click", (e) => {
+        e.preventDefault();
+        this.openStandardsModal();
+      });
+    }
+  },
   // =========================================================================
   // VIEW NAVIGATION & SESSION MANAGEMENT
   // =========================================================================
@@ -45,22 +116,7 @@ export const routerMethods = {
       this.dom.universalNavBar.style.display = "flex";
     }
 
-    // Role-specific nav adjustments
-    if (this.currentUser && this.currentUser.role === "user") {
-      if (this.dom.navSocialBtn) this.dom.navSocialBtn.style.display = "none";
-      if (this.dom.navAdminBtn) this.dom.navAdminBtn.style.display = "none";
-      if (this.dom.navEventsBtn) this.dom.navEventsBtn.style.display = "inline-flex";
-      if (this.dom.navScheduleBtn) this.dom.navScheduleBtn.style.display = "inline-flex";
-      if (this.dom.navMyEventsBtn) this.dom.navMyEventsBtn.style.display = "inline-flex";
-      if (this.dom.navLogoutBtn) this.dom.navLogoutBtn.textContent = this.t("nav_sign_out");
-    } else {
-      if (this.dom.navSocialBtn) this.dom.navSocialBtn.style.display = "inline-flex";
-      if (this.dom.navAdminBtn) this.dom.navAdminBtn.style.display = "inline-flex";
-      if (this.dom.navEventsBtn) this.dom.navEventsBtn.style.display = "inline-flex";
-      if (this.dom.navScheduleBtn) this.dom.navScheduleBtn.style.display = "inline-flex";
-      if (this.dom.navMyEventsBtn) this.dom.navMyEventsBtn.style.display = "inline-flex";
-      if (this.dom.navLogoutBtn) this.dom.navLogoutBtn.textContent = this.t("nav_logout");
-    }
+    this.applyRoleNavigation();
 
     this.updateMyEventsBadgeCount();
 
@@ -151,19 +207,18 @@ export const routerMethods = {
       this.dom.navUserPill.style.display = "none";
     }
 
-    // Role-specific nav adjustments
-    if (this.currentUser && this.currentUser.role === "user") {
-      if (this.dom.navSocialBtn) this.dom.navSocialBtn.style.display = "none";
-      if (this.dom.navAdminBtn) this.dom.navAdminBtn.style.display = "none";
-      if (this.dom.navEventsBtn) this.dom.navEventsBtn.style.display = "inline-flex";
-      if (this.dom.navScheduleBtn) this.dom.navScheduleBtn.style.display = "inline-flex";
-      if (this.dom.navLogoutBtn) this.dom.navLogoutBtn.textContent = this.t("nav_sign_out");
-    } else if (this.currentUser && this.currentUser.role === "admin") {
-      if (this.dom.navSocialBtn) this.dom.navSocialBtn.style.display = "inline-flex";
-      if (this.dom.navAdminBtn) this.dom.navAdminBtn.style.display = "inline-flex";
-      if (this.dom.navEventsBtn) this.dom.navEventsBtn.style.display = "inline-flex";
-      if (this.dom.navScheduleBtn) this.dom.navScheduleBtn.style.display = "inline-flex";
-      if (this.dom.navLogoutBtn) this.dom.navLogoutBtn.textContent = this.t("nav_logout");
-    }
+    this.applyRoleNavigation();
+  },
+  // Social Calendar and Admin are admin-only (the server enforces the same); everything else is shared.
+  applyRoleNavigation() {
+    const role = this.currentUser?.role;
+    const isAdmin = role === "admin";
+    const show = (el, visible) => { if (el) el.style.display = visible ? "inline-flex" : "none"; };
+    show(this.dom.navSocialBtn, isAdmin);
+    show(this.dom.navAdminBtn, isAdmin);
+    show(this.dom.navEventsBtn, true);
+    show(this.dom.navScheduleBtn, true);
+    show(this.dom.navMyEventsBtn, true);
+    if (this.dom.navLogoutBtn) this.dom.navLogoutBtn.textContent = this.t(role === "user" ? "nav_sign_out" : "nav_logout");
   }
 };

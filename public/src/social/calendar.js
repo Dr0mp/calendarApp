@@ -3,6 +3,113 @@
 import { MONTH_NAMES } from "../data/i18n.js";
 
 export const socialCalendarMethods = {
+  // Social calendar toolbar, filters, post dialogs and control panel.
+  bindSocialCalendar() {
+    // =========================================================================
+    // 3. SOCIAL MEDIA CALENDAR HANDLERS
+    // =========================================================================
+    this.dom.prevMonthBtn?.addEventListener("click", () => this.changeMonth(-1));
+    this.dom.nextMonthBtn?.addEventListener("click", () => this.changeMonth(1));
+    this.dom.todayBtn?.addEventListener("click", () => {
+      const today = new Date();
+      this.currentYear = today.getFullYear();
+      this.currentMonth = today.getMonth();
+      this.render();
+    });
+
+    this.dom.viewMonthBtn?.addEventListener("click", () => this.setViewMode("calendar"));
+    this.dom.viewYearBtn?.addEventListener("click", () => this.setViewMode("year"));
+    this.dom.viewFeedBtn?.addEventListener("click", () => this.setViewMode("feed"));
+
+    this.dom.socialSearchInput?.addEventListener("input", (e) => {
+      this.socialSearchQuery = (e.target.value || "").trim().toLowerCase();
+      this.render();
+    });
+
+    this.dom.openAddPostBtn?.addEventListener("click", () => this.openAddPostModal());
+    this.dom.openControlPanelBtn?.addEventListener("click", () => this.openControlPanelModal());
+
+    this.dom.closePostDialogBtn?.addEventListener("click", () => this.dom.postDialog?.close());
+    this.dom.cancelPostDialogBtn?.addEventListener("click", () => this.dom.postDialog?.close());
+    this.dom.postPlatformSelect?.addEventListener("change", () => this.onPlatformSelectChanged());
+    this.dom.postTypeSelect?.addEventListener("change", () => this.updateLiveSpecHelper());
+    this.dom.postDescInput?.addEventListener("input", () => this.updateCaptionCounter());
+    this.dom.postForm?.addEventListener("submit", (e) => this.handlePostFormSubmit(e));
+
+    this.dom.mediaDropZone?.addEventListener("click", () => this.dom.mediaFileInput?.click());
+    this.dom.mediaFileInput?.addEventListener("change", (e) => this.handleFileSelect(e));
+    this.dom.applyUrlBtn?.addEventListener("click", () => this.handleUrlApply());
+
+    if (this.dom.mediaDropZone) {
+      this.dom.mediaDropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        this.dom.mediaDropZone.style.borderColor = "var(--primary)";
+      });
+      this.dom.mediaDropZone.addEventListener("dragleave", () => {
+        this.dom.mediaDropZone.style.borderColor = "";
+      });
+      this.dom.mediaDropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        this.dom.mediaDropZone.style.borderColor = "";
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+          this.processUploadedFiles(e.dataTransfer.files);
+        }
+      });
+    }
+
+    this.dom.closeDetailDialogBtn?.addEventListener("click", () => this.dom.detailDialog?.close());
+    this.dom.detailDeleteBtn?.addEventListener("click", () => this.deleteCurrentDetailPost());
+    this.dom.detailDuplicateBtn?.addEventListener("click", () => this.duplicateCurrentDetailPost());
+    this.dom.detailEditBtn?.addEventListener("click", () => {
+      const postId = this.currentDetailPostId;
+      this.dom.detailDialog?.close();
+      this.openEditPostModal(postId);
+    });
+
+    if (this.dom.btnTestShareLink) {
+      this.dom.btnTestShareLink.addEventListener("click", () => {
+        const val = this.dom.postShareLink ? this.dom.postShareLink.value.trim() : "";
+        if (!val) {
+          alert(this.t("alert_share_link_required"));
+          return;
+        }
+        this.openShareLink(val);
+      });
+    }
+
+    if (this.dom.btnDetailCopyShare) {
+      this.dom.btnDetailCopyShare.addEventListener("click", () => {
+        const post = this.posts.find(p => p.id === this.currentDetailPostId);
+        if (post && post.shareLink) {
+          this.copyToClipboard(post.shareLink, this.dom.btnDetailCopyShare);
+        }
+      });
+    }
+
+    if (this.dom.btnCpHeaderAddPlatform) {
+      this.dom.btnCpHeaderAddPlatform.addEventListener("click", () => {
+        const details = this.dom.cpAddPlatformDetails || document.getElementById("cp-add-platform-details");
+        if (details) {
+          details.open = !details.open;
+          if (details.open) {
+            const input = document.getElementById("new-platform-name");
+            if (input) input.focus();
+            details.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          }
+        }
+      });
+    }
+    this.dom.closeCpDialogBtn?.addEventListener("click", () => this.dom.controlPanelDialog?.close());
+    this.dom.closeCpDoneBtn?.addEventListener("click", () => this.dom.controlPanelDialog?.close());
+    this.dom.addPlatformForm?.addEventListener("submit", (e) => this.handleAddPlatform(e));
+    this.dom.cpResetDefaultsBtn?.addEventListener("click", () => this.resetAllDefaults());
+    this.dom.cpExportBtn?.addEventListener("click", () => this.exportData());
+    this.dom.cpImportBtn?.addEventListener("click", () => this.dom.cpImportFileInput?.click());
+    this.dom.cpImportFileInput?.addEventListener("change", (e) => this.importData(e));
+
+    this.dom.closeStandardsDialogBtn?.addEventListener("click", () => this.dom.standardsDialog?.close());
+    this.dom.closeStandardsDoneBtn?.addEventListener("click", () => this.dom.standardsDialog?.close());
+  },
   // Helpers
   getPlatform(id) {
     return this.platforms.find(p => p.id === id);
@@ -337,13 +444,7 @@ export const socialCalendarMethods = {
           ${countBadge}
         </div>
         <div class="yearly-mini-calendar">
-          <div class="yearly-mini-weekday">${weekdaysMin[0]}</div>
-          <div class="yearly-mini-weekday">${weekdaysMin[1]}</div>
-          <div class="yearly-mini-weekday">${weekdaysMin[2]}</div>
-          <div class="yearly-mini-weekday">${weekdaysMin[3]}</div>
-          <div class="yearly-mini-weekday">${weekdaysMin[4]}</div>
-          <div class="yearly-mini-weekday" style="color: #64748b;">${weekdaysMin[5]}</div>
-          <div class="yearly-mini-weekday" style="color: #64748b;">${weekdaysMin[6]}</div>
+          ${this.renderMiniWeekdayRow(weekdaysMin)}
         </div>
       `;
 

@@ -175,20 +175,7 @@ export const wizardMethods = {
           return false;
         }
       } else if (type === "room_only") {
-        if (!this.currentRoomBookings || this.currentRoomBookings.length === 0) {
-          alert(this.t("wizard_val_room_req"));
-          return false;
-        }
-        for (const booking of this.currentRoomBookings) {
-          if (!booking.roomId || !booking.startDate || !booking.endDate) {
-            alert(this.t("wizard_val_room_req"));
-            return false;
-          }
-          if (booking.endDate < booking.startDate) {
-            alert(this.t("alert_room_dates_invalid"));
-            return false;
-          }
-        }
+        if (!this.validateRoomBookings()) return false;
       }
     } else if (paneId === "wizard-step-pane-2") {
       const date = this.dom.eventDateInput?.value;
@@ -202,24 +189,22 @@ export const wizardMethods = {
         return false;
       }
     } else if (paneId === "wizard-step-pane-3") {
-      if (this.dom.eventNeedsRoom?.checked) {
-        if (!this.currentRoomBookings || this.currentRoomBookings.length === 0) {
-          alert(this.t("wizard_val_room_req"));
-          return false;
-        }
-        for (const booking of this.currentRoomBookings) {
-          if (!booking.roomId || !booking.startDate || !booking.endDate) {
-            alert(this.t("wizard_val_room_req"));
-            return false;
-          }
-          if (booking.endDate < booking.startDate) {
-            alert(this.t("alert_room_dates_invalid"));
-            return false;
-          }
-        }
-      }
+      if (this.dom.eventNeedsRoom?.checked && !this.validateRoomBookings()) return false;
     }
 
+    return true;
+  },
+  // Every booking needs a room and a check-in/check-out in the right order.
+  validateRoomBookings() {
+    const bookings = this.currentRoomBookings || [];
+    if (bookings.length === 0 || bookings.some(b => !b.roomId || !b.startDate || !b.endDate)) {
+      alert(this.t("wizard_val_room_req"));
+      return false;
+    }
+    if (bookings.some(b => b.endDate < b.startDate)) {
+      alert(this.t("alert_room_dates_invalid"));
+      return false;
+    }
     return true;
   },
   nextWizardStep() {
@@ -491,8 +476,8 @@ export const wizardMethods = {
 
       // Check single roomId fallback
       if (e.roomId === roomId) {
-        const eStart = e.startDate || e.date;
-        const eEnd = e.endDate || e.startDate || e.date;
+        const eStart = e.startDate;
+        const eEnd = e.endDate;
         return targetStart <= eEnd && targetEnd >= eStart;
       }
 

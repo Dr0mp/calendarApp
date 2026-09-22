@@ -899,42 +899,6 @@
     </div>
   </dialog>
 
-  <!-- DIALOG: User / Admin Login Modal -->
-  <dialog id="login-dialog" aria-labelledby="login-dialog-title" style="max-width: 450px;">
-    <div class="dialog-header">
-      <h2 id="login-dialog-title">Conectare</h2>
-      <button class="dialog-close-btn" id="close-login-dialog-btn" aria-label="Close dialog">&times;</button>
-    </div>
-    <form id="login-form" class="dialog-body" style="padding: 24px 22px;">
-      <p id="login-dialog-subtitle" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 18px;">
-        Conectați-vă pentru a programa evenimente.
-      </p>
-      <div class="form-group" style="margin-bottom: 14px;">
-        <label for="login-username">Username *</label>
-        <input type="text" id="login-username" class="form-input" placeholder="e.g. admin or demo" required>
-      </div>
-      <div class="form-group" style="margin-bottom: 16px;">
-        <label for="login-password">Password *</label>
-        <input type="password" id="login-password" class="form-input" placeholder="Enter password" required>
-      </div>
-      <div id="login-error-msg" class="auth-error-msg" style="display: none;"></div>
-
-      <!-- Quick Demo Login Switchers -->
-      <div class="quick-demo-logins">
-        <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Conturi demonstrative (Doar vizualizare / Read-Only):</span>
-        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-          <button type="button" class="btn-demo-chip" data-user="demo">Demo Utilizator</button>
-          <button type="button" class="btn-demo-chip" data-user="demo_admin">Demo Administrator</button>
-        </div>
-      </div>
-
-      <div style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 10px;">
-        <button type="button" class="btn btn-secondary" id="cancel-login-btn">Cancel</button>
-        <button type="submit" class="btn btn-primary" id="login-submit-btn" style="min-width: 110px;">Sign In</button>
-      </div>
-    </form>
-  </dialog>
-
   <!-- DIALOG: Add / Edit Event Modal -->
   <dialog id="event-dialog" aria-labelledby="event-dialog-title" style="max-width: 680px; width: min(680px, 94vw);">
     <div class="dialog-header event-dialog-header">

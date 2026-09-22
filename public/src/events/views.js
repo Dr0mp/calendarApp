@@ -3,6 +3,131 @@
 import { MONTH_NAMES, SHORT_MONTH_NAMES } from "../data/i18n.js";
 
 export const eventViewMethods = {
+  // Events calendar, scheduling wizard and notifications.
+  bindEventsCalendar() {
+    // =========================================================================
+    // 6. TEAM EVENTS CALENDAR & DROP-IN SCHEDULER
+    // =========================================================================
+    this.dom.eventsPrevMonthBtn?.addEventListener("click", () => this.changeEventsPeriod(-1));
+    this.dom.eventsNextMonthBtn?.addEventListener("click", () => this.changeEventsPeriod(1));
+    this.dom.eventsTodayBtn?.addEventListener("click", () => this.jumpToEventsToday());
+
+    this.dom.btnZoomOut?.addEventListener("click", () => this.stepZoom(-1));
+    this.dom.btnZoomIn?.addEventListener("click", () => this.stepZoom(1));
+    this.dom.btnZoomDaily?.addEventListener("click", () => this.setEventsZoomLevel("daily"));
+    this.dom.btnZoomMonthly?.addEventListener("click", () => this.setEventsZoomLevel("monthly"));
+    this.dom.btnZoomYearly?.addEventListener("click", () => this.setEventsZoomLevel("yearly"));
+    this.dom.openAddEventBtn?.addEventListener("click", () => this.openAddEventModal());
+
+    // Entry Type Switcher buttons
+    this.dom.btnEntryTypeEvent?.addEventListener("click", () => this.setEventEntryType("event"));
+    this.dom.btnEntryTypeLocked?.addEventListener("click", () => this.setEventEntryType("locked"));
+    this.dom.btnEntryTypeRoom?.addEventListener("click", () => this.setEventEntryType("room_only"));
+
+    // Accommodation / Sleeping Room Booking Category listeners
+    this.dom.eventNeedsRoom?.addEventListener("change", (e) => this.handleToggleNeedsRoom(e.target.checked));
+    this.dom.btnAddRoomBooking?.addEventListener("click", () => this.handleAddRoomBookingRow());
+
+    this.dom.closeEventDialogBtn?.addEventListener("click", () => this.closeEventForm());
+    this.dom.wizardPrevBtn?.addEventListener("click", () => this.prevWizardStep());
+    this.dom.wizardNextBtn?.addEventListener("click", () => this.nextWizardStep());
+    this.dom.eventForm?.addEventListener("submit", (e) => this.handleEventFormSubmit(e));
+    this.dom.eventTimingModeInputs?.forEach(input => input.addEventListener("change", event => {
+      this.setEventTimingMode(event.target.value);
+    }));
+
+    if (this.dom.eventDateInput) {
+      this.dom.eventDateInput.addEventListener("change", (e) => {
+        const val = e.target.value;
+        this.updateFreeHoursBoard(val);
+        this.checkEventDateConflict(val, val, this.dom.eventEditId?.value);
+        this.findSmartSuggestions(val, this.dom.eventHourInput?.value, this.dom.eventDurationInput?.value, this.dom.eventEditId?.value);
+      });
+    }
+
+    this.dom.eventHourInput?.addEventListener("change", () => {
+      const d = this.dom.eventDateInput?.value;
+      this.checkEventDateConflict(d, d, this.dom.eventEditId?.value);
+      this.findSmartSuggestions(d, this.dom.eventHourInput.value, this.dom.eventDurationInput?.value, this.dom.eventEditId?.value);
+    });
+
+    this.dom.eventDurationInput?.addEventListener("input", () => {
+      this.updateFreeHoursBoard(this.dom.eventDateInput?.value);
+      this.checkEventDateConflict(this.dom.eventDateInput?.value, this.dom.eventDateInput?.value, this.dom.eventEditId?.value);
+      this.findSmartSuggestions(this.dom.eventDateInput?.value, this.dom.eventHourInput?.value, this.dom.eventDurationInput.value, this.dom.eventEditId?.value);
+    });
+
+    if (this.dom.eventIsRecurrent) {
+      this.dom.eventIsRecurrent.addEventListener("change", (e) => {
+        if (this.dom.eventRecurrenceOptions) {
+          this.dom.eventRecurrenceOptions.style.display = e.target.checked ? "block" : "none";
+        }
+        this.updateRecurrencePreviewHint("modal");
+      });
+    }
+    this.dom.eventRecurrenceMonths?.addEventListener("change", () => this.updateRecurrencePreviewHint("modal"));
+
+    if (this.dom.eventFbImageFile) {
+      this.dom.eventFbImageFile.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (evt) => this.validateFacebookImage(evt.target.result);
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    if (this.dom.eventFbImageUrl) {
+      this.dom.eventFbImageUrl.addEventListener("input", () => {
+        const url = this.dom.eventFbImageUrl.value.trim();
+        if (url) {
+          this.validateFacebookImage(url);
+        } else if (!this.dom.eventFbImageData?.value) {
+          this.resetFacebookValidation();
+        }
+      });
+    }
+
+    this.dom.btnUseFbSample?.addEventListener("click", () => {
+      const sample16by9 = "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&h=675&q=80";
+      if (this.dom.eventFbImageUrl) this.dom.eventFbImageUrl.value = sample16by9;
+      this.validateFacebookImage(sample16by9);
+    });
+
+    this.dom.closeEventDetailBtn?.addEventListener("click", () => this.dom.eventDetailDialog?.close());
+    this.dom.closeEventDetailDoneBtn?.addEventListener("click", () => this.dom.eventDetailDialog?.close());
+    this.dom.eventDetailDeleteBtn?.addEventListener("click", () => this.deleteCurrentDetailEvent());
+    this.dom.eventDetailEditBtn?.addEventListener("click", () => {
+      const id = this.currentDetailEventId;
+      this.dom.eventDetailDialog?.close();
+      this.openEditEventModal(id);
+    });
+
+    this.dom.createUserForm?.addEventListener("submit", (e) => this.handleCreateUser(e));
+    this.dom.createSpaceForm?.addEventListener("submit", (e) => this.handleCreateSpace(e));
+    this.dom.createRoomForm?.addEventListener("submit", (e) => this.handleCreateRoom(e));
+
+    this.dom.adminCatTabs?.forEach(tab => {
+      tab.addEventListener("click", () => {
+        const cat = tab.dataset.adminCat || "all";
+        this.setAdminCategory(cat);
+      });
+    });
+
+    this.dom.btnSocialEventNotifications?.addEventListener("click", () => this.openSocialNotificationsModal());
+    this.dom.closeSocialNotificationsBtn?.addEventListener("click", () => this.dom.socialNotificationsModal?.close());
+    this.dom.closeSocialNotificationsDoneBtn?.addEventListener("click", () => this.dom.socialNotificationsModal?.close());
+
+    document.querySelectorAll(".notif-filter-pill").forEach(pill => {
+      pill.addEventListener("click", () => {
+        document.querySelectorAll(".notif-filter-pill").forEach(p => p.classList.remove("active"));
+        pill.classList.add("active");
+        this.notifFilter = pill.dataset.notifFilter || "all";
+        this.renderSocialNotifications();
+      });
+    });
+  },
   // =========================================================================
   // TEAM EVENTS CALENDAR LOGIC (3-Level Zoom & Navigation)
   // =========================================================================
@@ -192,8 +317,8 @@ export const eventViewMethods = {
     // Calculate count per user for current time frame
     const userCounts = { all: 0 };
     this.events.forEach(evt => {
-      const start = evt.startDate || evt.date;
-      const end = evt.endDate || evt.startDate || evt.date;
+      const start = evt.startDate;
+      const end = evt.endDate;
       if (!start) return;
 
       let isInRange = false;
@@ -391,8 +516,8 @@ export const eventViewMethods = {
 
       // Filter events occurring on this specific day
       const dayEvents = filteredEvents.filter(evt => {
-        const s = evt.startDate || evt.date;
-        const ed = evt.endDate || evt.startDate || evt.date;
+        const s = evt.startDate;
+        const ed = evt.endDate;
         return day.dateStr >= s && day.dateStr <= ed;
       });
 
@@ -401,7 +526,7 @@ export const eventViewMethods = {
         const separateHours = Array.isArray(evt.scheduledHours) && evt.scheduledHours.length > 1
           ? evt.scheduledHours
           : [];
-        const displayHour = separateHours[0] || evt.hour || evt.time || "18:00";
+        const displayHour = separateHours[0] || evt.hour || "18:00";
         const [eh, em] = displayHour.split(":").map(Number);
         const startDec = eh + ((em || 0) / 60);
         const dur = separateHours.length ? 1 : (parseFloat(evt.durationHours) || 2);
@@ -436,27 +561,7 @@ export const eventViewMethods = {
         const creatorTagBg = this.theme === "light" ? this.hexToRgba(theme.accent, 0.13) : theme.tagBg;
         const creatorTagColor = this.theme === "light" ? "#334155" : theme.tagColor;
 
-        const space = evt.spaceId ? (this.spaces || []).find(s => s.id === evt.spaceId) : null;
-        const room = evt.roomId ? (this.rooms || []).find(r => r.id === evt.roomId) : null;
-
-        let extraMeta = "";
-        if (isLocked) {
-          extraMeta += `<span class="event-pill-space-tag" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24;">🔒 ${this.t("entry_type_locked")}</span>`;
-        } else if (isRoomOnly) {
-          extraMeta += `<span class="event-pill-room-tag" style="background: rgba(168, 85, 247, 0.2); color: #c084fc;">🛏️ ${this.t("entry_type_room_only")}</span>`;
-        }
-        if (space) {
-          extraMeta += `<span class="event-pill-space-tag">📍 ${this.escapeHtml(space.name)}</span>`;
-        }
-        if (Array.isArray(evt.roomBookings) && evt.roomBookings.length > 0) {
-          const roomNames = evt.roomBookings.map(b => {
-            const rm = (this.rooms || []).find(r => r.id === b.roomId);
-            return rm ? rm.name : b.roomId;
-          }).join(", ");
-          extraMeta += `<span class="event-pill-room-tag">🛏️ ${this.escapeHtml(roomNames)}</span>`;
-        } else if (room) {
-          extraMeta += `<span class="event-pill-room-tag">🛏️ ${this.escapeHtml(room.name)}</span>`;
-        }
+        const extraMeta = this.renderEventTags(evt);
 
         card.innerHTML = `
           <div class="timeline-event-top">
@@ -566,8 +671,8 @@ export const eventViewMethods = {
 
       // Multi-day match: event spans cellDateString
       const dayEvents = filteredEvents.filter(evt => {
-        const start = evt.startDate || evt.date;
-        const end = evt.endDate || evt.startDate || evt.date;
+        const start = evt.startDate;
+        const end = evt.endDate;
         return cellDateString >= start && cellDateString <= end;
       });
 
@@ -616,30 +721,10 @@ export const eventViewMethods = {
         eventPill.style.boxShadow = `0 2px 10px ${theme.glow}`;
 
         const durHours = event.durationHours ? `${event.durationHours}h` : "2h";
-        const time = event.hour || event.time || "18:00";
+        const time = event.hour || "18:00";
         eventPill.setAttribute("aria-label", `${event.title}, ${time}, ${durHours}. Open event details.`);
 
-        const space = event.spaceId ? (this.spaces || []).find(s => s.id === event.spaceId) : null;
-        const room = event.roomId ? (this.rooms || []).find(r => r.id === event.roomId) : null;
-
-        let tagsHtml = "";
-        if (isLocked) {
-          tagsHtml += `<span class="event-pill-space-tag" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24;">🔒 ${this.t("entry_type_locked")}</span>`;
-        } else if (isRoomOnly) {
-          tagsHtml += `<span class="event-pill-room-tag" style="background: rgba(168, 85, 247, 0.2); color: #c084fc;">🛏️ ${this.t("entry_type_room_only")}</span>`;
-        }
-        if (space) {
-          tagsHtml += `<span class="event-pill-space-tag">📍 ${this.escapeHtml(space.name)}</span>`;
-        }
-        if (Array.isArray(event.roomBookings) && event.roomBookings.length > 0) {
-          const roomNames = event.roomBookings.map(b => {
-            const rm = (this.rooms || []).find(r => r.id === b.roomId);
-            return rm ? rm.name : b.roomId;
-          }).join(", ");
-          tagsHtml += `<span class="event-pill-room-tag">🛏️ ${this.escapeHtml(roomNames)}</span>`;
-        } else if (room) {
-          tagsHtml += `<span class="event-pill-room-tag">🛏️ ${this.escapeHtml(room.name)}</span>`;
-        }
+        const tagsHtml = this.renderEventTags(event);
 
         eventPill.innerHTML = `
           <span class="event-card-time">${time} · ${durHours}</span>
@@ -683,8 +768,8 @@ export const eventViewMethods = {
 
       // Events in this month
       const monthEvents = filteredEvents.filter(e => {
-        const s = e.startDate || e.date;
-        const ed = e.endDate || e.startDate || e.date;
+        const s = e.startDate;
+        const ed = e.endDate;
         if (!s) return false;
         const [sy, sm] = s.split("-").map(Number);
         const [ey, em] = (ed || s).split("-").map(Number);
@@ -704,13 +789,7 @@ export const eventViewMethods = {
           ${countBadge}
         </div>
         <div class="yearly-mini-calendar">
-          <div class="yearly-mini-weekday">${weekdaysMin[0]}</div>
-          <div class="yearly-mini-weekday">${weekdaysMin[1]}</div>
-          <div class="yearly-mini-weekday">${weekdaysMin[2]}</div>
-          <div class="yearly-mini-weekday">${weekdaysMin[3]}</div>
-          <div class="yearly-mini-weekday">${weekdaysMin[4]}</div>
-          <div class="yearly-mini-weekday" style="color: #64748b;">${weekdaysMin[5]}</div>
-          <div class="yearly-mini-weekday" style="color: #64748b;">${weekdaysMin[6]}</div>
+          ${this.renderMiniWeekdayRow(weekdaysMin)}
         </div>
       `;
 
@@ -746,14 +825,14 @@ export const eventViewMethods = {
 
         // Find events on this day
         const dayEvts = filteredEvents.filter(e => {
-          const s = e.startDate || e.date;
-          const ed = e.endDate || e.startDate || e.date;
+          const s = e.startDate;
+          const ed = e.endDate;
           return dateStr >= s && dateStr <= ed;
         });
 
         if (dayEvts.length > 0) {
           dayCell.classList.add("has-event-circle");
-          const evtTitles = dayEvts.map(e => `• ${e.title} (${e.hour || e.time || '18:00'})`).join("\n");
+          const evtTitles = dayEvts.map(e => `• ${e.title} (${e.hour || '18:00'})`).join("\n");
           dayCell.title = `${dateStr}\n${evtTitles}\n(${this.t("yearly_click_to_zoom")} ${monthNames[m]})`;
           
           dayCell.addEventListener("click", (e) => {

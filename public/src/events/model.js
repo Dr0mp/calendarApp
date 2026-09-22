@@ -3,6 +3,32 @@
 import { WEEKDAY_NAMES } from "../data/i18n.js";
 
 export const eventModelMethods = {
+  // Type / space / room tags shown on month pills and timeline cards.
+  renderEventTags(event) {
+    const entryType = event.entryType || "event";
+    const space = event.spaceId ? (this.spaces || []).find(s => s.id === event.spaceId) : null;
+    const room = event.roomId ? (this.rooms || []).find(r => r.id === event.roomId) : null;
+    let html = "";
+    if (entryType === "locked") {
+      html += `<span class="event-pill-space-tag" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24;">🔒 ${this.t("entry_type_locked")}</span>`;
+    } else if (entryType === "room_only") {
+      html += `<span class="event-pill-room-tag" style="background: rgba(168, 85, 247, 0.2); color: #c084fc;">🛏️ ${this.t("entry_type_room_only")}</span>`;
+    }
+    if (space) {
+      html += `<span class="event-pill-space-tag">📍 ${this.escapeHtml(space.name)}</span>`;
+    }
+    if (Array.isArray(event.roomBookings) && event.roomBookings.length > 0) {
+      const roomNames = event.roomBookings.map(b => {
+        const rm = (this.rooms || []).find(r => r.id === b.roomId);
+        return rm ? rm.name : b.roomId;
+      }).join(", ");
+      html += `<span class="event-pill-room-tag">🛏️ ${this.escapeHtml(roomNames)}</span>`;
+    } else if (room) {
+      html += `<span class="event-pill-room-tag">🛏️ ${this.escapeHtml(room.name)}</span>`;
+    }
+    return html;
+  },
+
   // Vibrant, Lively Color Theming for User Events (Low-Bleed Dark Mode Tint)
   getEventTheme(event) {
     if (!event) {
@@ -123,8 +149,8 @@ export const eventModelMethods = {
   },
   getFilteredEvents() {
     return this.events.filter(event => {
-      const start = event.startDate || event.date;
-      const end = event.endDate || event.startDate || event.date;
+      const start = event.startDate;
+      const end = event.endDate;
       if (!start) return false;
 
       // User Filter check

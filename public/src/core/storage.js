@@ -3,6 +3,17 @@
 import { DEFAULT_PLATFORMS, DEFAULT_ROOMS, DEFAULT_SPACES, INITIAL_EVENTS, INITIAL_POSTS } from "../data/seed-data.js";
 import { STORAGE_EVENTS_KEY, STORAGE_PLATFORMS_KEY, STORAGE_POSTS_KEY, STORAGE_PREFS_KEY, STORAGE_ROOMS_KEY, STORAGE_SPACES_KEY, STORAGE_STORAGE_SIM_KEY, warnStorage } from "../constants.js";
 
+// Events saved by older builds carried duplicate fields (date = startDate, time = hour).
+// Canonical fields: startDate, endDate, hour. Returns the same object when nothing changes.
+export function normalizeEvent(event) {
+  if (!event || (!("date" in event) && !("time" in event))) return event;
+  const { date, time, ...rest } = event;
+  rest.startDate = rest.startDate || date;
+  rest.endDate = rest.endDate || rest.startDate;
+  rest.hour = rest.hour || time;
+  return rest;
+}
+
 export const storageMethods = {
   // Storage Handlers
   loadPlatforms() {
@@ -95,7 +106,10 @@ export const storageMethods = {
     try {
       const stored = localStorage.getItem(STORAGE_EVENTS_KEY);
       if (stored) {
-        return JSON.parse(stored);
+        const events = JSON.parse(stored);
+        const migrated = events.map(normalizeEvent);
+        if (migrated.some((e, i) => e !== events[i])) localStorage.setItem(STORAGE_EVENTS_KEY, JSON.stringify(migrated));
+        return migrated;
       }
     } catch (e) { warnStorage(e); }
     return JSON.parse(JSON.stringify(INITIAL_EVENTS));

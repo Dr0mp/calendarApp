@@ -71,8 +71,8 @@ export const eventFormMethods = {
     // Find all events that overlap dateStr
     const dayEvents = this.events.filter(e => {
       if (excludeId && e.id === excludeId) return false;
-      const start = e.startDate || e.date;
-      const end = e.endDate || e.startDate || e.date;
+      const start = e.startDate;
+      const end = e.endDate;
       return dateStr >= start && dateStr <= end;
     });
 
@@ -85,7 +85,7 @@ export const eventFormMethods = {
           return { start, end: start + 1, title: e.title };
         });
       }
-      const timeStr = e.hour || e.time || "10:00";
+      const timeStr = e.hour || "10:00";
       const [h, m] = timeStr.split(":").map(Number);
       const startHour = h + ((m || 0) / 60);
       const dur = parseFloat(e.durationHours) || 2;
@@ -168,13 +168,13 @@ export const eventFormMethods = {
     // Check for events that overlap startDate
     const dayEvents = this.events.filter(e => {
       if (excludeEventId && e.id === excludeEventId) return false;
-      const s = e.startDate || e.date;
-      const ed = e.endDate || e.startDate || e.date;
+      const s = e.startDate;
+      const ed = e.endDate;
       return startDate >= s && startDate <= ed;
     });
 
     const directConflict = dayEvents.find(e => {
-      const [eh, em] = (e.hour || e.time || "10:00").split(":").map(Number);
+      const [eh, em] = (e.hour || "10:00").split(":").map(Number);
       const eStart = eh + ((em || 0) / 60);
       const eDur = parseFloat(e.durationHours) || 2;
       const eEnd = eStart + eDur;
@@ -192,7 +192,7 @@ export const eventFormMethods = {
     for (let slotH = 8; slotH <= (20 - dur); slotH++) {
       const slotEnd = slotH + dur;
       const overlaps = dayEvents.some(e => {
-        const [eh, em] = (e.hour || e.time || "10:00").split(":").map(Number);
+        const [eh, em] = (e.hour || "10:00").split(":").map(Number);
         const eStart = eh + ((em || 0) / 60);
         const eDur = parseFloat(e.durationHours) || 2;
         const eEnd = eStart + eDur;
@@ -223,8 +223,8 @@ export const eventFormMethods = {
 
       const hasAnyEvent = this.events.some(e => {
         if (excludeEventId && e.id === excludeEventId) return false;
-        const s = e.startDate || e.date;
-        const ed = e.endDate || e.startDate || e.date;
+        const s = e.startDate;
+        const ed = e.endDate;
         return nextDateStr >= s && nextDateStr <= ed;
       });
 
@@ -253,13 +253,13 @@ export const eventFormMethods = {
 
     const nextWeekEvents = this.events.filter(e => {
       if (excludeEventId && e.id === excludeEventId) return false;
-      const s = e.startDate || e.date;
-      const ed = e.endDate || e.startDate || e.date;
+      const s = e.startDate;
+      const ed = e.endDate;
       return nextWeekStr >= s && nextWeekStr <= ed;
     });
 
     const hasConflictNextWeek = nextWeekEvents.some(e => {
-      const [eh, em] = (e.hour || e.time || "10:00").split(":").map(Number);
+      const [eh, em] = (e.hour || "10:00").split(":").map(Number);
       const eStart = eh + ((em || 0) / 60);
       const eDur = parseFloat(e.durationHours) || 2;
       const eEnd = eStart + eDur;
@@ -286,7 +286,7 @@ export const eventFormMethods = {
 
     this.dom.eventSmartSuggestionBox.style.display = "block";
     if (directConflict) {
-      this.dom.smartConflictDetails.innerHTML = `Conflict with <strong>"${this.escapeHtml(directConflict.title)}"</strong> booked at ${directConflict.hour || directConflict.time || "18:00"} (${directConflict.durationHours || 2}h). Choose an alternative below:`;
+      this.dom.smartConflictDetails.innerHTML = `Conflict with <strong>"${this.escapeHtml(directConflict.title)}"</strong> booked at ${directConflict.hour || "18:00"} (${directConflict.durationHours || 2}h). Choose an alternative below:`;
     } else {
       this.dom.smartConflictDetails.innerHTML = `Date has scheduled events. You may keep this or select an open recommendation below:`;
     }
@@ -335,14 +335,14 @@ export const eventFormMethods = {
     const selectedAsyncHours = this.eventTimingMode === "async" ? this.eventAsyncHours : [];
     const conflicts = this.events.filter(e => {
       if (excludeEventId && e.id === excludeEventId) return false;
-      const eStart = e.startDate || e.date;
-      const eEnd = e.endDate || e.startDate || e.date;
+      const eStart = e.startDate;
+      const eEnd = e.endDate;
       if (!(eStart <= end && eEnd >= startDate)) return false;
       if (!selectedAsyncHours.length || startDate !== end) return true;
       if (Array.isArray(e.scheduledHours) && e.scheduledHours.length > 1) {
         return selectedAsyncHours.some(selectedHour => e.scheduledHours.includes(selectedHour));
       }
-      const [eventHour, eventMinute] = (e.hour || e.time || "18:00").split(":").map(Number);
+      const [eventHour, eventMinute] = (e.hour || "18:00").split(":").map(Number);
       const eventStart = eventHour + ((eventMinute || 0) / 60);
       const eventEnd = eventStart + (parseFloat(e.durationHours) || 2);
       return selectedAsyncHours.some(selectedHour => {
@@ -356,7 +356,7 @@ export const eventFormMethods = {
       this.dom.eventDateWarning.style.display = "flex";
       const list = conflicts.map(c => {
         const isMulti = c.startDate && c.endDate && c.startDate !== c.endDate;
-        const span = isMulti ? `(${c.startDate} to ${c.endDate})` : `(${c.hour || c.time || '18:00'}, ${c.durationHours || 2}h)`;
+        const span = isMulti ? `(${c.startDate} to ${c.endDate})` : `(${c.hour || '18:00'}, ${c.durationHours || 2}h)`;
         return `"${this.escapeHtml(c.title)}" ${span}`;
       }).join(", ");
       this.dom.eventDateWarningMsg.innerHTML = `Date Conflict Notice: <strong>${conflicts.length}</strong> active event(s) in this period: ${list}.`;
@@ -548,8 +548,8 @@ export const eventFormMethods = {
     this.dom.eventDialogActionText.textContent = this.t("event_dialog_edit_title");
     this.dom.eventTitleInput.value = event.title;
     this.dom.eventCreatorDisplay.value = `${event.creatorName || event.creatorUsername} (Creator)`;
-    this.dom.eventDateInput.value = event.startDate || event.date;
-    this.dom.eventHourInput.value = event.hour || event.time || "18:00";
+    this.dom.eventDateInput.value = event.startDate;
+    this.dom.eventHourInput.value = event.hour || "18:00";
     this.dom.eventDurationInput.value = event.durationHours || 2;
     this.eventAsyncHours = Array.isArray(event.scheduledHours) ? [...event.scheduledHours] : [];
     this.setEventTimingMode(this.eventAsyncHours.length > 1 ? "async" : "consecutive");
@@ -562,8 +562,8 @@ export const eventFormMethods = {
     } else if (event.roomId) {
       this.currentRoomBookings = [{
         roomId: event.roomId,
-        startDate: event.startDate || event.date,
-        endDate: event.endDate || event.startDate || event.date
+        startDate: event.startDate,
+        endDate: event.endDate
       }];
     } else {
       this.currentRoomBookings = [];
@@ -608,9 +608,9 @@ export const eventFormMethods = {
       this.resetFacebookValidation();
     }
 
-    this.updateFreeHoursBoard(event.startDate || event.date);
-    this.checkEventDateConflict(event.startDate || event.date, event.startDate || event.date, event.id);
-    this.findSmartSuggestions(event.startDate || event.date, event.hour || event.time || "18:00", event.durationHours || 2, event.id);
+    this.updateFreeHoursBoard(event.startDate);
+    this.checkEventDateConflict(event.startDate, event.startDate, event.id);
+    this.findSmartSuggestions(event.startDate, event.hour || "18:00", event.durationHours || 2, event.id);
     this.dom.eventDialog.showModal();
   },
   handleEventFormSubmit(e) {
@@ -718,6 +718,25 @@ export const eventFormMethods = {
     }
 
     const defaultSocialStatus = (isLocked || isRoomOnly) ? "none" : "pending";
+    const isPublic = !isLocked && !isRoomOnly;
+    // Fields every save writes, whatever the path (new / edit / series).
+    const formFields = {
+      title,
+      hour,
+      durationHours,
+      entryType,
+      spaceId,
+      roomId,
+      roomBookings,
+      price: isPublic ? price : "",
+      currency,
+      enrollLink: isPublic ? enrollLink : "",
+      facebookImage: isPublic ? facebookImage : "",
+      description,
+      scheduledHours: scheduledHours.length > 1 ? scheduledHours : undefined
+    };
+    const onDate = date => ({ startDate: date, endDate: date });
+    const nowIso = () => new Date().toISOString();
 
     if (editId) {
       const idx = this.events.findIndex(ev => ev.id === editId);
@@ -727,6 +746,7 @@ export const eventFormMethods = {
           alert(this.t("alert_permission_denied"));
           return;
         }
+        const socialStatus = isPublic ? (existingEvent.socialStatus || "pending") : "none";
 
         const relatedSeries = existingEvent.isRecurrent && existingEvent.recurrenceGroupId
           ? this.events.filter(ev => ev.recurrenceGroupId === existingEvent.recurrenceGroupId)
@@ -747,30 +767,15 @@ export const eventFormMethods = {
           seriesDates.forEach((recDate, recIdx) => {
             this.events.push({
               ...existingEvent,
+              ...formFields,
+              ...onDate(recDate),
               id: recIdx === 0 ? existingEvent.id : `evt-${Date.now()}-series-${recIdx + 1}`,
-              title,
-              startDate: recDate,
-              endDate: recDate,
-              date: recDate,
-              time: hour,
-              hour,
-              durationHours,
-              entryType,
-              spaceId,
-              roomId,
-              roomBookings,
-              price: (isLocked || isRoomOnly) ? "" : price,
-              currency,
-              enrollLink: (isLocked || isRoomOnly) ? "" : enrollLink,
-              facebookImage: (isLocked || isRoomOnly) ? "" : facebookImage,
-              description,
-              scheduledHours: scheduledHours.length > 1 ? scheduledHours : undefined,
               isRecurrent: isRecurrent && seriesDates.length > 1,
               recurrenceGroupId,
               recurrenceMonths: recurrenceGroupId ? recurrenceMonths : undefined,
               recurrenceIndex: recurrenceGroupId ? recIdx + 1 : undefined,
               recurrenceTotal: recurrenceGroupId ? seriesDates.length : undefined,
-              socialStatus: (isLocked || isRoomOnly) ? "none" : (existingEvent.socialStatus || "pending")
+              socialStatus
             });
           });
         } else {
@@ -781,30 +786,15 @@ export const eventFormMethods = {
 
           const updatedEvent = {
             ...existingEvent,
-            title,
-            startDate: recurrenceDates[0],
-            endDate: recurrenceDates[0],
-            date: recurrenceDates[0],
-            time: hour,
-            hour,
-            durationHours,
-            entryType,
-            spaceId,
-            roomId,
-            roomBookings,
-            price: (isLocked || isRoomOnly) ? "" : price,
-            currency,
-            enrollLink: (isLocked || isRoomOnly) ? "" : enrollLink,
-            facebookImage: (isLocked || isRoomOnly) ? "" : facebookImage,
-            description,
-            scheduledHours: scheduledHours.length > 1 ? scheduledHours : undefined,
+            ...formFields,
+            ...onDate(recurrenceDates[0]),
             color: existingEvent.color || this.getEventTheme(existingEvent).accent,
             isRecurrent,
             recurrenceGroupId: isRecurrent ? recurrenceGroupId : null,
             recurrenceMonths: isRecurrent ? (isSingleSeriesEdit ? (existingEvent.recurrenceMonths || recurrenceMonths) : recurrenceMonths) : undefined,
             recurrenceIndex: isRecurrent ? (isSingleSeriesEdit ? (existingEvent.recurrenceIndex || 1) : 1) : undefined,
             recurrenceTotal: isRecurrent ? (isSingleSeriesEdit ? (existingEvent.recurrenceTotal || recurrenceMonths) : recurrenceDates.length) : undefined,
-            socialStatus: (isLocked || isRoomOnly) ? "none" : (existingEvent.socialStatus || "pending")
+            socialStatus
           };
           this.events[idx] = updatedEvent;
 
@@ -812,88 +802,53 @@ export const eventFormMethods = {
             recurrenceDates.slice(1).forEach((recDate, recIdx) => {
               this.events.push({
                 ...updatedEvent,
+                ...onDate(recDate),
                 id: `evt-${Date.now()}-rec-${recIdx + 2}`,
-                startDate: recDate,
-                endDate: recDate,
-                date: recDate,
                 recurrenceIndex: recIdx + 2,
-                createdAt: new Date().toISOString()
+                createdAt: nowIso()
               });
             });
           }
         }
       }
-    } else if (isRecurrent && recurrenceMonths > 1) {
-      const recurrenceGroupId = `rec-grp-${Date.now()}`;
-      const recDates = this.computeRecurrenceDates(startDate, recurrenceMonths);
-
-      const eventTheme = this.getEventTheme({ creatorUsername: this.currentUser.username, creatorId: this.currentUser.id });
-      recDates.forEach((recDateStr, idx) => {
-        const newEvent = {
-          id: `evt-${Date.now()}-${idx + 1}`,
-          creatorId: this.currentUser.id,
-          creatorUsername: this.currentUser.username,
-          creatorName: this.currentUser.name,
-          title,
-          startDate: recDateStr,
-          endDate: recDateStr,
-          date: recDateStr,
-          time: hour,
-          hour,
-          durationHours,
-          entryType,
-          spaceId,
-          roomId,
-          roomBookings,
-          price: (isLocked || isRoomOnly) ? "" : price,
-          currency,
-          enrollLink: (isLocked || isRoomOnly) ? "" : enrollLink,
-          facebookImage: (isLocked || isRoomOnly) ? "" : facebookImage,
-          description,
-          scheduledHours: scheduledHours.length > 1 ? scheduledHours : undefined,
-          color: eventTheme.accent,
-          socialStatus: defaultSocialStatus,
-          promotedPostId: null,
-          isRecurrent: true,
-          recurrenceGroupId,
-          recurrenceMonths,
-          recurrenceIndex: idx + 1,
-          recurrenceTotal: recDates.length,
-          createdAt: new Date().toISOString()
-        };
-        this.events.push(newEvent);
-      });
     } else {
+      // New event (optionally a monthly series)
       const eventTheme = this.getEventTheme({ creatorUsername: this.currentUser.username, creatorId: this.currentUser.id });
-      const newEvent = {
-        id: `evt-${Date.now()}`,
+      const baseEvent = {
         creatorId: this.currentUser.id,
         creatorUsername: this.currentUser.username,
         creatorName: this.currentUser.name,
-        title,
-        startDate,
-        endDate: startDate,
-        date: startDate,
-        time: hour,
-        hour,
-        durationHours,
-        entryType,
-        spaceId,
-        roomId,
-        roomBookings,
-        price: (isLocked || isRoomOnly) ? "" : price,
-        currency,
-        enrollLink: (isLocked || isRoomOnly) ? "" : enrollLink,
-        facebookImage: (isLocked || isRoomOnly) ? "" : facebookImage,
-        description,
-        scheduledHours: scheduledHours.length > 1 ? scheduledHours : undefined,
+        ...formFields,
         color: eventTheme.accent,
         socialStatus: defaultSocialStatus,
-        promotedPostId: null,
-        isRecurrent: false,
-        createdAt: new Date().toISOString()
+        promotedPostId: null
       };
-      this.events.push(newEvent);
+
+      if (isRecurrent && recurrenceMonths > 1) {
+        const recurrenceGroupId = `rec-grp-${Date.now()}`;
+        const recDates = this.computeRecurrenceDates(startDate, recurrenceMonths);
+        recDates.forEach((recDateStr, idx) => {
+          this.events.push({
+            id: `evt-${Date.now()}-${idx + 1}`,
+            ...baseEvent,
+            ...onDate(recDateStr),
+            isRecurrent: true,
+            recurrenceGroupId,
+            recurrenceMonths,
+            recurrenceIndex: idx + 1,
+            recurrenceTotal: recDates.length,
+            createdAt: nowIso()
+          });
+        });
+      } else {
+        this.events.push({
+          id: `evt-${Date.now()}`,
+          ...baseEvent,
+          ...onDate(startDate),
+          isRecurrent: false,
+          createdAt: nowIso()
+        });
+      }
     }
 
     this.saveEvents();
