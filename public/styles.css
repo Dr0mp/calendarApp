@@ -233,6 +233,14 @@ body {
 }
 
 .theme-toggle .ui-icon { width: 17px; height: 17px; }
+
+/* Icon inline with text (tags, badges, titles): sized to the text. */
+.ui-icon.ui-icon--inline {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  flex-shrink: 0;
+}
 .theme-icon-light { display: none; }
 :root[data-theme="light"] .theme-icon-dark { display: none; }
 :root[data-theme="light"] .theme-icon-light { display: block; }
@@ -2166,6 +2174,8 @@ dialog::backdrop {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
   padding-top: 12px;
   border-top: 1px solid var(--border-subtle);
   margin-top: 4px;

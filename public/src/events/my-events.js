@@ -72,7 +72,7 @@ export const myEventsMethods = {
       const isFiltered = activeFilter !== "all" || searchQuery.length > 0;
       this.dom.myEventsListContainer.innerHTML = `
         <div class="my-events-empty-state">
-          <div class="my-events-empty-icon">📅</div>
+          <div class="my-events-empty-icon">${this.icon("calendar")}</div>
           <h3 class="u-text-lg u-fw-700 u-mt-0 u-mr-0 u-mb-0 u-ml-0">${isFiltered ? this.t("my_events_no_results") : this.t("my_events_empty_title")}</h3>
           <p class="u-color-muted u-text-sm u-maxw-420 u-mt-0 u-mr-0 u-mb-0 u-ml-0">${isFiltered ? "" : this.t("my_events_empty_sub")}</p>
           ${!isFiltered ? `
@@ -144,7 +144,7 @@ export const myEventsMethods = {
           <div class="my-event-card-meta u-mt-10">
             ${spaceName ? `
               <div class="my-event-card-meta-item">
-                <span>📍</span>
+                <span>${this.icon("map-pin")}</span>
                 <strong class="u-color-primary">${this.escapeHtml(spaceName)}</strong>
               </div>
             ` : ""}
@@ -156,7 +156,7 @@ export const myEventsMethods = {
             ` : ""}
             ${type === "event" && event.price ? `
               <div class="my-event-card-meta-item">
-                <span>🎟️</span>
+                <span>${this.icon("ticket")}</span>
                 <span>${this.escapeHtml(this.formatEventPrice(event))}</span>
               </div>
             ` : ""}
@@ -168,7 +168,7 @@ export const myEventsMethods = {
         </div>
 
         <div class="my-event-card-footer">
-          <div class="u-flex u-gap-6">
+          <div class="u-flex u-gap-6 u-wrap">
             <button type="button" class="btn btn-secondary btn-sm btn-my-event-edit">
               <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkle"></use></svg>
               <span>${this.t("event_detail_edit_btn")}</span>
@@ -178,7 +178,7 @@ export const myEventsMethods = {
               <span>${this.t("event_detail_title")}</span>
             </button>
           </div>
-          <button type="button" class="btn btn-danger btn-sm btn-my-event-delete" title="${this.t("event_detail_delete_btn")}">
+          <button type="button" class="btn btn-danger btn-sm btn-my-event-delete" title="${this.t("event_detail_delete_btn")}" aria-label="${this.t("event_detail_delete_btn")}">
             <svg class="ui-icon" aria-hidden="true"><use href="#icon-trash"></use></svg>
           </button>
         </div>
@@ -216,10 +216,10 @@ export const myEventsMethods = {
     if (this.dom.eventDetailTypeBadge) {
       if (isLocked) {
         this.dom.eventDetailTypeBadge.style.display = "inline-flex";
-        this.dom.eventDetailTypeBadge.textContent = `🔒 ${this.t("entry_type_locked")}`;
+        this.dom.eventDetailTypeBadge.innerHTML = `${this.icon("lock")} ${this.escapeHtml(this.t("entry_type_locked"))}`;
       } else if (isRoomOnly) {
         this.dom.eventDetailTypeBadge.style.display = "inline-flex";
-        this.dom.eventDetailTypeBadge.textContent = `🛏️ ${this.t("entry_type_room_only")}`;
+        this.dom.eventDetailTypeBadge.innerHTML = `${this.icon("bed")} ${this.escapeHtml(this.t("entry_type_room_only"))}`;
       } else {
         this.dom.eventDetailTypeBadge.style.display = "none";
       }
@@ -229,7 +229,7 @@ export const myEventsMethods = {
       if (event.spaceId) {
         const space = (this.spaces || []).find(s => s.id === event.spaceId);
         this.dom.eventDetailSpaceBadge.style.display = "inline-flex";
-        this.dom.eventDetailSpaceBadge.textContent = `📍 ${space ? space.name : event.spaceId}`;
+        this.dom.eventDetailSpaceBadge.innerHTML = `${this.icon("map-pin")} ${this.escapeHtml(space ? space.name : event.spaceId)}`;
       } else {
         this.dom.eventDetailSpaceBadge.style.display = "none";
       }
@@ -242,11 +242,11 @@ export const myEventsMethods = {
           return rm ? rm.name : b.roomId;
         }).join(", ");
         this.dom.eventDetailRoomBadge.style.display = "inline-flex";
-        this.dom.eventDetailRoomBadge.textContent = `🛏️ ${roomNames}`;
+        this.dom.eventDetailRoomBadge.innerHTML = `${this.icon("bed")} ${this.escapeHtml(roomNames)}`;
       } else if (event.roomId) {
         const room = (this.rooms || []).find(r => r.id === event.roomId);
         this.dom.eventDetailRoomBadge.style.display = "inline-flex";
-        this.dom.eventDetailRoomBadge.textContent = `🛏️ ${room ? room.name : event.roomId}`;
+        this.dom.eventDetailRoomBadge.innerHTML = `${this.icon("bed")} ${this.escapeHtml(room ? room.name : event.roomId)}`;
       } else {
         this.dom.eventDetailRoomBadge.style.display = "none";
       }

@@ -73,7 +73,7 @@ export const wizardMethods = {
 
       const badge = document.createElement("span");
       badge.className = "wizard-step-badge";
-      badge.textContent = stepNum < this.wizardCurrentStep ? "✓" : String(stepNum);
+      if (stepNum < this.wizardCurrentStep) badge.innerHTML = this.icon("check"); else badge.textContent = String(stepNum);
 
       const label = document.createElement("span");
       label.className = "wizard-step-label";

@@ -156,11 +156,11 @@ export const adminPanelMethods = {
       if (Array.isArray(evt.roomBookings) && evt.roomBookings.length > 0) {
         roomsBadgeHtml = evt.roomBookings.map(b => {
           const rm = (this.rooms || []).find(r => r.id === b.roomId);
-          return `<span class="badge-subtle u-color-purple-400 u-text-3xs">🛏️ ${this.escapeHtml(rm ? rm.name : b.roomId)} (${b.startDate.slice(5)} – ${b.endDate.slice(5)})</span>`;
+          return `<span class="badge-subtle u-color-purple-400 u-text-3xs">${this.icon("bed")} ${this.escapeHtml(rm ? rm.name : b.roomId)} (${b.startDate.slice(5)} – ${b.endDate.slice(5)})</span>`;
         }).join(" ");
       } else if (evt.roomId) {
         const room = (this.rooms || []).find(r => r.id === evt.roomId);
-        roomsBadgeHtml = `<span class="badge-subtle u-color-purple-400 u-text-3xs">🛏️ ${this.escapeHtml(room ? room.name : evt.roomId)}</span>`;
+        roomsBadgeHtml = `<span class="badge-subtle u-color-purple-400 u-text-3xs">${this.icon("bed")} ${this.escapeHtml(room ? room.name : evt.roomId)}</span>`;
       }
 
       const tr = document.createElement("tr");
@@ -171,13 +171,13 @@ export const adminPanelMethods = {
         </td>
         <td>
           <div class="u-fw-700 u-color-primary">
-            ${isLocked ? '🔒 ' : (isRoomOnly ? '🛏️ ' : '')}${this.escapeHtml(evt.title)}
+            ${isLocked ? this.icon("lock") + " " : (isRoomOnly ? this.icon("bed") + " " : "")}${this.escapeHtml(evt.title)}
             ${isLocked ? `<span class="badge-subtle u-color-amber-400 u-text-3xs u-ml-4">${this.t("badge_locked_hours")}</span>` : ''}
             ${isRoomOnly ? `<span class="badge-subtle u-color-purple-400 u-text-3xs u-ml-4">${this.t("badge_room_booking")}</span>` : ''}
             ${evt.isRecurrent ? `<span class="badge-subtle u-color-sky u-text-3xs u-ml-4">${this.tf("recurrence_badge", { index: evt.recurrenceIndex, total: evt.recurrenceTotal })}</span>` : ''}
           </div>
           <div class="u-flex u-gap-4 u-wrap u-mt-3">
-            ${space ? `<span class="badge-subtle u-color-sky u-text-3xs">📍 ${this.escapeHtml(space.name)}</span>` : ''}
+            ${space ? `<span class="badge-subtle u-color-sky u-text-3xs">${this.icon("map-pin")} ${this.escapeHtml(space.name)}</span>` : ''}
             ${roomsBadgeHtml}
             ${(evt.facebookImage && !isLocked && !isRoomOnly) ? `<span class="u-text-3xs u-color-info">${this.t("admin_cover_attached")}</span>` : ''}
           </div>

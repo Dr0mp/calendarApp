@@ -15,6 +15,10 @@ export async function apiRequest(method, url, body) {
 }
 
 export const utilMethods = {
+  // Inline SVG icon from the sprite in index.html (Heroicons). Decorative: aria-hidden.
+  icon(name, extraClass = "") {
+    return `<svg class="ui-icon ui-icon--inline${extraClass ? " " + extraClass : ""}" aria-hidden="true"><use href="#icon-${name}"></use></svg>`;
+  },
   // Weekday initials row for the year-overview mini calendars (Sat/Sun muted).
   renderMiniWeekdayRow(weekdaysMin) {
     return weekdaysMin.map((d, i) => `<div class="yearly-mini-weekday"${i >= 5 ? ' style="color: #64748b;"' : ""}>${d}</div>`).join("\n");

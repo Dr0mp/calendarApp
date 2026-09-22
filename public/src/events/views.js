@@ -568,7 +568,7 @@ export const eventViewMethods = {
             <span class="timeline-event-time">${displayHour} – ${endHourStr}</span>
             ${recurrentTag}
           </div>
-          <div class="timeline-event-title">${isLocked ? '🔒 ' : (isRoomOnly ? '🛏️ ' : '')}${this.escapeHtml(evt.title)}</div>
+          <div class="timeline-event-title">${isLocked ? this.icon("lock") + " " : (isRoomOnly ? this.icon("bed") + " " : "")}${this.escapeHtml(evt.title)}</div>
           <div class="timeline-event-meta u-flex u-gap-4 u-wrap u-items-center">
             <span class="user-creator-tag" style="background: ${creatorTagBg}; color: ${creatorTagColor}; font-weight: 500;">${this.escapeHtml(evt.creatorName || evt.creatorUsername)} ${isOwn ? '<svg class="ui-icon u-w-10 u-h-10 u-valign-middle u-color-emerald-400"><use href="#icon-star"></use></svg>' : ''}</span>
             ${(!isLocked && !isRoomOnly && evt.price) ? `<strong class="u-color-emerald-400 u-fw-600">${this.escapeHtml(evt.price)}</strong>` : ''}
@@ -728,7 +728,7 @@ export const eventViewMethods = {
 
         eventPill.innerHTML = `
           <span class="event-card-time">${time} · ${durHours}</span>
-          <div class="event-card-title">${isLocked ? '🔒 ' : (isRoomOnly ? '🛏️ ' : '')}${this.escapeHtml(event.title)}</div>
+          <div class="event-card-title">${isLocked ? this.icon("lock") + " " : (isRoomOnly ? this.icon("bed") + " " : "")}${this.escapeHtml(event.title)}</div>
           ${tagsHtml ? `<div class="u-flex u-gap-4 u-wrap u-mt-2">${tagsHtml}</div>` : ''}
         `;
 

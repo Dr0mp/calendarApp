@@ -10,21 +10,21 @@ export const eventModelMethods = {
     const room = event.roomId ? (this.rooms || []).find(r => r.id === event.roomId) : null;
     let html = "";
     if (entryType === "locked") {
-      html += `<span class="event-pill-space-tag u-bg-amber-500-20 u-color-amber-400">🔒 ${this.t("entry_type_locked")}</span>`;
+      html += `<span class="event-pill-space-tag u-bg-amber-500-20 u-color-amber-400">${this.icon("lock")} ${this.t("entry_type_locked")}</span>`;
     } else if (entryType === "room_only") {
-      html += `<span class="event-pill-room-tag u-bg-purple-500-20 u-color-purple-400">🛏️ ${this.t("entry_type_room_only")}</span>`;
+      html += `<span class="event-pill-room-tag u-bg-purple-500-20 u-color-purple-400">${this.icon("bed")} ${this.t("entry_type_room_only")}</span>`;
     }
     if (space) {
-      html += `<span class="event-pill-space-tag">📍 ${this.escapeHtml(space.name)}</span>`;
+      html += `<span class="event-pill-space-tag">${this.icon("map-pin")} ${this.escapeHtml(space.name)}</span>`;
     }
     if (Array.isArray(event.roomBookings) && event.roomBookings.length > 0) {
       const roomNames = event.roomBookings.map(b => {
         const rm = (this.rooms || []).find(r => r.id === b.roomId);
         return rm ? rm.name : b.roomId;
       }).join(", ");
-      html += `<span class="event-pill-room-tag">🛏️ ${this.escapeHtml(roomNames)}</span>`;
+      html += `<span class="event-pill-room-tag">${this.icon("bed")} ${this.escapeHtml(roomNames)}</span>`;
     } else if (room) {
-      html += `<span class="event-pill-room-tag">🛏️ ${this.escapeHtml(room.name)}</span>`;
+      html += `<span class="event-pill-room-tag">${this.icon("bed")} ${this.escapeHtml(room.name)}</span>`;
     }
     return html;
   },

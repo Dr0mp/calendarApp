@@ -13,7 +13,6 @@ export const TRANSLATIONS = {
     nav_my_events: "Evenimentele mele",
     nav_social: "Social Calendar",
     nav_admin: "Panou Admin",
-    nav_logout: "Deconectare",
     nav_quota_alert_tooltip: "Alertă Cotă Spațiu de Stocare",
 
     // My Events Dedicated Page
@@ -124,11 +123,9 @@ export const TRANSLATIONS = {
     yearly_click_to_zoom: "Apasă pentru a deschide luna",
 
     // Entry Types (Event vs Locked Hours)
-    entry_type_locked: "🔒 Blocare Interval / Privat",
     badge_locked_hours: "Interval Blocat / Privat",
 
     // Event Spaces & Venues
-    event_space_none: "Fără spațiu specificat / Locație externă",
     admin_th_space_name: "Spațiu / Sală",
     admin_th_space_cap: "Capacitate",
     admin_th_space_desc: "Dotări & Descriere",
@@ -139,7 +136,6 @@ export const TRANSLATIONS = {
     btn_enable: "Activează",
 
     // Accommodation / Sleeping Rooms (Restricted to Moderator & Admin)
-    event_room_label: "Cameră de Cazare (Doar Moderator / Admin)",
     event_room_user_blocked_msg: "Doar utilizatorii cu rol de Moderator sau Administrator pot rezerva camere de cazare.",
     admin_th_room_name: "Cameră Cazare",
     admin_th_room_type: "Tip",
@@ -253,9 +249,9 @@ export const TRANSLATIONS = {
     wizard_step_room_notes: "Observații & Salvare",
     wizard_btn_next: "Pasul Următor →",
     wizard_btn_back: "← Înapoi",
-    wizard_btn_save_event: "✓ Salvează Evenimentul",
-    wizard_btn_save_locked: "✓ Confirmă Blocarea",
-    wizard_btn_save_room: "✓ Salvează Cazarea",
+    wizard_btn_save_event: "Salvează Evenimentul",
+    wizard_btn_save_locked: "Confirmă Blocarea",
+    wizard_btn_save_room: "Salvează Cazarea",
     wizard_val_title_req: "Vă rugăm să introduceți titlul înainte de a continua.",
     wizard_val_space_req: "Vă rugăm să selectați o sală / spațiu de desfășurare.",
     wizard_val_date_req: "Vă rugăm să selectați data de desfășurare.",
@@ -392,7 +388,7 @@ export const TRANSLATIONS = {
     demo_no_save: "Mod demonstrativ: Modificările nu pot fi salvate în contul demo.",
 
     // === Social Feed ===
-    copied_label: "✓ Copiat!",
+    copied_label: "Copiat!",
 
     // === Admin Panel ===
     admin_edit_btn: "Editează",
@@ -482,7 +478,7 @@ export const TRANSLATIONS = {
     events_zoom_month_title: "Zoom: Lună (grilă calendar)",
     events_zoom_year_title: "Zoom: An (privire de ansamblu și salt rapid)",
     locked_mode_notice_desc: "Acest interval va fi blocat în orar pentru a împiedica alte rezervări. Nu generează notificări de promovare social media pentru administratori.",
-    locked_mode_notice_title: "🔒 Mod Blocare Interval Activ:",
+    locked_mode_notice_title: "Mod Blocare Interval Activ:",
     moderator_admin_only: "Doar Moderator / Admin",
     nav_sign_out_title: "Deconectare",
     open_share_title: "Deschide folderul / fișierul într-un tab nou",
@@ -519,7 +515,7 @@ export const TRANSLATIONS = {
     room_capacity_label: "Capacitate Oaspeți",
     room_capacity_placeholder: "ex: 2 oaspeți",
     room_mode_notice_desc: "Rezervare spații de cazare (camere). Nu necesită sală de desfășurare, bilete cu preț sau copertă social media.",
-    room_mode_notice_title: "🛏️ Mod Doar Cazare Activ:",
+    room_mode_notice_title: "Mod Doar Cazare Activ:",
     room_name_label: "Denumire Cameră *",
     room_name_placeholder: "ex: Camera 1 (Matrimonială)",
     room_notes_label: "Observații & Facilități",
@@ -666,7 +662,6 @@ export const TRANSLATIONS = {
     nav_my_events: "My Events",
     nav_social: "Social Calendar",
     nav_admin: "Admin Panel",
-    nav_logout: "Logout",
     nav_quota_alert_tooltip: "Storage Quota Alert",
 
     // My Events Dedicated Page
@@ -777,11 +772,9 @@ export const TRANSLATIONS = {
     yearly_click_to_zoom: "Click to zoom into",
 
     // Entry Types (Event vs Locked Hours)
-    entry_type_locked: "🔒 Private / Locked Hours",
     badge_locked_hours: "Private / Locked Hours",
 
     // Event Spaces & Venues
-    event_space_none: "No space specified / External venue",
     admin_th_space_name: "Space / Venue",
     admin_th_space_cap: "Capacity",
     admin_th_space_desc: "Equipment & Description",
@@ -792,7 +785,6 @@ export const TRANSLATIONS = {
     btn_enable: "Enable",
 
     // Accommodation / Sleeping Rooms (Restricted to Moderator & Admin)
-    event_room_label: "Accommodation Room (Moderator / Admin Only)",
     event_room_user_blocked_msg: "Only Moderator and Administrator accounts can reserve accommodation rooms.",
     admin_th_room_name: "Accommodation Room",
     admin_th_room_type: "Type",
@@ -906,9 +898,9 @@ export const TRANSLATIONS = {
     wizard_step_room_notes: "Notes & Confirm",
     wizard_btn_next: "Next Step →",
     wizard_btn_back: "← Back",
-    wizard_btn_save_event: "✓ Save Event",
-    wizard_btn_save_locked: "✓ Confirm Lock",
-    wizard_btn_save_room: "✓ Save Booking",
+    wizard_btn_save_event: "Save Event",
+    wizard_btn_save_locked: "Confirm Lock",
+    wizard_btn_save_room: "Save Booking",
     wizard_val_title_req: "Please enter a title before proceeding.",
     wizard_val_space_req: "Please select a venue / space for this event.",
     wizard_val_date_req: "Please select the event date.",
@@ -1045,7 +1037,7 @@ export const TRANSLATIONS = {
     demo_no_save: "Demo mode: Modifications cannot be saved in demo accounts.",
 
     // === Social Feed ===
-    copied_label: "✓ Copied!",
+    copied_label: "Copied!",
 
     // === Admin Panel ===
     admin_edit_btn: "Edit",
@@ -1135,7 +1127,7 @@ export const TRANSLATIONS = {
     events_zoom_month_title: "Zoom: Month (calendar grid)",
     events_zoom_year_title: "Zoom: Year (overview & quick jump)",
     locked_mode_notice_desc: "This interval will be blocked in the schedule to prevent other bookings. It does not create social media promotion notifications for administrators.",
-    locked_mode_notice_title: "🔒 Locked Interval Mode:",
+    locked_mode_notice_title: "Locked Interval Mode:",
     moderator_admin_only: "Moderator / Admin only",
     nav_sign_out_title: "Sign out",
     open_share_title: "Open share folder / file in new tab",
@@ -1172,7 +1164,7 @@ export const TRANSLATIONS = {
     room_capacity_label: "Guest Capacity",
     room_capacity_placeholder: "e.g. 2 guests",
     room_mode_notice_desc: "Books accommodation (rooms) only. No venue, paid tickets or social media cover needed.",
-    room_mode_notice_title: "🛏️ Accommodation-Only Mode:",
+    room_mode_notice_title: "Accommodation-Only Mode:",
     room_name_label: "Room Name *",
     room_name_placeholder: "e.g. Room 1 (Double)",
     room_notes_label: "Notes & Amenities",

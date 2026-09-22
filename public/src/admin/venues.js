@@ -104,7 +104,7 @@ export const adminVenueMethods = {
         <td>
           <div class="u-flex u-items-center u-gap-8 u-fw-700">
             <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background: ${room.color || '#a855f7'}; flex-shrink: 0;"></span>
-            <span>🛏️ ${this.escapeHtml(room.name)}</span>
+            <span>${this.icon("bed")} ${this.escapeHtml(room.name)}</span>
           </div>
         </td>
         <td><span class="badge-subtle">${this.escapeHtml(room.type || 'Standard')}</span></td>
