@@ -21,6 +21,20 @@ echo [INFO] Starting local HTTP server on port 3000...
 echo [INFO] Opening default web browser to http://localhost:3000 ...
 echo.
 
+:: The server needs a .env file with JWT_SECRET (see .env.example)
+if not exist ".env" (
+    echo [ERROR] Missing .env file. Copy .env.example to .env and set JWT_SECRET.
+    echo.
+    pause
+    exit /b 1
+)
+
+:: Install dependencies on first run
+if not exist "node_modules" (
+    echo [INFO] Installing dependencies...
+    call npm install --omit=dev
+)
+
 :: Launch the browser after a brief 1-second delay in background
 start "" cmd /c "timeout /t 1 /nobreak >nul & start http://localhost:3000"
 

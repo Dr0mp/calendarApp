@@ -50,4 +50,4 @@ export async function settle(page) {
 }
 
 // Password of the non-demo admin in the test users store (see tests/start-test-server.mjs).
-export const ADMIN_PW = 'admin123';
+export const ADMIN_PW = 'Admin-Test-Password-1';

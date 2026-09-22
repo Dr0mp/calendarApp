@@ -18,7 +18,9 @@ const STATES = [
 
 async function shoot(page, name, fullPage = true) {
   await settle(page);
-  await expect(page).toHaveScreenshot(name + '.png', { fullPage });
+  // Server-generated creation dates depend on the real day the test store was seeded.
+  const mask = [page.locator('#admin-users-table-body td:nth-child(5)')];
+  await expect(page).toHaveScreenshot(name + '.png', { fullPage, mask });
 }
 
 for (const theme of ['dark', 'light']) {
