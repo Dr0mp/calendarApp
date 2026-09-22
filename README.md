@@ -24,6 +24,24 @@ Node/Express server (authentication + user management) and a vanilla-JS single-p
 - **Users:** on the server, in `users.json`. Passwords are stored as bcrypt hashes. This file is git-ignored.
 - **Posts, events, spaces and rooms:** in each browser's `localStorage`. They are **not** shared between devices or browsers. Moving them to the server would be a separate piece of work.
 
+## Project layout
+
+```
+server.js              Express server: auth, users API, serves public/ only
+public/index.html      markup (static labels carry data-i18n keys)
+public/styles.css      tokens -> components -> utilities (u-*)
+public/src/app.js      SocialCalendarApp: state + mixin registration
+public/src/core/       storage, i18n, dom refs, event binding, router, utils, feedback (toasts/dialogs)
+public/src/auth.js     session, login/logout, user list
+public/src/social/     social calendar, post editor, control panel, promotion queue
+public/src/events/     event model, calendar views, event form, wizard, My Events
+public/src/admin/      admin panel, users, venues, storage quota
+public/src/data/       translations (RO/EN) and seed data
+tests/                 Playwright: smoke, security, regressions, visual (screenshots in tests/__screens__)
+tools/audit/           code-health metrics and safe clean-up scripts (see its README)
+docs/                  clean-up report
+```
+
 ## Development
 
 | Command | What it does |
