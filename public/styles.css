@@ -1,3 +1,14 @@
+/* =========================================================================
+   Social Calendar & Workspace Suite — styles
+   -------------------------------------------------------------------------
+   Tokens:      colour primitives (RGB triplets) -> semantic tokens (:root,
+                :root[data-theme="light"]) -> components. Use tokens, not raw values.
+   Type scale:  --text-3xs … --text-display   Radii: --radius-xs … --radius-pill
+   Motion:      --duration-fast / -base / -slow
+   Breakpoints: 900px (tablet) and 640px (phone) — max-width media queries.
+   States:      prefer .is-* classes and the [hidden] attribute.
+   ========================================================================= */
+
 :root {
   /* Colour primitives (Tailwind palette) as RGB triplets: use rgb(var(--name)) or rgb(var(--name) / 0.4). Semantic tokens below build on these. */
   --white: 255 255 255;
@@ -2942,7 +2953,7 @@ dialog::backdrop {
   line-height: 1.45;
 }
 
-@media (max-width: 560px) {
+@media (max-width: 640px) {
   .notif-filter-pill { font-size: var(--text-2xs); padding: 6px; }
   .event-notification-card { align-items: flex-start; flex-direction: column; gap: 10px; }
   .notif-card-action { width: 100%; }
@@ -2956,7 +2967,7 @@ dialog::backdrop {
   padding: 10px 0 20px 0;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 900px) {
   .form-grid,
   .detail-view-container {
     grid-template-columns: 1fr;
@@ -3833,7 +3844,7 @@ button.timeline-time-header-spacer:hover {
 }
 
 /* ========================================================================= */
-/* QUIET SOCIAL + ADMIN WORKSPACE                                             */
+/* SOCIAL + ADMIN WORKSPACE REFINEMENTS                                      */
 /* ========================================================================= */
 /* The calendar already identifies its active platform in the filter bar; this
    repeated sentence adds a full row without adding useful working context. */
@@ -3928,7 +3939,7 @@ button.timeline-time-header-spacer:hover {
   gap: 20px !important;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 900px) {
   .form-grid {
     gap: 20px;
   }
