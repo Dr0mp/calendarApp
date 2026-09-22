@@ -113,20 +113,20 @@ export const adminPanelMethods = {
           <div style="display: flex; align-items: center; gap: 8px; font-weight: 700;">
             <span class="user-avatar" aria-hidden="true"><svg class="ui-icon"><use href="#icon-user"></use></svg></span>
             <span>${this.escapeHtml(user.name)}</span>
-            ${isSelf ? '<span class="badge-subtle" style="color: #38bdf8;">(You)</span>' : ''}
+            ${isSelf ? `<span class="badge-subtle" style="color: #38bdf8;">(${this.t("admin_you")})</span>` : ''}
           </div>
         </td>
         <td><code>@${this.escapeHtml(user.username)}</code></td>
         <td>
-          <span class="user-role-badge ${user.role === 'admin' ? 'role-admin' : ''}">${user.role}</span>
+          <span class="user-role-badge ${user.role === 'admin' ? 'role-admin' : ''}">${this.t(`role_${user.role}`)}</span>
         </td>
-        <td><strong>${userEventCount}</strong> events</td>
+        <td>${this.tn("count_events", userEventCount, { count: `<strong>${userEventCount}</strong>` })}</td>
         <td style="color: var(--text-muted); font-size: 0.75rem;">${user.createdAt || '—'}</td>
         <td>
           <div style="display: flex; gap: 6px; align-items: center;">
-            <button class="btn btn-secondary btn-sm btn-edit-user" data-uid="${user.id}" title="${isSystemAdmin ? 'Change Name & Password' : 'Edit User'}">${this.t("admin_edit_btn")}</button>
+            <button class="btn btn-secondary btn-sm btn-edit-user" data-uid="${user.id}" title="${this.t(isSystemAdmin ? "admin_edit_root_title" : "admin_edit_user_title")}">${this.t("admin_edit_btn")}</button>
             ${(isSystemAdmin || isSelf) ? '' : `<button class="btn btn-danger btn-sm btn-del-user" data-uid="${user.id}">${this.t("admin_delete_btn")}</button>`}
-            ${isSystemAdmin ? '<span class="badge-subtle" style="color: #ef4444; font-size: 0.72rem; font-weight: 600;">Root Admin</span>' : ''}
+            ${isSystemAdmin ? `<span class="badge-subtle" style="color: #ef4444; font-size: 0.72rem; font-weight: 600;">${this.t("admin_root_badge")}</span>` : ''}
           </div>
         </td>
       `;
@@ -174,17 +174,17 @@ export const adminPanelMethods = {
             ${isLocked ? '🔒 ' : (isRoomOnly ? '🛏️ ' : '')}${this.escapeHtml(evt.title)}
             ${isLocked ? `<span class="badge-subtle" style="color: #fbbf24; font-size: 0.68rem; margin-left: 4px;">${this.t("badge_locked_hours")}</span>` : ''}
             ${isRoomOnly ? `<span class="badge-subtle" style="color: #c084fc; font-size: 0.68rem; margin-left: 4px;">${this.t("badge_room_booking")}</span>` : ''}
-            ${evt.isRecurrent ? `<span class="badge-subtle" style="color: #38bdf8; font-size: 0.68rem; margin-left: 4px;">Month ${evt.recurrenceIndex}/${evt.recurrenceTotal}</span>` : ''}
+            ${evt.isRecurrent ? `<span class="badge-subtle" style="color: #38bdf8; font-size: 0.68rem; margin-left: 4px;">${this.tf("recurrence_badge", { index: evt.recurrenceIndex, total: evt.recurrenceTotal })}</span>` : ''}
           </div>
           <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-top: 3px;">
             ${space ? `<span class="badge-subtle" style="color: #38bdf8; font-size: 0.68rem;">📍 ${this.escapeHtml(space.name)}</span>` : ''}
             ${roomsBadgeHtml}
-            ${(evt.facebookImage && !isLocked && !isRoomOnly) ? '<span style="font-size: 0.7rem; color: var(--status-info);">16:9 cover attached</span>' : ''}
+            ${(evt.facebookImage && !isLocked && !isRoomOnly) ? `<span style="font-size: 0.7rem; color: var(--status-info);">${this.t("admin_cover_attached")}</span>` : ''}
           </div>
         </td>
         <td>
           <span class="promo-status-badge ${isLocked ? 'locked' : (isRoomOnly ? 'room_only' : (isPromoted ? 'promoted' : 'pending'))}" style="${isLocked ? 'background: rgba(245, 158, 11, 0.15); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3);' : (isRoomOnly ? 'background: rgba(168, 85, 247, 0.15); color: #c084fc; border-color: rgba(168, 85, 247, 0.3);' : '')}">
-            ${isLocked ? 'Private / Locked' : (isRoomOnly ? (this.t("badge_room_booking")) : (isPromoted ? 'Promoted' : 'Awaiting promotion'))}
+            ${this.t(isLocked ? "admin_status_locked" : (isRoomOnly ? "badge_room_booking" : (isPromoted ? "admin_status_promoted" : "admin_status_awaiting")))}
           </span>
         </td>
         <td>
@@ -192,12 +192,12 @@ export const adminPanelMethods = {
         </td>
         <td style="font-size: 0.8rem;">
           <div><strong>${(isLocked || isRoomOnly) ? '-' : this.formatEventPrice(evt)}</strong></div>
-          ${(!isLocked && !isRoomOnly && evt.enrollLink) ? `<a href="${evt.enrollLink}" target="_blank" style="color: var(--primary); font-size: 0.75rem; text-decoration: underline;">Enrolment Link</a>` : '<span style="color: var(--text-muted); font-size: 0.75rem;">None</span>'}
+          ${(!isLocked && !isRoomOnly && evt.enrollLink) ? `<a href="${evt.enrollLink}" target="_blank" style="color: var(--primary); font-size: 0.75rem; text-decoration: underline;">${this.t("admin_enrol_link")}</a>` : `<span style="color: var(--text-muted); font-size: 0.75rem;">${this.t("admin_none")}</span>`}
         </td>
         <td>
           <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-            <button class="btn btn-secondary btn-sm btn-admin-edit-evt" data-id="${evt.id}">Edit</button>
-            <button class="btn btn-danger btn-sm btn-admin-del-evt" data-id="${evt.id}">Delete</button>
+            <button class="btn btn-secondary btn-sm btn-admin-edit-evt" data-id="${evt.id}">${this.t("admin_edit_btn")}</button>
+            <button class="btn btn-danger btn-sm btn-admin-del-evt" data-id="${evt.id}">${this.t("admin_delete_btn")}</button>
           </div>
         </td>
       `;

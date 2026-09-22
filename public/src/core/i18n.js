@@ -51,6 +51,20 @@ export const i18nMethods = {
     }
     return fallback || key;
   },
+  // t() with {placeholders}: tf("key", { count: 3 })
+  tf(key, vars = {}) {
+    return this.t(key).replace(/\{(\w+)\}/g, (m, name) => (name in vars ? String(vars[name]) : m));
+  },
+  // Pluralised tf(): uses "<key>_one" when n === 1 and that key exists.
+  tn(key, n, vars = {}) {
+    const dict = TRANSLATIONS[this.currentLang] || TRANSLATIONS.ro;
+    const k = n === 1 && dict[`${key}_one`] !== undefined ? `${key}_one` : key;
+    return this.tf(k, { count: n, ...vars });
+  },
+  // BCP 47 locale for dates/numbers in the current UI language.
+  locale() {
+    return this.currentLang === "en" ? "en-GB" : "ro-RO";
+  },
   setLanguage(lang) {
     if (lang !== "ro" && lang !== "en") lang = "ro";
     this.saveLanguage(lang);

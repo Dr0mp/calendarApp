@@ -272,7 +272,7 @@ export const socialCalendarMethods = {
       tab.dataset.platform = platform.id;
       const iconSrc = this.getPlatformIcon(platform);
       tab.innerHTML = `
-        <img class="platform-favicon" src="${iconSrc}" alt="${platform.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+        <img class="platform-favicon" src="${iconSrc}" alt="${platform.name}" data-fallback="dot">
         <span class="platform-dot" style="background: ${platform.color}; display: none;"></span>
         <span>${platform.name}</span>
         <span class="filter-tab-badge">${count}</span>
@@ -359,7 +359,7 @@ export const socialCalendarMethods = {
       dayHeader.className = "day-header";
       dayHeader.innerHTML = `
         <span class="day-number">${dayNumber}</span>
-        ${isCurrentMonthCell && !isPast ? `<button class="btn-add-day" title="Schedule post for this date" data-date="${cellDateString}">+</button>` : ""}
+        ${isCurrentMonthCell && !isPast ? `<button class="btn-add-day" title="${this.t("post_schedule_on_date")}" data-date="${cellDateString}">+</button>` : ""}
         ${isPast && isCurrentMonthCell ? `<span class="past-schedule-message" aria-live="polite">${this.t("post_past_create_unavailable")}</span>` : ""}
       `;
 
@@ -385,20 +385,20 @@ export const socialCalendarMethods = {
         postCard.className = "post-card-pill";
         postCard.style.borderLeftColor = platform ? platform.color : "var(--primary)";
 
-        const mediaIcon = post.mediaType === "video" ? "Video" : (post.mediaCount > 1 ? `Gallery (${post.mediaCount})` : "Photo");
+        const mediaIcon = post.mediaType === "video" ? this.t("media_video") : (post.mediaCount > 1 ? this.tf("media_gallery", { count: post.mediaCount }) : this.t("media_photo"));
 
         postCard.innerHTML = `
           <div class="post-card-pill-header">
             <span class="post-card-platform-badge" style="color: ${platform ? platform.color : 'inherit'}">
-              <img class="platform-favicon-sm" src="${iconSrc}" alt="" onerror="this.style.display='none'">
+              <img class="platform-favicon-sm" src="${iconSrc}" alt="" data-fallback="hide">
               ${platform ? platform.name : post.platformId}
             </span>
             <span class="post-card-time">${post.time || "12:00"}</span>
           </div>
-          <div class="post-card-title">${this.escapeHtml(post.title || post.description || "Untitled Post")}</div>
+          <div class="post-card-title">${this.escapeHtml(post.title || post.description || this.t("post_untitled"))}</div>
           <div class="post-card-footer">
-            <span class="media-tag">${mediaIcon} ${post.mediaType}</span>
-            ${post.shareLink ? `<button type="button" class="share-pill-btn btn-quick-copy-share" data-link="${this.escapeHtml(post.shareLink)}" title="Copy asset share link: ${this.escapeHtml(post.shareLink)}">Copy share link</button>` : `<span class="aspect-tag">${post.aspectRatio || "9:16"}</span>`}
+            <span class="media-tag">${mediaIcon}</span>
+            ${post.shareLink ? `<button type="button" class="share-pill-btn btn-quick-copy-share" data-link="${this.escapeHtml(post.shareLink)}" title="${this.t("copy_link_title")}: ${this.escapeHtml(post.shareLink)}">${this.t("post_detail_copy_share_btn")}</button>` : `<span class="aspect-tag">${post.aspectRatio || "9:16"}</span>`}
           </div>
         `;
 
@@ -468,7 +468,7 @@ export const socialCalendarMethods = {
         dayCell.textContent = day;
         dayCell.tabIndex = 0;
         dayCell.setAttribute("role", "button");
-        dayCell.setAttribute("aria-label", `${dateStr}${datePosts.length ? `, ${datePosts.length} scheduled post${datePosts.length === 1 ? "" : "s"}` : ""}`);
+        dayCell.setAttribute("aria-label", `${dateStr}${datePosts.length ? `, ${this.tn("count_posts", datePosts.length)}` : ""}`);
 
         if (dateStr < todayStr) dayCell.classList.add("is-past");
         if (dateStr === todayStr) dayCell.classList.add("is-today");
@@ -503,9 +503,9 @@ export const socialCalendarMethods = {
       this.dom.feedView.innerHTML = `
         <div class="empty-state">
           <div class="empty-state-icon" aria-hidden="true"></div>
-          <h3>No posts scheduled for this selection</h3>
-          <p>Click <strong>"+ New Post"</strong> to schedule content for this month.</p>
-          <button class="btn btn-primary btn-sm" id="empty-add-btn">+ Schedule New Post</button>
+          <h3>${this.t("feed_empty_title")}</h3>
+          <p>${this.t("feed_empty_desc")}</p>
+          <button class="btn btn-primary btn-sm" id="empty-add-btn">+ ${this.t("post_dialog_new_title")}</button>
         </div>
       `;
       const btn = document.getElementById("empty-add-btn");
@@ -559,41 +559,41 @@ export const socialCalendarMethods = {
         const card = document.createElement("div");
         card.className = "feed-post-card";
 
-        const mediaIcon = post.mediaType === "video" ? "Video" : (post.mediaCount > 1 ? `Gallery (${post.mediaCount})` : "Photo");
+        const mediaIcon = post.mediaType === "video" ? this.t("media_video") : (post.mediaCount > 1 ? this.tf("media_gallery", { count: post.mediaCount }) : this.t("media_photo"));
 
         const iconSrc = this.getPlatformIcon(platform);
         const fallbackImg = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80";
 
         card.innerHTML = `
           <div class="feed-post-media-preview">
-            <img src="${post.mediaUrl || fallbackImg}" alt="Preview" loading="lazy">
+            <img src="${post.mediaUrl || fallbackImg}" alt="" loading="lazy">
             <span class="feed-media-badge">${mediaIcon}</span>
             <span class="feed-aspect-badge">${post.aspectRatio || "9:16"}</span>
           </div>
           <div class="feed-post-content">
             <div class="feed-post-platform-row">
               <span class="feed-platform-tag" style="color: ${platform ? platform.color : 'inherit'}">
-                <img class="platform-favicon" src="${iconSrc}" alt="" onerror="this.style.display='none'">
+                <img class="platform-favicon" src="${iconSrc}" alt="" data-fallback="hide">
                 ${platform ? platform.name : post.platformId}
               </span>
               <span style="font-size: 0.72rem; color: var(--text-muted);">${post.time || "12:00"}</span>
             </div>
-            <h4 class="feed-post-title">${this.escapeHtml(post.title || "Untitled")}</h4>
+            <h4 class="feed-post-title">${this.escapeHtml(post.title || this.t("post_untitled"))}</h4>
             ${post.description ? `<p class="feed-post-desc">${this.escapeHtml(post.description)}</p>` : ""}
             <div class="feed-post-footer">
-              <span>Standard: <strong>${postType ? postType.recommendedWidth + "x" + postType.recommendedHeight : "Standard"}</strong></span>
+              <span>${this.t("post_standard_label")}: <strong>${postType ? postType.recommendedWidth + "x" + postType.recommendedHeight : "—"}</strong></span>
               <span style="text-transform: capitalize; color: ${post.status === 'published' ? '#10b981' : '#60a5fa'}; font-weight: 600;">
-                ● ${post.status || 'Scheduled'}
+                ● ${this.t(`post_status_${post.status || "scheduled"}`)}
               </span>
             </div>
             ${post.shareLink ? `
               <div class="feed-share-row">
                 <span style="font-size: 0.74rem; color: #38bdf8; font-weight: 700; display: inline-flex; align-items: center; gap: 5px;">
-                  Asset share link: <span style="color: var(--text-primary); font-family: monospace; font-size: 0.72rem; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${this.escapeHtml(post.shareLink)}</span>
+                  ${this.t("post_share_link_label")}: <span style="color: var(--text-primary); font-family: monospace; font-size: 0.72rem; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${this.escapeHtml(post.shareLink)}</span>
                 </span>
                 <div style="display: inline-flex; gap: 6px;">
                   <button type="button" class="btn btn-secondary btn-sm btn-feed-copy-share" data-link="${this.escapeHtml(post.shareLink)}" style="font-size: 0.72rem; padding: 3px 8px; font-weight: 700;">${this.t("post_detail_copy_share_btn")}</button>
-                  <a href="${post.shareLink.startsWith('http') ? this.escapeHtml(post.shareLink) : '#'}" target="_blank" class="btn btn-primary btn-sm btn-feed-open-share" data-link="${this.escapeHtml(post.shareLink)}" style="font-size: 0.72rem; padding: 3px 8px; text-decoration: none; font-weight: 700;">Open Share <svg class="ui-icon" style="width:11px;height:11px;vertical-align:middle"><use href="#icon-external-link"></use></svg></a>
+                  <a href="${post.shareLink.startsWith('http') ? this.escapeHtml(post.shareLink) : '#'}" target="_blank" class="btn btn-primary btn-sm btn-feed-open-share" data-link="${this.escapeHtml(post.shareLink)}" style="font-size: 0.72rem; padding: 3px 8px; text-decoration: none; font-weight: 700;">${this.t("post_open_share_btn")} <svg class="ui-icon" style="width:11px;height:11px;vertical-align:middle"><use href="#icon-external-link"></use></svg></a>
                 </div>
               </div>
             ` : ""}

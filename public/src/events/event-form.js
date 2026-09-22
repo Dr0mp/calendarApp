@@ -32,7 +32,7 @@ export const eventFormMethods = {
 
     if (!hintEl) return;
     if (!isChecked || !dateVal) {
-      hintEl.textContent = `Schedules monthly on the same day for ${monthsVal} months`;
+      hintEl.textContent = this.tf("recurrence_hint_months", { months: monthsVal });
       return;
     }
 
@@ -40,14 +40,14 @@ export const eventFormMethods = {
     const dateNames = dates.map(dt => {
       const [y, m, d] = dt.split("-").map(Number);
       const dtObj = new Date(y, m - 1, d);
-      return dtObj.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+      return dtObj.toLocaleDateString(this.locale(), { month: "short", day: "numeric" });
     });
 
     const previewStr = dateNames.length <= 4 
       ? dateNames.join(", ") 
       : `${dateNames.slice(0, 3).join(", ")} ... ${dateNames[dateNames.length - 1]}`;
 
-    hintEl.textContent = `${monthsVal} monthly sessions: ${previewStr}`;
+    hintEl.textContent = this.tf("recurrence_preview", { months: monthsVal, dates: previewStr });
   },
   setEventTimingMode(mode) {
     this.eventTimingMode = mode === "async" ? "async" : "consecutive";
@@ -109,14 +109,14 @@ export const eventFormMethods = {
         chip.innerHTML = `<span>${slotStr}</span><span class="slot-status">${this.t("event_slot_past")}</span>`;
       } else if (overlapping) {
         chip.className = "hour-slot-chip busy";
-        chip.title = `Occupied by: ${overlapping.title}`;
+        chip.title = this.tf("slot_occupied_by", { title: overlapping.title });
         chip.innerHTML = `
           <span>${slotStr}</span>
           <span class="slot-status">${this.t("event_slot_busy")}</span>
         `;
       } else {
         chip.className = "hour-slot-chip free";
-        chip.title = `Free slot. Click to set start hour to ${slotStr}`;
+        chip.title = this.tf("slot_free_title", { time: slotStr });
         chip.innerHTML = `
           <span>${slotStr}</span>
           <span class="slot-status">${this.t("event_slot_free")}</span>
@@ -202,8 +202,8 @@ export const eventFormMethods = {
         const slotStr = `${String(slotH).padStart(2, "0")}:00`;
         suggestions.push({
           type: "hour",
-          label: "Free Hour Today",
-          text: `Free slot today at ${slotStr} (${dur}h duration)`,
+          label: this.t("suggest_free_hour_label"),
+          text: this.tf("suggest_free_hour_text", { time: slotStr, hours: dur }),
           newHour: slotStr,
           newDate: startDate
         });
@@ -229,14 +229,14 @@ export const eventFormMethods = {
       });
 
       if (!hasAnyEvent) {
-        const dayName = nextDateObj.toLocaleDateString(undefined, { weekday: "short" });
-        const monthName = nextDateObj.toLocaleDateString(undefined, { month: "short" });
+        const dayName = nextDateObj.toLocaleDateString(this.locale(), { weekday: "short" });
+        const monthName = nextDateObj.toLocaleDateString(this.locale(), { month: "short" });
         const dayNum = nextDateObj.getDate();
-        const prefix = d === 1 ? "Tomorrow" : `${dayName}, ${monthName} ${dayNum}`;
+        const prefix = d === 1 ? this.t("suggest_tomorrow") : `${dayName}, ${dayNum} ${monthName}`;
         suggestions.push({
           type: "next-day",
-          label: "Next Free Day",
-          text: `${prefix} (${nextDateStr}) is completely free`,
+          label: this.t("suggest_next_free_day_label"),
+          text: this.tf("suggest_next_free_day_text", { day: prefix, date: nextDateStr }),
           newHour: startHour || "18:00",
           newDate: nextDateStr
         });
@@ -267,13 +267,13 @@ export const eventFormMethods = {
     });
 
     if (!hasConflictNextWeek) {
-      const dayName = nextWeekObj.toLocaleDateString(undefined, { weekday: "long" });
-      const monthName = nextWeekObj.toLocaleDateString(undefined, { month: "short" });
+      const dayName = nextWeekObj.toLocaleDateString(this.locale(), { weekday: "long" });
+      const monthName = nextWeekObj.toLocaleDateString(this.locale(), { month: "short" });
       const dayNum = nextWeekObj.getDate();
       suggestions.push({
         type: "next-week",
-        label: "Same Day Next Week",
-        text: `Next ${dayName}, ${monthName} ${dayNum} (${nextWeekStr}) at ${startHour || "18:00"}`,
+        label: this.t("suggest_next_week_label"),
+        text: this.tf("suggest_next_week_text", { day: `${dayName}, ${dayNum} ${monthName}`, date: nextWeekStr, time: startHour || "18:00" }),
         newHour: startHour || "18:00",
         newDate: nextWeekStr
       });
@@ -286,9 +286,9 @@ export const eventFormMethods = {
 
     this.dom.eventSmartSuggestionBox.style.display = "block";
     if (directConflict) {
-      this.dom.smartConflictDetails.innerHTML = `Conflict with <strong>"${this.escapeHtml(directConflict.title)}"</strong> booked at ${directConflict.hour || "18:00"} (${directConflict.durationHours || 2}h). Choose an alternative below:`;
+      this.dom.smartConflictDetails.innerHTML = this.tf("suggest_conflict_with", { title: `<strong>"${this.escapeHtml(directConflict.title)}"</strong>`, time: directConflict.hour || "18:00", hours: directConflict.durationHours || 2 });
     } else {
-      this.dom.smartConflictDetails.innerHTML = `Date has scheduled events. You may keep this or select an open recommendation below:`;
+      this.dom.smartConflictDetails.textContent = this.t("suggest_date_busy");
     }
 
     suggestions.forEach(s => {
@@ -299,7 +299,7 @@ export const eventFormMethods = {
           <span class="suggestion-label label-${s.type}">${s.label}</span>
           <span>${this.escapeHtml(s.text)}</span>
         </div>
-        <button type="button" class="btn-apply-suggestion">Reschedule</button>
+        <button type="button" class="btn-apply-suggestion">${this.t("suggest_apply_btn")}</button>
       `;
       const applyBtn = card.querySelector(".btn-apply-suggestion");
       applyBtn.addEventListener("click", () => {
@@ -324,7 +324,7 @@ export const eventFormMethods = {
     if (existingNotice) existingNotice.remove();
     const notice = document.createElement("div");
     notice.className = "suggestion-applied-notice";
-    notice.innerHTML = `<span><svg class="ui-icon" style="width:12px;height:12px;vertical-align:middle"><use href="#icon-check"></use></svg> Rescheduled to <strong>${newDate} at ${newHour}</strong>. Slot is available!</span>`;
+    notice.innerHTML = `<span><svg class="ui-icon" style="width:12px;height:12px;vertical-align:middle"><use href="#icon-check"></use></svg> ${this.tf("suggest_applied", { when: `<strong>${newDate}, ${newHour}</strong>` })}</span>`;
     this.dom.eventSmartSuggestionBox.insertAdjacentElement("beforebegin", notice);
     setTimeout(() => notice.remove(), 4000);
   },
@@ -356,10 +356,10 @@ export const eventFormMethods = {
       this.dom.eventDateWarning.style.display = "flex";
       const list = conflicts.map(c => {
         const isMulti = c.startDate && c.endDate && c.startDate !== c.endDate;
-        const span = isMulti ? `(${c.startDate} to ${c.endDate})` : `(${c.hour || '18:00'}, ${c.durationHours || 2}h)`;
+        const span = isMulti ? `(${c.startDate} – ${c.endDate})` : `(${c.hour || '18:00'}, ${c.durationHours || 2}h)`;
         return `"${this.escapeHtml(c.title)}" ${span}`;
       }).join(", ");
-      this.dom.eventDateWarningMsg.innerHTML = `Date Conflict Notice: <strong>${conflicts.length}</strong> active event(s) in this period: ${list}.`;
+      this.dom.eventDateWarningMsg.innerHTML = this.tf("date_conflict_notice", { count: `<strong>${conflicts.length}</strong>`, list });
     } else {
       this.dom.eventDateWarning.style.display = "none";
     }
@@ -387,7 +387,7 @@ export const eventFormMethods = {
       this.dom.eventFbValidationStatus.style.display = "flex";
       this.dom.eventFbValidationStatus.className = "fb-dimension-status";
       this.dom.fbStatusIcon.innerHTML = '<svg class="ui-icon" style="width:14px;height:14px"><use href="#icon-clock"></use></svg>';
-      this.dom.fbStatusText.textContent = "Analyzing image dimensions & Facebook 16:9 proportional standard...";
+      this.dom.fbStatusText.textContent = this.t("fb_analyzing");
     }
 
     const img = new Image();
@@ -403,8 +403,8 @@ export const eventFormMethods = {
         this.isFbImageValid = true;
         if (this.dom.eventFbValidationStatus) {
           this.dom.eventFbValidationStatus.className = "fb-dimension-status valid";
-          this.dom.fbStatusIcon.textContent = "Valid";
-          this.dom.fbStatusText.innerHTML = `Valid Facebook Standard (16:9): <strong>${w} × ${h} px</strong> (Ratio: ${ratio.toFixed(2)}:1)`;
+          this.dom.fbStatusIcon.textContent = this.t("fb_valid");
+          this.dom.fbStatusText.innerHTML = this.tf("fb_valid_detail", { size: `<strong>${w} × ${h} px</strong>`, ratio: ratio.toFixed(2) });
         }
         if (this.dom.eventFbImageData) this.dom.eventFbImageData.value = src;
         if (this.dom.eventFbPreviewImg) this.dom.eventFbPreviewImg.src = src;
@@ -413,16 +413,16 @@ export const eventFormMethods = {
         if (this.dom.saveEventBtn) this.dom.saveEventBtn.disabled = false;
       } else {
         this.isFbImageValid = false;
-        let shapeDesc = "non-proportional";
-        if (Math.abs(ratio - 1) < 0.1) shapeDesc = "Square (1:1)";
-        else if (ratio < 1) shapeDesc = "Vertical / Portrait (9:16)";
-        else if (ratio > 2.0) shapeDesc = "Ultra-wide banner";
-        else shapeDesc = `Aspect ratio ${ratio.toFixed(2)}:1`;
+        let shapeDesc;
+        if (Math.abs(ratio - 1) < 0.1) shapeDesc = this.t("fb_shape_square");
+        else if (ratio < 1) shapeDesc = this.t("fb_shape_vertical");
+        else if (ratio > 2.0) shapeDesc = this.t("fb_shape_ultrawide");
+        else shapeDesc = this.tf("fb_shape_ratio", { ratio: ratio.toFixed(2) });
 
         if (this.dom.eventFbValidationStatus) {
           this.dom.eventFbValidationStatus.className = "fb-dimension-status invalid";
-          this.dom.fbStatusIcon.textContent = "Invalid";
-          this.dom.fbStatusText.innerHTML = `<strong>Rejected (Non-proportional):</strong> Facebook Page Cover standard strictly requires a <strong>16:9 landscape aspect ratio</strong> (e.g. 1920×1080 or 1200×675). Detected: <strong>${w} × ${h} px</strong> (${shapeDesc}).`;
+          this.dom.fbStatusIcon.textContent = this.t("fb_invalid");
+          this.dom.fbStatusText.innerHTML = this.tf("fb_rejected_detail", { size: `<strong>${w} × ${h} px</strong>`, shape: shapeDesc });
         }
         if (this.dom.eventFbImageData) this.dom.eventFbImageData.value = "";
         if (this.dom.eventFbPreviewBox) this.dom.eventFbPreviewBox.style.display = "none";
@@ -434,8 +434,8 @@ export const eventFormMethods = {
       this.isFbImageValid = false;
       if (this.dom.eventFbValidationStatus) {
         this.dom.eventFbValidationStatus.className = "fb-dimension-status invalid";
-        this.dom.fbStatusIcon.textContent = "Invalid";
-        this.dom.fbStatusText.textContent = "Unable to load image. Please verify file integrity or URL format.";
+        this.dom.fbStatusIcon.textContent = this.t("fb_invalid");
+        this.dom.fbStatusText.textContent = this.t("fb_load_error");
       }
       if (this.dom.eventFbImageData) this.dom.eventFbImageData.value = "";
       if (this.dom.eventFbPreviewBox) this.dom.eventFbPreviewBox.style.display = "none";

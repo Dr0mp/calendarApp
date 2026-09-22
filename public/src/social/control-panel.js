@@ -21,11 +21,11 @@ export const controlPanelMethods = {
       card.innerHTML = `
         <div class="cp-platform-header">
           <div class="cp-platform-title">
-            <img class="platform-favicon-lg" src="${iconSrc}" alt="" onerror="this.style.display='none'">
+            <img class="platform-favicon-lg" src="${iconSrc}" alt="" data-fallback="hide">
             <span>${platform.name}</span>
           </div>
           <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-            <label class="cp-platform-toggle-label" title="Toggle platform visibility across calendar, filters, and post creation">
+            <label class="cp-platform-toggle-label" title="${this.t("cp_toggle_title")}">
               <span class="cp-platform-status-text">${isEnabled ? this.t("cp_status_active") : this.t("cp_status_disabled")}</span>
               <div class="toggle-switch">
                 <input type="checkbox" class="cp-platform-enable-toggle" data-pid="${platform.id}" ${isEnabled ? "checked" : ""}>
@@ -113,7 +113,7 @@ export const controlPanelMethods = {
 
       // Add post type button
       card.querySelector(".cp-add-pt-btn").addEventListener("click", () => {
-        const typeName = prompt("Enter new post type name (e.g., Square Carousel, Story, Live Clip):");
+        const typeName = prompt(this.t("cp_new_post_type_prompt"));
         if (typeName) {
           platform.postTypes.push({
             id: `${platform.id}-custom-${Date.now()}`,
@@ -281,7 +281,7 @@ export const controlPanelMethods = {
     const enabledPlatforms = this.platforms.filter(p => p.enabled !== false);
     if (enabledPlatforms.length === 0) {
       const tr = document.createElement("tr");
-      tr.innerHTML = `<td colspan="6" style="text-align: center; color: var(--text-muted); padding: 24px;">No active platforms enabled. Enable platforms in Control Panel.</td>`;
+      tr.innerHTML = `<td colspan="6" style="text-align: center; color: var(--text-muted); padding: 24px;">${this.t("standards_no_platforms")}</td>`;
       this.dom.standardsTableBody.appendChild(tr);
       this.dom.standardsDialog.showModal();
       return;
@@ -294,7 +294,7 @@ export const controlPanelMethods = {
         tr.innerHTML = `
           <td>
             <span class="platform-pill-badge" style="display: inline-flex; align-items: center; gap: 8px; font-weight: 700; color: ${platform.color};">
-              <img class="platform-favicon" src="${iconSrc}" alt="" onerror="this.style.display='none'">
+              <img class="platform-favicon" src="${iconSrc}" alt="" data-fallback="hide">
               ${platform.name}
             </span>
           </td>

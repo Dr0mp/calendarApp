@@ -16,7 +16,7 @@ export const postEditorMethods = {
     }
 
     this.dom.postEditId.value = "";
-    this.dom.postDialogActionText.textContent = prefillData ? "Promote event on social" : "Schedule new post";
+    this.dom.postDialogActionText.textContent = this.t(prefillData ? "post_dialog_promote_title" : "post_dialog_new_title");
     this.dom.postForm.reset();
 
     // Track if this post is linked to an event promotion
@@ -86,15 +86,15 @@ export const postEditorMethods = {
     this.dom.previewImg.src = "";
     this.dom.previewVideo.style.display = "none";
     this.dom.previewVideo.src = "";
-    this.dom.previewMediaName.textContent = "No media selected";
-    this.dom.previewAspectPill.textContent = "Awaiting upload";
+    this.dom.previewMediaName.textContent = this.t("post_no_media");
+    this.dom.previewAspectPill.textContent = this.t("post_awaiting_upload");
   },
   openEditPostModal(postId) {
     const post = this.posts.find(p => p.id === postId);
     if (!post) return;
 
     this.dom.postEditId.value = post.id;
-    this.dom.postDialogActionText.textContent = "Edit Scheduled Post";
+    this.dom.postDialogActionText.textContent = this.t("post_dialog_edit_title");
     this.populatePlatformSelect(post.platformId);
 
     this.dom.postPlatformSelect.value = post.platformId;
@@ -157,13 +157,13 @@ export const postEditorMethods = {
     const postType = this.getPostType(platformId, postTypeId);
 
     if (!postType) {
-      this.dom.liveSpecHelper.innerHTML = `<span style="color: var(--text-muted)">Select a post type to see 2026 specs.</span>`;
+      this.dom.liveSpecHelper.innerHTML = `<span style="color: var(--text-muted)">${this.t("spec_select_type")}</span>`;
       return;
     }
 
     // Update collapsible summary headers
     if (this.dom.specSummaryTitle) {
-      this.dom.specSummaryTitle.textContent = `Standard requirements: ${postType.name}`;
+      this.dom.specSummaryTitle.textContent = this.tf("spec_requirements_for", { name: postType.name });
     }
     if (this.dom.specSummaryBadge) {
       this.dom.specSummaryBadge.textContent = `${postType.aspectRatio} • ${postType.recommendedWidth}×${postType.recommendedHeight} px`;
@@ -171,42 +171,42 @@ export const postEditorMethods = {
 
     this.dom.liveSpecHelper.innerHTML = `
       <div class="spec-helper-title">
-        <span>2026 standard requirements: ${postType.name}</span>
+        <span>${this.tf("spec_requirements_for", { name: postType.name })}</span>
       </div>
       <div class="spec-helper-grid">
         <div class="spec-helper-item">
           <strong>${postType.aspectRatio}</strong>
-          <span>Aspect Ratio</span>
+          <span>${this.t("spec_aspect_ratio")}</span>
         </div>
         <div class="spec-helper-item">
           <strong>${postType.recommendedWidth} × ${postType.recommendedHeight} px</strong>
-          <span>Optimal Resolution</span>
+          <span>${this.t("spec_resolution")}</span>
         </div>
         <div class="spec-helper-item">
           <strong>${postType.format}</strong>
-          <span>Format & Encoding</span>
+          <span>${this.t("spec_format")}</span>
         </div>
         <div class="spec-helper-item">
           <strong>${postType.maxDuration || "N/A"}</strong>
-          <span>Duration / Count</span>
+          <span>${this.t("spec_duration")}</span>
         </div>
         <div class="spec-helper-item">
           <strong>${postType.maxFileSize || "Standard"}</strong>
-          <span>File Size Limit</span>
+          <span>${this.t("spec_file_size")}</span>
         </div>
         <div class="spec-helper-item">
-          <strong>${postType.captionLimit || 2200} chars</strong>
-          <span>Caption Limit</span>
+          <strong>${this.tf("spec_chars", { count: postType.captionLimit || 2200 })}</strong>
+          <span>${this.t("spec_caption_limit")}</span>
         </div>
       </div>
       <div class="spec-safe-zone">
-        <strong>Safe zone:</strong> ${postType.safeZone || "Keep text centered to avoid UI overlay obstructions."}
+        <strong>${this.t("spec_safe_zone")}:</strong> ${postType.safeZone || this.t("spec_safe_zone_default")}
       </div>
     `;
 
     // Update aspect tag in preview if waiting
     if (this.dom.previewAspectPill) {
-      this.dom.previewAspectPill.textContent = `Standard: ${postType.aspectRatio}`;
+      this.dom.previewAspectPill.textContent = `${this.t("post_standard_label")}: ${postType.aspectRatio}`;
     }
   },
   updateCaptionCounter() {
@@ -388,18 +388,18 @@ export const postEditorMethods = {
     this.dom.detailPlatformBadge.style.background = platform ? platform.color : "var(--primary)";
     this.dom.detailPlatformBadge.style.color = "#fff";
     this.dom.detailPlatformBadge.innerHTML = `
-      <img class="platform-favicon" src="${iconSrc}" alt="" onerror="this.style.display='none'" style="filter: brightness(1.2);">
+      <img class="platform-favicon" src="${iconSrc}" alt="" data-fallback="hide" style="filter: brightness(1.2);">
       <span>${platform ? platform.name : post.platformId}</span>
     `;
 
-    this.dom.detailTitle.textContent = post.title || "Untitled Post";
-    this.dom.detailDateTime.textContent = `${post.date} at ${post.time || "12:00"}`;
-    this.dom.detailPostType.textContent = `${postType ? postType.name : "Post"} (${post.aspectRatio || '9:16'})`;
+    this.dom.detailTitle.textContent = post.title || this.t("post_untitled");
+    this.dom.detailDateTime.textContent = `${post.date}, ${post.time || "12:00"}`;
+    this.dom.detailPostType.textContent = `${postType ? postType.name : this.t("post_generic")} (${post.aspectRatio || '9:16'})`;
     
-    const mediaCountStr = post.mediaCount > 1 ? ` (${post.mediaCount} slides)` : "";
-    this.dom.detailMediaFormat.textContent = `${post.mediaType === 'video' ? 'Video clip' : 'Photo'}${mediaCountStr}`;
+    const mediaCountStr = post.mediaCount > 1 ? ` (${this.tf("media_slides", { count: post.mediaCount })})` : "";
+    this.dom.detailMediaFormat.textContent = `${this.t(post.mediaType === "video" ? "media_video" : "media_photo")}${mediaCountStr}`;
     
-    this.dom.detailStatus.textContent = (post.status || "Scheduled").toUpperCase();
+    this.dom.detailStatus.textContent = this.t(`post_status_${post.status || "scheduled"}`).toUpperCase();
     this.dom.detailStatus.style.color = post.status === "published" ? "#10b981" : "#60a5fa";
 
     // Asset & File Share Section
@@ -423,20 +423,20 @@ export const postEditorMethods = {
           };
         }
         if (this.dom.btnDetailCopyShare) this.dom.btnDetailCopyShare.style.display = "inline-flex";
-        if (this.dom.detailShareStatusBadge) this.dom.detailShareStatusBadge.textContent = "Assets Linked";
+        if (this.dom.detailShareStatusBadge) this.dom.detailShareStatusBadge.textContent = this.t("post_share_linked");
       } else {
         this.dom.detailShareBox.style.display = "block";
         this.dom.detailShareBox.classList.add("empty");
-        this.dom.detailShareLinkText.textContent = "No external file share attached. (Click Edit Post to attach Drive, Dropbox, or Server share)";
+        this.dom.detailShareLinkText.textContent = this.t("post_share_none_hint");
         this.dom.detailShareLinkText.removeAttribute("href");
         this.dom.detailShareLinkText.onclick = null;
         if (this.dom.btnDetailOpenShare) this.dom.btnDetailOpenShare.style.display = "none";
         if (this.dom.btnDetailCopyShare) this.dom.btnDetailCopyShare.style.display = "none";
-        if (this.dom.detailShareStatusBadge) this.dom.detailShareStatusBadge.textContent = "No Share Attached";
+        if (this.dom.detailShareStatusBadge) this.dom.detailShareStatusBadge.textContent = this.t("post_share_none");
       }
     }
 
-    this.dom.detailDescBox.textContent = post.description || "No caption provided.";
+    this.dom.detailDescBox.textContent = post.description || this.t("post_no_caption");
 
     this.dom.detailDialog.showModal();
   },
@@ -464,7 +464,7 @@ export const postEditorMethods = {
     const duplicated = {
       ...post,
       id: `post-${Date.now()}`,
-      title: `${post.title} (Copy)`,
+      title: `${post.title} (${this.t("post_copy_suffix")})`,
       status: "draft"
     };
 

@@ -11,6 +11,15 @@ export const bindMethods = {
   },
   // Delegated handlers (theme, language, demo logins, share buttons) and the login form.
   bindGlobal() {
+    // Broken platform icons: hide them (and show the colour dot instead, where there is one).
+    // Replaces inline onerror="" handlers, which the Content-Security-Policy blocks.
+    document.addEventListener("error", (e) => {
+      const img = e.target;
+      if (!(img instanceof HTMLImageElement) || !img.dataset.fallback) return;
+      img.style.display = "none";
+      if (img.dataset.fallback === "dot" && img.nextElementSibling) img.nextElementSibling.style.display = "inline-block";
+    }, true);
+
     // =========================================================================
     // 1. GLOBAL DELEGATED EVENT HANDLERS (Theme, Language, Demo Accounts)
     // =========================================================================

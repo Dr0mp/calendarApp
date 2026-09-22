@@ -171,7 +171,7 @@ app.use(cookieParser());
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 20,
+  max: Number(process.env.LOGIN_RATE_LIMIT_MAX) || 20, // attempts per IP per window
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: "Too many login attempts. Please try again in 15 minutes." }

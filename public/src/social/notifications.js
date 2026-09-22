@@ -111,16 +111,16 @@ export const notificationMethods = {
     }
 
     // Prepare campaign marketing copy
-    const title = `🚀 Upcoming Session: ${evt.title}`;
+    const title = `🚀 ${this.tf("promo_upcoming", { title: evt.title })}`;
     const dateStr = evt.startDate;
     const timeStr = evt.hour || "18:00";
-    const priceStr = evt.price ? this.formatEventPrice(evt) : "Free Access";
-    const enrollStr = evt.enrollLink ? `\n\n🔗 Reserve your spot: ${evt.enrollLink}` : "";
-    const mentorStr = evt.creatorName ? `Hosted by ${evt.creatorName}` : "";
+    const priceStr = evt.price ? this.formatEventPrice(evt) : this.t("promo_free_access");
+    const enrollStr = evt.enrollLink ? `\n\n🔗 ${this.t("promo_reserve")}: ${evt.enrollLink}` : "";
+    const mentorStr = evt.creatorName ? this.tf("promo_hosted_by", { name: evt.creatorName }) : "";
     
-    let description = `${title}\n${mentorStr ? mentorStr + '\n' : ''}\n📅 Date: ${dateStr} at ${timeStr}\n🎟️ Admission: ${priceStr}${enrollStr}`;
+    let description = `${title}\n${mentorStr ? mentorStr + '\n' : ''}\n📅 ${this.t("promo_date")}: ${dateStr}, ${timeStr}\n🎟️ ${this.t("promo_admission")}: ${priceStr}${enrollStr}`;
     if (evt.description) {
-      description += `\n\nAbout this session:\n${evt.description}`;
+      description += `\n\n${this.t("promo_about")}:\n${evt.description}`;
     }
 
     this.openAddPostModal(dateStr, {

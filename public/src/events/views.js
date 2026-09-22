@@ -433,7 +433,7 @@ export const eventViewMethods = {
           <span class="timeline-day-name">${day.dayName}</span>
           <span class="timeline-day-number">${day.dayNumber}</span>
         </div>
-        ${isPast ? "" : `<button type="button" class="btn-timeline-add-day" title="Schedule event on ${day.dateStr}" data-date="${day.dateStr}">+</button>`}
+        ${isPast ? "" : `<button type="button" class="btn-timeline-add-day" title="${this.tf("event_schedule_on", { date: day.dateStr })}" data-date="${day.dateStr}">+</button>`}
       `;
 
       headerCell.querySelector(".btn-timeline-add-day")?.addEventListener("click", (e) => {
@@ -502,7 +502,7 @@ export const eventViewMethods = {
         }
         const hourStr = `${String(h).padStart(2, "0")}:00`;
         slot.innerHTML = (isPast || isPastHour) ? "" : `
-          <button type="button" class="btn-slot-schedule" title="Schedule at ${hourStr}">+ ${hourStr}</button>
+          <button type="button" class="btn-slot-schedule" title="${this.tf("event_schedule_at", { time: hourStr })}">+ ${hourStr}</button>
         `;
         slot.querySelector(".btn-slot-schedule")?.addEventListener("click", (e) => {
           e.stopPropagation();
@@ -681,7 +681,7 @@ export const eventViewMethods = {
       dayHeader.className = "day-header";
       dayHeader.innerHTML = `
         <span class="day-number" title="Click date to zoom into Day Timeline" style="cursor: pointer;">${dayNumber}</span>
-        ${isCurrentMonthCell && !isPast ? `<button class="btn-add-day" title="Schedule event for this date" data-date="${cellDateString}">+</button>` : ""}
+        ${isCurrentMonthCell && !isPast ? `<button class="btn-add-day" title="${this.t("event_schedule_this_date")}" data-date="${cellDateString}">+</button>` : ""}
         ${isPast && isCurrentMonthCell ? `<span class="past-schedule-message" aria-live="polite">${this.t("event_past_create_unavailable")}</span>` : ""}
       `;
       cell.appendChild(dayHeader);
@@ -722,7 +722,7 @@ export const eventViewMethods = {
 
         const durHours = event.durationHours ? `${event.durationHours}h` : "2h";
         const time = event.hour || "18:00";
-        eventPill.setAttribute("aria-label", `${event.title}, ${time}, ${durHours}. Open event details.`);
+        eventPill.setAttribute("aria-label", `${event.title}, ${time}, ${durHours}. ${this.t("event_open_details")}`);
 
         const tagsHtml = this.renderEventTags(event);
 

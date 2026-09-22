@@ -7,7 +7,9 @@ const sources = walk(root).filter(f => /\.(js|html)$/.test(f) && f !== i18nFile)
 const { TRANSLATIONS } = await import(pathToFileURL(i18nFile) + '?t=' + Date.now());
 const keys = Object.keys(TRANSLATIONS.ro);
 const used = new Set(keys.filter(k => new RegExp(`["'\`]${k}["'\`]`).test(sources)));
-const unused = keys.filter(k => !used.has(k));
+// Keys built at runtime: role_${role}, post_status_${status}, plural forms <key>_one (see tn()).
+const DYNAMIC = [/^role_/, /^post_status_/, /_one$/];
+const unused = keys.filter(k => !used.has(k) && !DYNAMIC.some(re => re.test(k)));
 let text = fs.readFileSync(i18nFile, 'utf8');
 let removed = 0;
 for (const k of unused) {

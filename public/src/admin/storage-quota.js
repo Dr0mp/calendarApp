@@ -96,13 +96,13 @@ export const storageQuotaMethods = {
       this.dom.storageEventsSize.textContent = this.formatBytes(stats.eventsBytes);
     }
     if (this.dom.storageEventsCount) {
-      this.dom.storageEventsCount.textContent = `(${this.events.length} ${this.t("yearly_events_count_plural")})`;
+      this.dom.storageEventsCount.textContent = `(${this.tn("count_events", this.events.length)})`;
     }
     if (this.dom.storagePostsSize) {
       this.dom.storagePostsSize.textContent = this.formatBytes(stats.postsBytes);
     }
     if (this.dom.storagePostsCount) {
-      this.dom.storagePostsCount.textContent = `(${this.posts.length} posts)`;
+      this.dom.storagePostsCount.textContent = `(${this.tn("count_posts", this.posts.length)})`;
     }
     if (this.dom.storageFreeSize) {
       this.dom.storageFreeSize.textContent = this.formatBytes(stats.freeBytes);
@@ -158,7 +158,7 @@ export const storageQuotaMethods = {
     });
 
     if (this.dom.cleanupPreviewEvents) {
-      this.dom.cleanupPreviewEvents.textContent = `Matches: ${pastEvents.length} past event(s) (Est. ~${this.formatBytes(estimatedBytes)} to free)`;
+      this.dom.cleanupPreviewEvents.textContent = this.tf("cleanup_preview_events", { count: pastEvents.length, size: this.formatBytes(estimatedBytes) });
     }
 
     // Strip images preview
@@ -169,14 +169,14 @@ export const storageQuotaMethods = {
     });
 
     if (this.dom.cleanupStripPreview) {
-      this.dom.cleanupStripPreview.textContent = `${pastEventsWithImage.length} past event(s) holding images (~${this.formatBytes(stripBytes)})`;
+      this.dom.cleanupStripPreview.textContent = this.tf("cleanup_preview_strip", { count: pastEventsWithImage.length, size: this.formatBytes(stripBytes) });
     }
 
     // Social media purge preview
     const todayStr = new Date().toISOString().slice(0, 10);
     const oldPublishedPosts = this.posts.filter(p => p.status === "published" && p.date < todayStr && p.mediaUrl);
     if (this.dom.cleanupSocialPreview) {
-      this.dom.cleanupSocialPreview.textContent = `${oldPublishedPosts.length} published post(s) with media`;
+      this.dom.cleanupSocialPreview.textContent = this.tf("cleanup_preview_social", { count: oldPublishedPosts.length });
     }
   },
   executeCleanupPastEvents() {
@@ -193,7 +193,7 @@ export const storageQuotaMethods = {
       return;
     }
 
-    const desc = filterVal === "all-past" ? "all past events prior to today" : `events older than ${days} days`;
+    const desc = filterVal === "all-past" ? this.t("cleanup_desc_all_past") : this.tf("cleanup_desc_older_than", { days });
     if (!confirm(this.t("confirm_cleanup_delete").replace("${count}", toDelete.length).replace("${desc}", desc))) {
       return;
     }

@@ -255,7 +255,7 @@ export const myEventsMethods = {
     if (this.dom.eventDetailRecurrentBadge) {
       if (event.isRecurrent) {
         this.dom.eventDetailRecurrentBadge.style.display = "inline-flex";
-        this.dom.eventDetailRecurrentBadge.textContent = `Recurrent (${event.recurrenceIndex || 1}/${event.recurrenceTotal || event.recurrenceMonths || 1})`;
+        this.dom.eventDetailRecurrentBadge.textContent = this.tf("event_recurrent_badge", { index: event.recurrenceIndex || 1, total: event.recurrenceTotal || event.recurrenceMonths || 1 });
       } else {
         this.dom.eventDetailRecurrentBadge.style.display = "none";
       }
@@ -264,9 +264,9 @@ export const myEventsMethods = {
     this.dom.eventDetailCreatorPill.textContent = `${this.t("event_scheduled_by_label")}: ${event.creatorName || event.creatorUsername}`;
     this.dom.eventDetailHeading.textContent = event.title;
 
-    const dateRangeStr = isMultiDay ? `${event.startDate} to ${event.endDate}` : `${event.startDate}`;
-    const durStr = `${event.durationHours || 2} ${event.durationHours === 1 ? 'hr' : 'hrs'}`;
-    this.dom.eventDetailDatetime.textContent = `${dateRangeStr} at ${event.hour || '18:00'} (${durStr})`;
+    const dateRangeStr = isMultiDay ? `${event.startDate} – ${event.endDate}` : `${event.startDate}`;
+    const durStr = `${event.durationHours || 2}h`;
+    this.dom.eventDetailDatetime.textContent = `${dateRangeStr}, ${event.hour || '18:00'} (${durStr})`;
 
     if (this.dom.eventDetailPriceItem) {
       this.dom.eventDetailPriceItem.style.display = (isLocked || isRoomOnly) ? "none" : "flex";
@@ -310,7 +310,7 @@ export const myEventsMethods = {
       this.dom.eventDetailDesc.style.fontStyle = "italic";
       this.dom.eventDetailDesc.style.opacity = "0.75";
     } else {
-      this.dom.eventDetailDesc.textContent = event.description || "No notes provided for this event.";
+      this.dom.eventDetailDesc.textContent = event.description || this.t("event_no_notes");
       this.dom.eventDetailDesc.style.fontStyle = "normal";
       this.dom.eventDetailDesc.style.opacity = "1";
     }
@@ -343,7 +343,7 @@ export const myEventsMethods = {
       this.dom.eventDetailEditBtn.style.display = "none";
       this.dom.eventDetailDeleteBtn.style.display = "none";
       this.dom.eventPermissionNotice.style.display = "flex";
-      this.dom.eventPermissionNotice.innerHTML = `<span>View only: created by <strong>${event.creatorName || event.creatorUsername}</strong>. You can only modify events you created.</span>`;
+      this.dom.eventPermissionNotice.innerHTML = `<span>${this.tf("event_view_only_by", { name: `<strong>${this.escapeHtml(event.creatorName || event.creatorUsername)}</strong>` })}</span>`;
     }
 
     this.dom.eventDetailDialog.showModal();

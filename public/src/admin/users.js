@@ -42,7 +42,7 @@ export const adminUserMethods = {
     this.dom.editUserUsername.value = user.username || "";
     this.dom.editUserUsername.disabled = isSystemAdmin;
     this.dom.editUserPassword.value = "";
-    this.dom.editUserPassword.placeholder = isSystemAdmin ? "Enter new password (or leave empty)" : "Leave empty to keep password";
+    this.dom.editUserPassword.placeholder = this.t(isSystemAdmin ? "edit_user_pass_placeholder_root" : "edit_user_pass_placeholder");
     this.dom.editUserRole.value = user.role || "user";
     this.dom.editUserRole.disabled = isSystemAdmin;
 

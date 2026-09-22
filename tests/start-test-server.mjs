@@ -8,5 +8,7 @@ Object.assign(process.env, {
   ADMIN_INITIAL_PASSWORD: 'Admin-Test-Password-1',
   DEMO_PASSWORD: 'demo123',
   NODE_ENV: 'test',
+  // Playwright restarts workers after failures, which re-logs in; don't let that trip the limiter.
+  LOGIN_RATE_LIMIT_MAX: '1000',
 });
 await import(path.resolve('server.js'));

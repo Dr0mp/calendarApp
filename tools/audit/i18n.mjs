@@ -7,7 +7,9 @@ console.log('ro',ro.length,'en',en.length);
 console.log('in ro not en:',ro.filter(k=>!en.includes(k)).join(' '));
 console.log('in en not ro:',en.filter(k=>!ro.includes(k)).join(' '));
 const src=js+html;
-const unused=ro.filter(k=>!new RegExp('[\'"`.]'+k+'\\b').test(src)&&!src.includes(k));
+// Keys built at runtime: role_${role}, post_status_${status}, plural forms <key>_one (see tn()).
+const DYNAMIC=[/^role_/,/^post_status_/,/_one$/];
+const unused=ro.filter(k=>!DYNAMIC.some(re=>re.test(k))&&!new RegExp('[\'"`.]'+k+'\\b').test(src)&&!src.includes(k));
 console.log('UNUSED KEYS ('+unused.length+'):',unused.join(' '));
 // dynamic prefixes
 console.log('dynamic t( calls:',(js.match(/t\(\s*`[^`]*\$\{[^`]*`/g)||[]).slice(0,20).join(' | '));
