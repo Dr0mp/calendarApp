@@ -99,6 +99,7 @@
   --text-2xl: 1.5rem;         /* 24px - Main Page Headers */
   --text-xl: 1.25rem;         /* 20px - Section / Modal Titles */
   --text-lg: 1.125rem;        /* 18px - Card Titles */
+  --text-md: 1rem;
   --text-base: 0.9375rem;     /* 15px - Body text, descriptions, inputs */
   --text-sm: 0.875rem;        /* 14px - Form Labels, Primary Buttons */
   --text-xs: 0.8125rem;       /* 13px - Secondary text, Subtitles, Help text */
@@ -120,7 +121,11 @@
   --radius-md: 10px;
   --radius-lg: 14px;
   --radius-xl: 18px;
-  --radius-pill: 9999px;      /* Pill shape reserved for tags, chips, badges */
+  --radius-pill: 9999px;
+  /* Motion */
+  --duration-fast: 0.15s;
+  --duration-base: 0.2s;
+  --duration-slow: 0.3s;      /* Pill shape reserved for tags, chips, badges */
   
   --shadow-sm: 0 2px 6px rgb(var(--black) / 0.3);
   --shadow-md: 0 6px 18px rgb(var(--black) / 0.4);
@@ -205,7 +210,7 @@ body {
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-btn);
   cursor: pointer;
-  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+  transition: background-color var(--duration-fast) ease, color var(--duration-fast) ease, border-color var(--duration-fast) ease;
 }
 
 .theme-toggle:hover,
@@ -288,7 +293,7 @@ body {
 
 .brand-info h1,
 .header-main-title {
-  font-size: 1.65rem;
+  font-size: var(--text-display);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -297,7 +302,7 @@ body {
 }
 
 .brand-info p {
-  font-size: 0.8rem;
+  font-size: var(--text-xs);
   color: var(--text-secondary);
 }
 
@@ -335,8 +340,8 @@ body {
   bottom: 0;
   background-color: var(--bg-input);
   border: 1px solid var(--border-subtle);
-  transition: .3s;
-  border-radius: 20px;
+  transition: var(--duration-slow);
+  border-radius: var(--radius-xl);
 }
 
 .slider:before {
@@ -347,7 +352,7 @@ body {
   left: 2px;
   bottom: 2px;
   background-color: var(--text-muted);
-  transition: .3s;
+  transition: var(--duration-slow);
   border-radius: 50%;
 }
 
@@ -376,7 +381,7 @@ input:checked + .slider:before {
   line-height: 1.2;
   border-radius: var(--radius-btn);
   cursor: pointer;
-  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all var(--duration-fast) cubic-bezier(0.16, 1, 0.3, 1);
   border: 1px solid transparent;
   white-space: nowrap;
   user-select: none;
@@ -495,7 +500,7 @@ input:checked + .slider:before {
 .platform-favicon {
   width: 16px;
   height: 16px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   object-fit: contain;
   vertical-align: middle;
   flex-shrink: 0;
@@ -505,7 +510,7 @@ input:checked + .slider:before {
 .platform-favicon-sm {
   width: 13px;
   height: 13px;
-  border-radius: 3px;
+  border-radius: var(--radius-xs);
   object-fit: contain;
   vertical-align: middle;
   flex-shrink: 0;
@@ -514,7 +519,7 @@ input:checked + .slider:before {
 .platform-favicon-lg {
   width: 22px;
   height: 22px;
-  border-radius: 5px;
+  border-radius: var(--radius-sm);
   object-fit: contain;
   vertical-align: middle;
   flex-shrink: 0;
@@ -540,7 +545,7 @@ input:checked + .slider:before {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  font-size: 0.85rem;
+  font-size: var(--text-sm);
   color: var(--text-secondary);
 }
 
@@ -577,7 +582,7 @@ input:checked + .slider:before {
   display: flex;
   flex-direction: column;
   position: relative;
-  transition: background 0.18s ease, border-color 0.18s ease;
+  transition: background var(--duration-fast) ease, border-color var(--duration-fast) ease;
   min-height: 135px;
 }
 
@@ -612,12 +617,12 @@ input:checked + .slider:before {
   border: 1px solid var(--border-strong);
   background: var(--bg-card);
   color: var(--text-primary);
-  font-size: 14px;
+  font-size: var(--text-sm);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.15s ease, transform 0.1s ease;
+  transition: opacity var(--duration-fast) ease, transform var(--duration-fast) ease;
 }
 
 .calendar-day-cell:hover .btn-add-day {
@@ -632,14 +637,14 @@ input:checked + .slider:before {
   top: 8px;
   max-width: 112px;
   padding: 4px 6px;
-  border-radius: 5px;
+  border-radius: var(--radius-sm);
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   color: var(--text-secondary);
-  font-size: 0.64rem;
+  font-size: var(--text-3xs);
   line-height: 1.25;
   text-align: right;
-  transition: opacity 0.15s ease;
+  transition: opacity var(--duration-fast) ease;
 }
 
 .calendar-day-cell.has-past-schedule-message:hover .past-schedule-message { opacity: 1; }
@@ -669,7 +674,7 @@ input:checked + .slider:before {
   border-radius: var(--radius-sm);
   padding: 5px 6px;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
   display: flex;
   flex-direction: column;
   gap: 3px;
@@ -694,20 +699,20 @@ input:checked + .slider:before {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 0.68rem;
+  font-size: var(--text-3xs);
   font-weight: 700;
   color: var(--text-primary);
   text-transform: capitalize;
 }
 
 .post-card-time {
-  font-size: 0.68rem;
+  font-size: var(--text-3xs);
   color: var(--text-muted);
   font-family: var(--font-mono);
 }
 
 .post-card-title {
-  font-size: 0.75rem;
+  font-size: var(--text-2xs);
   font-weight: 600;
   color: var(--text-primary);
   white-space: nowrap;
@@ -720,7 +725,7 @@ input:checked + .slider:before {
   align-items: center;
   justify-content: space-between;
   gap: 4px;
-  font-size: 0.68rem;
+  font-size: var(--text-3xs);
 }
 
 .media-tag {
@@ -734,10 +739,10 @@ input:checked + .slider:before {
 .aspect-tag {
   background: rgb(var(--white) / 0.08);
   padding: 1px 4px;
-  border-radius: 3px;
+  border-radius: var(--radius-xs);
   color: var(--text-muted);
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: var(--text-3xs);
 }
 
 /* Feed / List View (Show only what we have view) */
@@ -764,7 +769,7 @@ input:checked + .slider:before {
 }
 
 .feed-day-title {
-  font-size: 0.95rem;
+  font-size: var(--text-base);
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -789,7 +794,7 @@ input:checked + .slider:before {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.15s ease, border-color 0.15s ease;
+  transition: transform var(--duration-fast) ease, border-color var(--duration-fast) ease;
   cursor: pointer;
 }
 
@@ -823,8 +828,8 @@ input:checked + .slider:before {
   backdrop-filter: blur(6px);
   color: rgb(var(--white));
   padding: 3px 8px;
-  border-radius: 999px;
-  font-size: 0.72rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-2xs);
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -840,8 +845,8 @@ input:checked + .slider:before {
   color: rgb(var(--sky-400));
   border: 1px solid rgb(var(--sky-400) / 0.3);
   padding: 3px 8px;
-  border-radius: 999px;
-  font-size: 0.72rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-2xs);
   font-weight: 700;
   font-family: var(--font-mono);
 }
@@ -864,20 +869,20 @@ input:checked + .slider:before {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.75rem;
+  font-size: var(--text-2xs);
   font-weight: 700;
   text-transform: capitalize;
 }
 
 .feed-post-title {
-  font-size: 0.95rem;
+  font-size: var(--text-base);
   font-weight: 700;
   color: var(--text-primary);
   line-height: 1.3;
 }
 
 .feed-post-desc {
-  font-size: 0.8rem;
+  font-size: var(--text-xs);
   color: var(--text-secondary);
   line-height: 1.45;
   display: -webkit-box;
@@ -893,7 +898,7 @@ input:checked + .slider:before {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.75rem;
+  font-size: var(--text-2xs);
   color: var(--text-muted);
 }
 
@@ -917,12 +922,12 @@ input:checked + .slider:before {
 }
 
 .empty-state h3 {
-  font-size: 1.1rem;
+  font-size: var(--text-lg);
   font-weight: 700;
 }
 
 .empty-state p {
-  font-size: 0.85rem;
+  font-size: var(--text-sm);
   color: var(--text-secondary);
   max-width: 420px;
 }
@@ -973,7 +978,7 @@ dialog::backdrop {
   background: transparent;
   border: none;
   color: var(--text-muted);
-  font-size: 20px;
+  font-size: var(--text-xl);
   cursor: pointer;
   width: 32px;
   height: 32px;
@@ -981,7 +986,7 @@ dialog::backdrop {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
 }
 
 .dialog-close-btn:hover {
@@ -1046,7 +1051,7 @@ dialog::backdrop {
   border: 1px solid rgb(var(--blue-500) / 0.25);
   border-radius: var(--radius-md);
   overflow: hidden;
-  transition: all 0.2s ease;
+  transition: all var(--duration-base) ease;
 }
 
 .spec-helper-details[open] {
@@ -1056,7 +1061,7 @@ dialog::backdrop {
 
 .spec-helper-summary {
   padding: 10px 14px;
-  font-size: 0.82rem;
+  font-size: var(--text-xs);
   font-weight: 700;
   color: rgb(var(--blue-400));
   cursor: pointer;
@@ -1065,7 +1070,7 @@ dialog::backdrop {
   justify-content: space-between;
   user-select: none;
   background: rgb(var(--blue-500) / 0.08);
-  transition: background 0.15s ease;
+  transition: background var(--duration-fast) ease;
 }
 
 .spec-helper-summary:hover {
@@ -1073,13 +1078,13 @@ dialog::backdrop {
 }
 
 .spec-summary-badge {
-  font-size: 0.72rem;
+  font-size: var(--text-2xs);
   font-family: var(--font-mono);
   background: rgb(var(--blue-500) / 0.2);
   border: 1px solid rgb(var(--blue-500) / 0.35);
   color: rgb(var(--blue-300));
   padding: 2px 8px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-weight: 600;
 }
 
@@ -1093,7 +1098,7 @@ dialog::backdrop {
 }
 
 .spec-helper-title {
-  font-size: 0.78rem;
+  font-size: var(--text-2xs);
   font-weight: 700;
   color: rgb(var(--blue-400));
   display: flex;
@@ -1107,7 +1112,7 @@ dialog::backdrop {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
-  font-size: 0.78rem;
+  font-size: var(--text-2xs);
 }
 
 .spec-helper-item strong {
@@ -1118,11 +1123,11 @@ dialog::backdrop {
 
 .spec-helper-item span {
   color: var(--text-muted);
-  font-size: 0.72rem;
+  font-size: var(--text-2xs);
 }
 
 .spec-safe-zone {
-  font-size: 0.75rem;
+  font-size: var(--text-2xs);
   color: rgb(var(--slate-400));
   border-top: 1px dashed rgb(var(--blue-500) / 0.2);
   padding-top: 6px;
@@ -1137,7 +1142,7 @@ dialog::backdrop {
   padding: 18px;
   text-align: center;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1181,7 +1186,7 @@ dialog::backdrop {
   border-radius: var(--radius-md);
   padding: 14px;
   margin-bottom: 14px;
-  transition: all 0.2s ease;
+  transition: all var(--duration-base) ease;
 }
 
 .cp-platform-card.is-disabled {
@@ -1211,7 +1216,7 @@ dialog::backdrop {
   padding: 4px 10px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-subtle);
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
 }
 
 .cp-platform-toggle-label:hover {
@@ -1219,7 +1224,7 @@ dialog::backdrop {
 }
 
 .cp-platform-status-text {
-  font-size: 0.75rem;
+  font-size: var(--text-2xs);
   font-weight: 700;
   color: var(--text-secondary);
   min-width: 48px;
@@ -1230,7 +1235,7 @@ dialog::backdrop {
 }
 
 .cp-platform-title {
-  font-size: 1rem;
+  font-size: var(--text-md);
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -1253,7 +1258,7 @@ dialog::backdrop {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   color: var(--text-primary);
-  font-size: 0.78rem;
+  font-size: var(--text-2xs);
   padding: 4px 8px;
   border-radius: var(--radius-sm);
   width: 100%;
@@ -1267,7 +1272,7 @@ dialog::backdrop {
 .standards-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.82rem;
+  font-size: var(--text-xs);
   text-align: left;
 }
 
@@ -1275,7 +1280,7 @@ dialog::backdrop {
   background: var(--bg-card);
   padding: 12px 14px;
   font-weight: 700;
-  font-size: 0.76rem;
+  font-size: var(--text-2xs);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--text-secondary);
@@ -1303,7 +1308,7 @@ dialog::backdrop {
   background: rgb(var(--blue-500) / 0.15);
   color: rgb(var(--blue-400));
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
 }
 
 /* Post Detail Modal Elements */
@@ -1343,14 +1348,14 @@ dialog::backdrop {
   align-items: center;
   gap: 8px;
   padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 0.8rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
   font-weight: 700;
   width: fit-content;
 }
 
 .detail-title {
-  font-size: 1.2rem;
+  font-size: var(--text-xl);
   font-weight: 700;
   line-height: 1.3;
 }
@@ -1360,7 +1365,7 @@ dialog::backdrop {
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   padding: 12px;
-  font-size: 0.85rem;
+  font-size: var(--text-sm);
   line-height: 1.6;
   color: var(--text-primary);
   white-space: pre-wrap;
@@ -1370,7 +1375,7 @@ dialog::backdrop {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
-  font-size: 0.8rem;
+  font-size: var(--text-xs);
 }
 
 .detail-meta-item {
@@ -1382,12 +1387,12 @@ dialog::backdrop {
 
 .detail-meta-item span {
   display: block;
-  font-size: 0.7rem;
+  font-size: var(--text-3xs);
   color: var(--text-muted);
 }
 
 .detail-meta-item strong {
-  font-size: 0.82rem;
+  font-size: var(--text-xs);
   color: var(--text-primary);
 }
 
@@ -1419,7 +1424,7 @@ dialog::backdrop {
 }
 
 .nav-brand-title {
-  font-size: 0.95rem;
+  font-size: var(--text-base);
   font-weight: 800;
   color: var(--text-primary);
   letter-spacing: -0.01em;
@@ -1448,12 +1453,12 @@ dialog::backdrop {
   border: 1px solid rgb(var(--white) / 0.08);
   height: 36px;
   color: var(--text-secondary);
-  font-size: 0.84rem;
+  font-size: var(--text-xs);
   font-weight: 600;
   padding: 0 14px;
   border-radius: var(--radius-btn);
   cursor: pointer;
-  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--duration-fast) cubic-bezier(0.4, 0, 0.2, 1);
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -1491,10 +1496,10 @@ dialog::backdrop {
   height: 36px;
   padding: 0 12px;
   border-radius: var(--radius-btn);
-  font-size: 0.78rem;
+  font-size: var(--text-2xs);
   font-weight: 600;
   color: var(--text-primary);
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
 }
 
 .nav-right {
@@ -1516,7 +1521,7 @@ dialog::backdrop {
   cursor: pointer;
   position: relative;
   padding: 0;
-  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--duration-fast) cubic-bezier(0.4, 0, 0.2, 1);
   flex-shrink: 0;
 }
 
@@ -1549,11 +1554,11 @@ dialog::backdrop {
 #events-calendar-app #open-add-event-btn { display: none !important; }
 
 .user-role-badge {
-  font-size: 0.65rem;
+  font-size: var(--text-3xs);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   background: rgb(var(--blue-500) / 0.2);
   color: rgb(var(--blue-400));
   font-weight: 700;
@@ -1589,13 +1594,13 @@ dialog::backdrop {
   background: transparent;
   border: none;
   color: var(--text-secondary);
-  font-size: 0.74rem;
+  font-size: var(--text-2xs);
   font-weight: 700;
   padding: 4px 8px;
   border-radius: var(--radius-sm);
   cursor: pointer;
   letter-spacing: 0.04em;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
   line-height: 1.2;
 }
 
@@ -1612,7 +1617,7 @@ dialog::backdrop {
 
 .lang-divider {
   color: rgb(var(--white) / 0.2);
-  font-size: 0.7rem;
+  font-size: var(--text-3xs);
   margin: 0 1px;
 }
 
@@ -1626,7 +1631,7 @@ dialog::backdrop {
   border: 1px solid rgb(var(--amber-500) / 0.3);
   border-radius: var(--radius-sm);
   padding: 8px 12px;
-  font-size: 0.75rem;
+  font-size: var(--text-2xs);
   color: rgb(var(--amber-400));
   display: flex;
   align-items: center;
@@ -1654,7 +1659,7 @@ dialog::backdrop {
   position: absolute;
   bottom: 4px;
   right: 6px;
-  font-size: 0.58rem;
+  font-size: var(--text-3xs);
   font-weight: 800;
   color: rgb(var(--white) / 0.08);
   letter-spacing: 0.05em;
@@ -1685,13 +1690,13 @@ dialog::backdrop {
   padding: 0;
   border: 0;
   color: var(--text-secondary);
-  font-size: 0.8rem;
+  font-size: var(--text-xs);
 }
 
 .event-timing-mode legend {
   padding: 0;
   margin-right: 10px;
-  font-weight: 650;
+  font-weight: 600;
   color: var(--text-primary);
 }
 
@@ -1700,13 +1705,13 @@ dialog::backdrop {
 
 .hour-slot-chip {
   padding: 5px 6px;
-  border-radius: 6px;
-  font-size: 0.72rem;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-2xs);
   font-weight: 700;
   font-family: var(--font-mono);
   text-align: center;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -1758,7 +1763,7 @@ dialog::backdrop {
 }
 
 .hour-slot-chip .slot-status {
-  font-size: 0.58rem;
+  font-size: var(--text-3xs);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -1769,14 +1774,14 @@ dialog::backdrop {
   align-items: center;
   gap: 6px;
   padding: 6px 14px;
-  border-radius: 999px;
-  font-size: 0.78rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-2xs);
   font-weight: 700;
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   color: var(--text-secondary);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
 }
 
 .user-filter-pill:hover {
@@ -1792,9 +1797,9 @@ dialog::backdrop {
 }
 
 .user-filter-count {
-  font-size: 0.68rem;
+  font-size: var(--text-3xs);
   padding: 1px 6px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: rgb(var(--white) / 0.15);
 }
 
@@ -1811,13 +1816,13 @@ dialog::backdrop {
   align-items: flex-start;
   gap: 12px;
   color: rgb(var(--amber-400));
-  font-size: 0.82rem;
+  font-size: var(--text-xs);
   line-height: 1.45;
   box-shadow: 0 2px 10px rgb(var(--amber-500) / 0.1);
 }
 
 .event-date-warning-box .warning-icon {
-  font-size: 1.25rem;
+  font-size: var(--text-xl);
   line-height: 1;
   flex-shrink: 0;
 }
@@ -1842,10 +1847,10 @@ dialog::backdrop {
   gap: 8px;
   padding: 8px 12px;
   border-radius: var(--radius-sm);
-  font-size: 0.78rem;
+  font-size: var(--text-2xs);
   font-weight: 600;
   margin-top: 6px;
-  transition: all 0.2s ease;
+  transition: all var(--duration-base) ease;
 }
 
 .fb-dimension-status.valid {
@@ -1884,10 +1889,10 @@ dialog::backdrop {
   right: 8px;
   background: rgb(var(--black) / 0.75);
   color: rgb(var(--white));
-  font-size: 0.7rem;
+  font-size: var(--text-3xs);
   font-family: var(--font-mono);
   padding: 2px 8px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   backdrop-filter: blur(4px);
   border: 1px solid rgb(var(--white) / 0.2);
 }
@@ -1916,10 +1921,10 @@ dialog::backdrop {
   right: 10px;
   background: rgb(var(--black) / 0.75);
   color: rgb(var(--sky-400));
-  font-size: 0.7rem;
+  font-size: var(--text-3xs);
   font-weight: 700;
   padding: 3px 8px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   backdrop-filter: blur(4px);
   border: 1px solid rgb(var(--sky-400) / 0.4);
 }
@@ -1979,14 +1984,14 @@ dialog::backdrop {
 }
 
 .my-events-header h2 {
-  font-size: 1.4rem;
+  font-size: var(--text-2xl);
   font-weight: 800;
   margin: 0;
 }
 
 .my-events-header p {
   color: var(--text-secondary);
-  font-size: 0.88rem;
+  font-size: var(--text-sm);
   margin: 4px 0 0 0;
 }
 
@@ -2015,14 +2020,14 @@ dialog::backdrop {
 
 .btn-filter-tab {
   padding: 7px 16px;
-  font-size: 0.8rem;
+  font-size: var(--text-xs);
   font-weight: 600;
   color: var(--text-secondary);
   background: transparent;
   border: 1px solid transparent;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
 }
 
 .btn-filter-tab:hover {
@@ -2062,7 +2067,7 @@ dialog::backdrop {
   flex-direction: column;
   justify-content: space-between;
   gap: 12px;
-  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: transform var(--duration-fast) ease, border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
   position: relative;
 }
 
@@ -2080,10 +2085,10 @@ dialog::backdrop {
 }
 
 .my-event-card-type {
-  font-size: 0.7rem;
+  font-size: var(--text-3xs);
   font-weight: 700;
   padding: 3px 8px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   letter-spacing: 0.02em;
 }
 
@@ -2106,7 +2111,7 @@ dialog::backdrop {
 }
 
 .my-event-card-date {
-  font-size: 0.78rem;
+  font-size: var(--text-2xs);
   color: var(--text-muted);
   font-weight: 600;
   display: flex;
@@ -2115,7 +2120,7 @@ dialog::backdrop {
 }
 
 .my-event-card-title {
-  font-size: 1.05rem;
+  font-size: var(--text-md);
   font-weight: 700;
   color: var(--text-primary);
   margin: 6px 0 0 0;
@@ -2126,7 +2131,7 @@ dialog::backdrop {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  font-size: 0.8rem;
+  font-size: var(--text-xs);
   color: var(--text-secondary);
 }
 
@@ -2137,7 +2142,7 @@ dialog::backdrop {
 }
 
 .my-event-card-desc {
-  font-size: 0.8rem;
+  font-size: var(--text-xs);
   color: var(--text-muted);
   line-height: 1.4;
   display: -webkit-box;
@@ -2177,7 +2182,7 @@ dialog::backdrop {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: var(--text-2xl);
   color: var(--text-muted);
 }
 
@@ -2211,11 +2216,11 @@ dialog::backdrop {
 }
 
 .badge-subtle {
-  font-size: 0.72rem;
+  font-size: var(--text-2xs);
   color: var(--text-muted);
   background: var(--bg-input);
   padding: 3px 8px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
 }
 
 /* ========================================================================= */
@@ -2225,7 +2230,7 @@ dialog::backdrop {
   background: rgb(var(--red-500) / 0.12);
   border: 1px solid rgb(var(--red-500) / 0.35);
   color: rgb(var(--red-300));
-  font-size: 0.78rem;
+  font-size: var(--text-2xs);
   padding: 8px 12px;
   border-radius: var(--radius-sm);
   margin-top: 8px;
@@ -2242,15 +2247,15 @@ dialog::backdrop {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   color: var(--text-primary);
-  font-size: 0.76rem;
+  font-size: var(--text-2xs);
   font-weight: 600;
   padding: 5px 12px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
 }
 
 .btn-demo-chip:hover {
@@ -2262,7 +2267,7 @@ dialog::backdrop {
 
 .direct-demo-chip {
   padding: 7px 14px;
-  font-size: 0.8rem;
+  font-size: var(--text-xs);
   font-weight: 600;
   background: rgb(var(--sky-400) / 0.08);
   border-color: rgb(var(--sky-400) / 0.3);
@@ -2304,7 +2309,7 @@ dialog::backdrop {
 }
 
 .direct-login-title {
-  font-size: 1.75rem;
+  font-size: var(--text-display);
   font-weight: 800;
   color: var(--text-primary);
   margin-top: 10px;
@@ -2314,13 +2319,13 @@ dialog::backdrop {
 
 .direct-login-subtitle {
   color: var(--text-secondary);
-  font-size: 0.86rem;
+  font-size: var(--text-sm);
   line-height: 1.45;
 }
 
 .form-input-lg {
   padding: 11px 14px;
-  font-size: 0.92rem;
+  font-size: var(--text-base);
 }
 
 /* Entry Type Segmented Switcher (Matching Filter Tabs Design System) */
@@ -2331,14 +2336,14 @@ dialog::backdrop {
   justify-content: center;
   gap: 8px;
   padding: 7px 16px;
-  font-size: 0.8rem;
+  font-size: var(--text-xs);
   font-weight: 600;
   color: var(--text-secondary);
   background: transparent;
   border: 1px solid transparent;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
 }
 
 .btn-entry-type:hover {
@@ -2384,7 +2389,7 @@ dialog::backdrop {
   min-width: 0;
 }
 .room-booking-row .room-booking-field label {
-  font-size: 0.72rem;
+  font-size: var(--text-2xs);
   color: var(--text-muted);
   font-weight: 600;
   margin: 0;
@@ -2394,7 +2399,7 @@ dialog::backdrop {
 }
 .room-booking-row .form-select,
 .room-booking-row .form-input {
-  font-size: 0.82rem;
+  font-size: var(--text-xs);
   padding: 6px 10px;
   min-width: 0;
   max-width: 100%;
@@ -2438,19 +2443,19 @@ dialog::backdrop {
 }
 
 .smart-suggestion-icon {
-  font-size: 1.25rem;
+  font-size: var(--text-xl);
   line-height: 1;
   flex-shrink: 0;
 }
 
 .smart-suggestion-header strong {
-  font-size: 0.85rem;
+  font-size: var(--text-sm);
   color: rgb(var(--violet-300));
   display: block;
 }
 
 .smart-conflict-details {
-  font-size: 0.78rem;
+  font-size: var(--text-2xs);
   color: rgb(var(--amber-200));
   line-height: 1.4;
   margin-top: 2px;
@@ -2471,7 +2476,7 @@ dialog::backdrop {
   border: 1px solid rgb(var(--violet-500) / 0.25);
   border-radius: var(--radius-sm);
   padding: 7px 11px;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
 }
 
 .suggestion-card:hover {
@@ -2484,17 +2489,17 @@ dialog::backdrop {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.78rem;
+  font-size: var(--text-2xs);
   color: var(--text-primary);
   font-weight: 600;
 }
 
 .suggestion-label {
-  font-size: 0.7rem;
+  font-size: var(--text-3xs);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   padding: 1px 6px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   font-weight: 700;
 }
 
@@ -2517,13 +2522,13 @@ dialog::backdrop {
   background: rgb(var(--violet-500));
   border: 1px solid rgb(var(--violet-600));
   color: rgb(var(--white));
-  font-size: 0.72rem;
+  font-size: var(--text-2xs);
   font-weight: 700;
   padding: 4px 10px;
-  border-radius: 5px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -2540,7 +2545,7 @@ dialog::backdrop {
   color: rgb(var(--emerald-400));
   border-radius: var(--radius-md);
   padding: 10px 14px;
-  font-size: 0.8rem;
+  font-size: var(--text-xs);
   font-weight: 600;
   margin-bottom: 16px;
   display: flex;
@@ -2569,12 +2574,12 @@ dialog::backdrop {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.78rem;
+  font-size: var(--text-2xs);
   font-weight: 600;
   color: var(--text-muted);
   white-space: nowrap;
   user-select: none;
-  transition: all 0.2s ease;
+  transition: all var(--duration-base) ease;
 }
 
 .wizard-step-badge {
@@ -2584,17 +2589,17 @@ dialog::backdrop {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.72rem;
+  font-size: var(--text-2xs);
   font-weight: 700;
   background: var(--bg-card);
   border: 1.5px solid var(--border-subtle);
   color: var(--text-muted);
   flex-shrink: 0;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all var(--duration-base) cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .wizard-step-label {
-  transition: color 0.2s ease;
+  transition: color var(--duration-base) ease;
 }
 
 /* Step States */
@@ -2629,7 +2634,7 @@ dialog::backdrop {
   height: 2px;
   background: var(--border-subtle);
   border-radius: 1px;
-  transition: background 0.2s ease;
+  transition: background var(--duration-base) ease;
 }
 .wizard-step-connector.is-completed {
   background: rgb(var(--emerald-500) / 0.6);
@@ -2685,10 +2690,10 @@ dialog::backdrop {
 .notifications-badge {
   background: rgb(var(--red-500));
   color: rgb(var(--white));
-  font-size: 0.68rem;
+  font-size: var(--text-3xs);
   font-weight: 800;
   padding: 2px 7px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   box-shadow: 0 2px 6px rgb(var(--red-500) / 0.4);
 }
 
@@ -2713,7 +2718,7 @@ dialog::backdrop {
 }
 
 .event-notification-card {
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
 }
 
 .promo-status-badge.pending {
@@ -2728,16 +2733,16 @@ dialog::backdrop {
   background: rgb(var(--blue-500));
   border: none;
   color: rgb(var(--white));
-  font-size: 0.76rem;
+  font-size: var(--text-2xs);
   font-weight: 700;
   padding: 7px 14px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 6px;
   white-space: nowrap;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
 }
 
 .btn-promote-event:hover {
@@ -2771,7 +2776,7 @@ dialog::backdrop {
 
 #social-notifications-title {
   margin: 0;
-  font-size: 1.125rem;
+  font-size: var(--text-lg);
   font-weight: 600;
   line-height: 1.3;
 }
@@ -2779,7 +2784,7 @@ dialog::backdrop {
 #social-notifications-modal .dialog-header p {
   margin: 3px 0 0;
   color: var(--text-secondary);
-  font-size: 0.8125rem;
+  font-size: var(--text-xs);
   line-height: 1.45;
 }
 
@@ -2803,7 +2808,7 @@ dialog::backdrop {
 #social-notifications-modal .notif-card-title-row,
 #social-notifications-modal .notif-meta { display: flex; align-items: center; gap: 8px; }
 #social-notifications-modal .notif-card-title-row { justify-content: space-between; }
-#social-notifications-modal .notif-meta { margin-top: 5px; color: var(--text-secondary); font-size: 0.75rem; flex-wrap: wrap; }
+#social-notifications-modal .notif-meta { margin-top: 5px; color: var(--text-secondary); font-size: var(--text-2xs); flex-wrap: wrap; }
 #social-notifications-modal .notif-card-action { flex: 0 0 auto; }
 
 .notifications-filter-bar {
@@ -2818,14 +2823,14 @@ dialog::backdrop {
 
 .notif-filter-pill {
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
   flex: 1 1 auto;
   padding: 6px 9px;
   border: 0;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   background: transparent;
   color: var(--text-secondary);
-  font-size: 0.8125rem;
+  font-size: var(--text-xs);
   font-weight: 500;
   box-shadow: none;
 }
@@ -2888,7 +2893,7 @@ dialog::backdrop {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 0.9375rem;
+  font-size: var(--text-base);
   font-weight: 600;
   line-height: 1.35;
 }
@@ -2899,7 +2904,7 @@ dialog::backdrop {
   flex-wrap: wrap;
   margin-top: 4px;
   color: var(--text-secondary);
-  font-size: 0.8125rem;
+  font-size: var(--text-xs);
   line-height: 1.45;
 }
 
@@ -2916,7 +2921,7 @@ dialog::backdrop {
 .notif-card-action .btn {
   min-height: 34px;
   padding: 6px 10px;
-  font-size: 0.8125rem;
+  font-size: var(--text-xs);
   font-weight: 600;
 }
 
@@ -2924,7 +2929,7 @@ dialog::backdrop {
   padding: 32px 16px;
   text-align: center;
   color: var(--text-secondary);
-  font-size: 0.9375rem;
+  font-size: var(--text-base);
   font-weight: 600;
 }
 
@@ -2932,13 +2937,13 @@ dialog::backdrop {
   max-width: 360px;
   margin: 5px auto 0;
   color: var(--text-muted);
-  font-size: 0.8125rem;
+  font-size: var(--text-xs);
   font-weight: 400;
   line-height: 1.45;
 }
 
 @media (max-width: 560px) {
-  .notif-filter-pill { font-size: 0.75rem; padding: 6px; }
+  .notif-filter-pill { font-size: var(--text-2xs); padding: 6px; }
   .event-notification-card { align-items: flex-start; flex-direction: column; gap: 10px; }
   .notif-card-action { width: 100%; }
   .notif-card-action .btn { width: 100%; justify-content: center; }
@@ -2980,7 +2985,7 @@ dialog::backdrop {
   right: -4px;
   background: rgb(var(--red-500));
   color: rgb(var(--white));
-  font-weight: 900;
+  font-weight: 800;
   width: 16px;
   height: 16px;
   border-radius: 50%;
@@ -2989,7 +2994,7 @@ dialog::backdrop {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.85rem;
+  font-size: var(--text-sm);
   margin-left: 4px;
   animation: pulseBadge 1.8s infinite;
 }
@@ -3026,13 +3031,13 @@ dialog::backdrop {
 }
 
 .quota-banner-icon {
-  font-size: 2rem;
+  font-size: var(--text-display);
   line-height: 1;
 }
 
 .quota-banner-title {
   display: block;
-  font-size: 1rem;
+  font-size: var(--text-md);
   font-weight: 800;
   margin-bottom: 3px;
   color: var(--text-primary);
@@ -3048,7 +3053,7 @@ dialog::backdrop {
 
 .quota-banner-desc {
   margin: 0;
-  font-size: 0.82rem;
+  font-size: var(--text-xs);
   color: var(--text-secondary);
   line-height: 1.4;
 }
@@ -3068,23 +3073,23 @@ dialog::backdrop {
 }
 
 .storage-meter-main-text {
-  font-size: 1.65rem;
+  font-size: var(--text-display);
   font-weight: 800;
   color: var(--text-primary);
   letter-spacing: -0.02em;
 }
 
 .storage-meter-sub-text {
-  font-size: 0.85rem;
+  font-size: var(--text-sm);
   color: var(--text-muted);
   margin-left: 6px;
 }
 
 .storage-pct-badge {
-  font-size: 0.85rem;
+  font-size: var(--text-sm);
   font-weight: 800;
   padding: 4px 12px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: rgb(var(--emerald-500) / 0.18);
   color: rgb(var(--emerald-400));
   border: 1px solid rgb(var(--emerald-500) / 0.3);
@@ -3107,7 +3112,7 @@ dialog::backdrop {
   width: 100%;
   height: 14px;
   background: rgb(var(--white) / 0.08);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   overflow: hidden;
   margin-bottom: 22px;
   border: 1px solid rgb(var(--white) / 0.05);
@@ -3115,9 +3120,9 @@ dialog::backdrop {
 
 .storage-meter-fill {
   height: 100%;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: linear-gradient(90deg, rgb(var(--emerald-500)), rgb(var(--emerald-400)));
-  transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
+  transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1), background var(--duration-slow) ease;
 }
 
 .storage-meter-fill.warning {
@@ -3145,12 +3150,12 @@ dialog::backdrop {
 }
 
 .breakdown-icon {
-  font-size: 1.5rem;
+  font-size: var(--text-2xl);
 }
 
 .breakdown-label {
   display: block;
-  font-size: 0.72rem;
+  font-size: var(--text-2xs);
   font-weight: 600;
   color: var(--text-muted);
   text-transform: uppercase;
@@ -3160,13 +3165,13 @@ dialog::backdrop {
 
 .breakdown-val {
   display: block;
-  font-size: 1.05rem;
+  font-size: var(--text-md);
   color: var(--text-primary);
 }
 
 .breakdown-sub {
   display: block;
-  font-size: 0.72rem;
+  font-size: var(--text-2xs);
   color: var(--text-muted);
 }
 
@@ -3195,7 +3200,7 @@ dialog::backdrop {
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   padding: 16px;
-  transition: border-color 0.15s ease;
+  transition: border-color var(--duration-fast) ease;
 }
 
 .cleanup-action-box:hover {
@@ -3209,7 +3214,7 @@ dialog::backdrop {
 }
 
 .cleanup-icon {
-  font-size: 1.4rem;
+  font-size: var(--text-2xl);
   line-height: 1;
 }
 
@@ -3217,7 +3222,7 @@ dialog::backdrop {
   background: rgb(var(--sky-400) / 0.08);
   border: 1px dashed rgb(var(--sky-400) / 0.25);
   padding: 6px 10px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   display: inline-block;
 }
 
@@ -3242,7 +3247,7 @@ dialog::backdrop {
 }
 
 .nav-block-period-label {
-  font-size: 0.88rem;
+  font-size: var(--text-sm);
   font-weight: 800;
   color: var(--text-primary);
   min-width: 140px;
@@ -3255,7 +3260,7 @@ dialog::backdrop {
 .nav-block-icon-btn {
   width: 28px;
   height: 28px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   border: 1px solid transparent;
   background: transparent;
   color: var(--text-secondary);
@@ -3263,7 +3268,7 @@ dialog::backdrop {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
   padding: 0;
 }
 
@@ -3277,12 +3282,12 @@ dialog::backdrop {
   background: rgb(var(--white) / 0.05);
   border: 1px solid rgb(var(--white) / 0.1);
   color: var(--text-secondary);
-  font-size: 0.74rem;
+  font-size: var(--text-2xs);
   font-weight: 700;
   padding: 4px 10px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
 }
 
 .nav-block-today-btn:hover {
@@ -3309,7 +3314,7 @@ dialog::backdrop {
   gap: 2px;
   background: rgb(var(--black) / 0.35);
   padding: 3px;
-  border-radius: 7px;
+  border-radius: var(--radius-btn);
   border: 1px solid rgb(var(--white) / 0.06);
 }
 
@@ -3318,15 +3323,15 @@ dialog::backdrop {
   background: transparent;
   border: none;
   color: var(--text-secondary);
-  font-size: 0.74rem;
+  font-size: var(--text-2xs);
   font-weight: 700;
   padding: 4px 11px;
-  border-radius: 5px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
   white-space: nowrap;
 }
 
@@ -3371,7 +3376,7 @@ dialog::backdrop {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.72rem;
+  font-size: var(--text-2xs);
   color: var(--text-muted);
   font-weight: 700;
   text-transform: uppercase;
@@ -3406,7 +3411,7 @@ button.timeline-time-header-spacer:hover {
   align-items: center;
   justify-content: space-between;
   gap: 6px;
-  transition: background 0.15s ease;
+  transition: background var(--duration-fast) ease;
 }
 
 .timeline-day-header-cell:last-child {
@@ -3430,7 +3435,7 @@ button.timeline-time-header-spacer:hover {
 }
 
 .timeline-day-name {
-  font-size: 0.75rem;
+  font-size: var(--text-2xs);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -3438,7 +3443,7 @@ button.timeline-time-header-spacer:hover {
 }
 
 .timeline-day-number {
-  font-size: 1.05rem;
+  font-size: var(--text-md);
   font-weight: 800;
   color: var(--text-primary);
 }
@@ -3452,7 +3457,7 @@ button.timeline-time-header-spacer:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.82rem;
+  font-size: var(--text-xs);
 }
 
 .btn-timeline-add-day {
@@ -3462,12 +3467,12 @@ button.timeline-time-header-spacer:hover {
   border: 1px solid var(--border-strong);
   background: var(--bg-card);
   color: var(--text-primary);
-  font-size: 14px;
+  font-size: var(--text-sm);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
 }
 
 .btn-timeline-add-day:hover {
@@ -3508,7 +3513,7 @@ button.timeline-time-header-spacer:hover {
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
-  font-size: 0.7rem;
+  font-size: var(--text-3xs);
   font-weight: 500;
   color: var(--text-muted);
   font-family: monospace;
@@ -3536,11 +3541,11 @@ button.timeline-time-header-spacer:hover {
   max-width: calc(100% - 16px);
   margin: 8px;
   padding: 5px 7px;
-  border-radius: 5px;
+  border-radius: var(--radius-sm);
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   color: var(--text-secondary);
-  font-size: 0.68rem;
+  font-size: var(--text-3xs);
   line-height: 1.25;
   text-align: center;
 }
@@ -3550,7 +3555,7 @@ button.timeline-time-header-spacer:hover {
   min-height: var(--timeline-hour-height);
   border-bottom: 1px solid rgb(var(--white) / 0.07);
   position: relative;
-  transition: background 0.15s ease;
+  transition: background var(--duration-fast) ease;
 }
 
 .timeline-hour-slot:hover .btn-slot-schedule {
@@ -3608,13 +3613,13 @@ button.timeline-time-header-spacer:hover {
   border-radius: var(--radius-md);
   background: linear-gradient(135deg, rgb(var(--blue-500)) 0%, rgb(var(--violet-500)) 50%, rgb(var(--pink-500)) 100%);
   color: rgb(var(--white));
-  font-size: 22px;
+  font-size: var(--text-2xl);
   box-shadow: none;
 }
 
 .header-main-title,
 .brand-info h1 {
-  font-weight: 650;
+  font-weight: 600;
   letter-spacing: -0.015em;
 }
 
@@ -3642,7 +3647,7 @@ button.timeline-time-header-spacer:hover {
   text-transform: uppercase;
   padding: 12px 4px;
   color: var(--text-muted);
-  font-size: 0.75rem;
+  font-size: var(--text-2xs);
   font-weight: 600;
   letter-spacing: 0.04em;
 }
@@ -3659,7 +3664,7 @@ button.timeline-time-header-spacer:hover {
 .calendar-day-cell.is-today {
   background: var(--bg-surface);
   border-color: rgb(var(--white) / 0.06);
-  border-radius: 8px;
+  border-radius: var(--radius-btn);
   padding: 11px;
 }
 
@@ -3682,7 +3687,7 @@ button.timeline-time-header-spacer:hover {
 
 .day-number {
   color: var(--text-secondary);
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 500;
 }
 
@@ -3693,11 +3698,11 @@ button.timeline-time-header-spacer:hover {
   flex-direction: column;
   background: var(--bg-card) !important;
   box-shadow: none !important;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   padding: 9px 10px;
   gap: 4px;
   backdrop-filter: none;
-  transition: background 0.15s ease, outline-color 0.15s ease;
+  transition: background var(--duration-fast) ease, outline-color var(--duration-fast) ease;
 }
 
 .event-card-pill:hover {
@@ -3710,14 +3715,14 @@ button.timeline-time-header-spacer:hover {
 .event-card-time {
   font-family: var(--font-mono);
   color: var(--text-secondary);
-  font-size: 0.78rem;
+  font-size: var(--text-2xs);
   font-weight: 500;
 }
 
 .event-card-title {
   margin-top: 1px;
   color: var(--text-primary);
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 600;
   line-height: 1.4;
   margin: 0;
@@ -3752,13 +3757,13 @@ button.timeline-time-header-spacer:hover {
   bottom: 5px;
   color: rgb(var(--white));
   border: none;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   cursor: pointer;
-  transition: opacity 0.15s ease, transform 0.1s ease;
+  transition: opacity var(--duration-fast) ease, transform var(--duration-fast) ease;
   z-index: 5;
   background: #2d638e;
   box-shadow: none;
-  font-size: 0.75rem;
+  font-size: var(--text-2xs);
   font-weight: 600;
   padding: 3px 8px;
 }
@@ -3780,10 +3785,10 @@ button.timeline-time-header-spacer:hover {
   justify-content: flex-start;
   background: var(--bg-card) !important;
   box-shadow: none !important;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   padding: 9px 10px;
   backdrop-filter: none;
-  transition: background 0.15s ease, outline-color 0.15s ease;
+  transition: background var(--duration-fast) ease, outline-color var(--duration-fast) ease;
 }
 
 .timeline-event-card:hover {
@@ -3795,7 +3800,7 @@ button.timeline-time-header-spacer:hover {
 
 .timeline-event-time {
   font-family: monospace;
-  font-size: 0.78rem;
+  font-size: var(--text-2xs);
   font-weight: 500;
   color: var(--text-secondary);
 }
@@ -3807,14 +3812,14 @@ button.timeline-time-header-spacer:hover {
   -webkit-box-orient: vertical;
   overflow: hidden;
   color: var(--text-primary);
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 600;
   line-height: 1.4;
 }
 
 .timeline-event-meta,
 .user-creator-tag {
-  font-size: 0.75rem;
+  font-size: var(--text-2xs);
   font-weight: 500;
 }
 
@@ -3824,7 +3829,7 @@ button.timeline-time-header-spacer:hover {
   gap: 4px;
   letter-spacing: 0.01em;
   padding: 3px 7px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
 }
 
 /* ========================================================================= */
@@ -3884,7 +3889,7 @@ button.timeline-time-header-spacer:hover {
 }
 
 .form-group label {
-  font-size: 0.9375rem !important;
+  font-size: var(--text-base) !important;
   font-weight: 600;
   color: var(--text-primary);
   line-height: 1.35;
@@ -3899,13 +3904,13 @@ button.timeline-time-header-spacer:hover {
   font-family: inherit;
   border-radius: var(--radius-md);
   outline: none;
-  transition: border-color 0.15s ease;
+  transition: border-color var(--duration-fast) ease;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
   min-width: 0;
   min-height: 48px;
-  font-size: 1rem !important;
+  font-size: var(--text-md) !important;
   line-height: 1.45;
   padding: 11px 14px !important;
 }
@@ -3959,13 +3964,13 @@ button.timeline-time-header-spacer:hover {
 .admin-stat-num {
   color: var(--text-primary);
   display: block;
-  font-size: 1rem;
+  font-size: var(--text-md);
   font-weight: 600;
 }
 
 .admin-stat-label {
   color: var(--text-muted);
-  font-size: 0.75rem;
+  font-size: var(--text-2xs);
   letter-spacing: 0;
   text-transform: none;
 }
@@ -4012,8 +4017,8 @@ button.timeline-time-header-spacer:hover {
   flex: 0 0 auto;
   border: 0;
   padding: 3px 7px;
-  border-radius: 4px;
-  font-size: 0.75rem;
+  border-radius: var(--radius-xs);
+  font-size: var(--text-2xs);
   font-weight: 500;
   letter-spacing: 0;
   text-transform: none;
@@ -4056,7 +4061,7 @@ button.timeline-time-header-spacer:hover {
   border-radius: var(--radius-md);
   padding: 14px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--duration-base) ease;
   display: flex;
   flex-direction: column;
 }
@@ -4111,7 +4116,7 @@ button.timeline-time-header-spacer:hover {
 }
 
 .yearly-month-title {
-  font-size: 0.95rem;
+  font-size: var(--text-base);
   font-weight: 800;
   color: var(--text-primary);
   display: flex;
@@ -4120,10 +4125,10 @@ button.timeline-time-header-spacer:hover {
 }
 
 .yearly-month-events-badge {
-  font-size: 0.68rem;
+  font-size: var(--text-3xs);
   font-weight: 700;
   padding: 2px 7px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: rgb(var(--white) / 0.06);
   color: var(--text-muted);
 }
@@ -4142,7 +4147,7 @@ button.timeline-time-header-spacer:hover {
 }
 
 .yearly-mini-weekday {
-  font-size: 0.65rem;
+  font-size: var(--text-3xs);
   font-weight: 700;
   color: var(--text-muted);
   padding: 2px 0 4px;
@@ -4150,7 +4155,7 @@ button.timeline-time-header-spacer:hover {
 }
 
 .yearly-mini-day {
-  font-size: 0.72rem;
+  font-size: var(--text-2xs);
   font-weight: 500;
   color: var(--text-secondary);
   height: 24px;
@@ -4159,7 +4164,7 @@ button.timeline-time-header-spacer:hover {
   justify-content: center;
   border-radius: 50%;
   position: relative;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
 }
 
 .yearly-mini-day.other-month {
@@ -4217,15 +4222,15 @@ button.timeline-time-header-spacer:hover {
   background: rgb(var(--sky-400) / 0.14);
   border: 1px solid rgb(var(--sky-400) / 0.35);
   color: rgb(var(--sky-400));
-  font-size: 0.65rem;
+  font-size: var(--text-3xs);
   font-weight: 700;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   padding: 1px 6px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
   white-space: nowrap;
 }
 
@@ -4244,7 +4249,7 @@ button.timeline-time-header-spacer:hover {
 }
 
 .detail-share-box {
-  transition: all 0.2s ease;
+  transition: all var(--duration-base) ease;
 }
 
 .detail-share-box.empty {
@@ -4257,7 +4262,7 @@ button.timeline-time-header-spacer:hover {
   padding: 8px 12px;
   background: rgb(var(--sky-400) / 0.08);
   border: 1px solid rgb(var(--sky-400) / 0.2);
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -4269,8 +4274,8 @@ button.timeline-time-header-spacer:hover {
 #social-notifications-modal .promo-status-badge {
   padding: 2px 6px;
   border: 0;
-  border-radius: 3px;
-  font-size: 0.6875rem;
+  border-radius: var(--radius-xs);
+  font-size: var(--text-3xs);
   font-weight: 500;
 }
 
@@ -4409,7 +4414,7 @@ button.timeline-time-header-spacer:hover {
 
 /* Typography normalization for shared UI: headings, body, support, and metadata. */
 .app-header h1,
-.header-main-title { font-size: var(--type-page); font-weight: 650; line-height: 1.3; }
+.header-main-title { font-size: var(--type-page); font-weight: 600; line-height: 1.3; }
 
 .admin-card-header h2,
 .dialog-header h2 { font-size: var(--type-section); font-weight: 600; line-height: 1.35; }
@@ -4723,7 +4728,7 @@ button.timeline-time-header-spacer:hover {
   gap: 6px;
   background: rgb(var(--slate-900) / 0.6);
   padding: 4px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   border: 1px solid rgb(var(--white) / 0.08);
   box-sizing: border-box;
   width: 100%;
@@ -4741,7 +4746,7 @@ button.timeline-time-header-spacer:hover {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  transition: border-color var(--duration-base) ease, background var(--duration-base) ease;
 }
 
 :root[data-theme="light"] .room-booking-category-block {
@@ -4802,7 +4807,7 @@ button.timeline-time-header-spacer:hover {
 }
 
 .room-booking-field label {
-  font-size: 0.72rem;
+  font-size: var(--text-2xs);
   font-weight: 700;
   color: var(--text-secondary);
   white-space: nowrap;
@@ -4815,7 +4820,7 @@ button.timeline-time-header-spacer:hover {
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
-  font-size: 0.8rem;
+  font-size: var(--text-xs);
   padding: 6px 8px;
   height: 38px;
 }
@@ -4833,7 +4838,7 @@ button.timeline-time-header-spacer:hover {
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
   padding: 0;
 }
 
@@ -4912,10 +4917,10 @@ button.timeline-time-header-spacer:hover {
 /* Mini Tags on Calendar Cards */
 .event-pill-space-tag {
   display: inline-block;
-  font-size: 0.65rem;
+  font-size: var(--text-3xs);
   font-weight: 600;
   padding: 1px 5px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   background: rgb(var(--sky-500) / 0.2);
   color: rgb(var(--sky-400));
   margin-top: 2px;
@@ -4932,10 +4937,10 @@ button.timeline-time-header-spacer:hover {
 
 .event-pill-room-tag {
   display: inline-block;
-  font-size: 0.65rem;
+  font-size: var(--text-3xs);
   font-weight: 600;
   padding: 1px 5px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   background: rgb(var(--purple-500) / 0.2);
   color: rgb(var(--purple-400));
   margin-top: 2px;
@@ -4997,14 +5002,14 @@ button.timeline-time-header-spacer:hover {
   align-items: center;
   gap: 6px;
   padding: 7px 14px;
-  font-size: 0.8rem;
+  font-size: var(--text-xs);
   font-weight: 600;
   color: var(--text-secondary);
   background: transparent;
   border: 1px solid transparent;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) ease;
   white-space: nowrap;
 }
 
@@ -5027,7 +5032,7 @@ button.timeline-time-header-spacer:hover {
 .social-platform-filter-tabs .platform-favicon {
   width: 16px;
   height: 16px;
-  border-radius: 3px;
+  border-radius: var(--radius-xs);
   object-fit: contain;
 }
 
@@ -5040,7 +5045,7 @@ button.timeline-time-header-spacer:hover {
 
 .social-platform-filter-tabs .btn-filter-tab .filter-tab-badge {
   background: rgb(var(--white) / 0.18);
-  font-size: 0.7rem;
+  font-size: var(--text-3xs);
   font-weight: 700;
   padding: 1px 6px;
   border-radius: var(--radius-pill);
@@ -5071,9 +5076,9 @@ button.timeline-time-header-spacer:hover {
   background: var(--bg-card);
   color: var(--text-primary);
   padding: 0 12px;
-  font-size: 0.84rem;
+  font-size: var(--text-xs);
   box-sizing: border-box;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
 }
 
 .social-search-box .form-input:focus {
