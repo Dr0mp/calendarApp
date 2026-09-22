@@ -5120,6 +5120,59 @@ button.timeline-time-header-spacer:hover {
   box-sizing: border-box !important;
 }
 
+/* === Feedback: toasts and confirm/prompt dialogs (replace alert/confirm/prompt) === */
+.toast-region {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: min(420px, calc(100vw - 32px));
+  pointer-events: none;
+}
+.toast {
+  pointer-events: auto;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-strong);
+  border-left-width: 4px;
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  line-height: 1.45;
+  box-shadow: var(--shadow-md);
+  transition: opacity var(--duration-slow) ease, transform var(--duration-slow) ease;
+}
+.toast.is-leaving { opacity: 0; transform: translateY(6px); }
+.toast--info { border-left-color: var(--status-info); }
+.toast--success { border-left-color: var(--status-success); }
+.toast--warning { border-left-color: var(--status-warning); }
+.toast--danger { border-left-color: var(--status-danger); }
+.feedback-dialog {
+  max-width: min(440px, calc(100vw - 32px));
+  padding: 0;
+}
+.feedback-dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+}
+.feedback-dialog-message {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  white-space: pre-line;
+}
+.feedback-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
 /* === States that used to be inline styles set from JS === */
 .is-clickable { cursor: pointer; }
 .media-uploader-box.is-dragover { border-color: var(--primary); }

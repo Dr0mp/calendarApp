@@ -163,14 +163,14 @@ export const wizardMethods = {
     if (paneId === "wizard-step-pane-1") {
       const title = this.dom.eventTitleInput?.value.trim();
       if (!title) {
-        alert(this.t("wizard_val_title_req"));
+        this.notify(this.t("wizard_val_title_req"), "danger");
         this.dom.eventTitleInput?.focus();
         return false;
       }
       if (type === "event") {
         const space = this.dom.eventSpaceSelect?.value;
         if (!space) {
-          alert(this.t("wizard_val_space_req"));
+          this.notify(this.t("wizard_val_space_req"), "danger");
           this.dom.eventSpaceSelect?.focus();
           return false;
         }
@@ -180,12 +180,12 @@ export const wizardMethods = {
     } else if (paneId === "wizard-step-pane-2") {
       const date = this.dom.eventDateInput?.value;
       if (!date) {
-        alert(this.t("wizard_val_date_req"));
+        this.notify(this.t("wizard_val_date_req"), "danger");
         this.dom.eventDateInput?.focus();
         return false;
       }
       if (!this.dom.eventEditId?.value && this.isPastEventDate(date)) {
-        alert(this.t("event_past_readonly"));
+        this.notify(this.t("event_past_readonly"), "warning");
         return false;
       }
     } else if (paneId === "wizard-step-pane-3") {
@@ -198,11 +198,11 @@ export const wizardMethods = {
   validateRoomBookings() {
     const bookings = this.currentRoomBookings || [];
     if (bookings.length === 0 || bookings.some(b => !b.roomId || !b.startDate || !b.endDate)) {
-      alert(this.t("wizard_val_room_req"));
+      this.notify(this.t("wizard_val_room_req"), "danger");
       return false;
     }
     if (bookings.some(b => b.endDate < b.startDate)) {
-      alert(this.t("alert_room_dates_invalid"));
+      this.notify(this.t("alert_room_dates_invalid"), "danger");
       return false;
     }
     return true;
@@ -224,7 +224,7 @@ export const wizardMethods = {
     if (type === "room_only") {
       const isAllowed = this.canBookRooms();
       if (!isAllowed) {
-        alert(this.t("event_room_user_blocked_msg"));
+        this.notify(this.t("event_room_user_blocked_msg"), "info");
         return;
       }
     }
@@ -363,7 +363,7 @@ export const wizardMethods = {
   handleToggleNeedsRoom(checked) {
     const isAllowed = this.currentUser && (this.currentUser.role === "admin" || this.currentUser.role === "moderator");
     if (checked && !isAllowed) {
-      alert(this.t("event_room_user_blocked_msg"));
+      this.notify(this.t("event_room_user_blocked_msg"), "info");
       if (this.dom.eventNeedsRoom) this.dom.eventNeedsRoom.checked = false;
       return;
     }
@@ -432,7 +432,7 @@ export const wizardMethods = {
   handleAddRoomBookingRow(roomId = "", startDate = "", endDate = "") {
     const isAllowed = this.currentUser && (this.currentUser.role === "admin" || this.currentUser.role === "moderator");
     if (!isAllowed) {
-      alert(this.t("event_room_user_blocked_msg"));
+      this.notify(this.t("event_room_user_blocked_msg"), "info");
       return;
     }
     if (!this.currentRoomBookings) this.currentRoomBookings = [];

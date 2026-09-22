@@ -478,7 +478,7 @@ export const eventFormMethods = {
     }
 
     if (this.isPastEventDate(preselectedDate)) {
-      alert(this.t("event_past_readonly"));
+      this.notify(this.t("event_past_readonly"), "warning");
       return;
     }
 
@@ -540,7 +540,7 @@ export const eventFormMethods = {
     if (!event) return;
 
     if (!this.canEditEvent(event)) {
-      alert(this.t("event_permission_denied"));
+      this.notify(this.t("event_permission_denied"), "danger");
       return;
     }
 
@@ -613,7 +613,7 @@ export const eventFormMethods = {
     this.findSmartSuggestions(event.startDate, event.hour || "18:00", event.durationHours || 2, event.id);
     this.dom.eventDialog.showModal();
   },
-  handleEventFormSubmit(e) {
+  async handleEventFormSubmit(e) {
     e.preventDefault();
     if (!this.currentUser) {
       this.openLoginDialog("events");
@@ -621,7 +621,7 @@ export const eventFormMethods = {
     }
 
     if (this.isDemoAccount()) {
-      alert(this.t("demo_no_save_event"));
+      this.notify(this.t("demo_no_save_event"), "warning");
       return;
     }
 
@@ -644,12 +644,12 @@ export const eventFormMethods = {
     const facebookImage = this.dom.eventFbImageData.value || this.dom.eventFbImageUrl.value.trim();
 
     if (!title || (!isRoomOnly && !startDate)) {
-      alert(this.t("event_required_title_date"));
+      this.notify(this.t("event_required_title_date"), "danger");
       return;
     }
 
     if (!editId && this.isPastEventDate(startDate)) {
-      alert(this.t("event_past_readonly"));
+      this.notify(this.t("event_past_readonly"), "warning");
       return;
     }
 
@@ -661,33 +661,33 @@ export const eventFormMethods = {
     if (needsRoom) {
       const isAllowedToBookRooms = this.currentUser && (this.currentUser.role === "admin" || this.currentUser.role === "moderator");
       if (!isAllowedToBookRooms) {
-        alert(this.t("event_room_user_blocked_msg"));
+        this.notify(this.t("event_room_user_blocked_msg"), "info");
         return;
       }
 
       if (!this.currentRoomBookings || this.currentRoomBookings.length === 0) {
-        alert(isRoomOnly ? (this.t("alert_room_required_room_only")) : (this.t("alert_room_required_event")));
+        this.notify(isRoomOnly ? (this.t("alert_room_required_room_only")) : (this.t("alert_room_required_event")), "danger");
         return;
       }
 
       for (const booking of this.currentRoomBookings) {
         if (!booking.roomId) {
-          alert(this.t("alert_room_select_all"));
+          this.notify(this.t("alert_room_select_all"), "warning");
           return;
         }
         if (!booking.startDate || !booking.endDate) {
-          alert(this.t("alert_room_dates_required"));
+          this.notify(this.t("alert_room_dates_required"), "danger");
           return;
         }
         if (booking.endDate < booking.startDate) {
-          alert(this.t("alert_room_dates_invalid"));
+          this.notify(this.t("alert_room_dates_invalid"), "danger");
           return;
         }
 
         const roomConflict = this.checkRoomConflict(booking.roomId, booking.startDate, booking.endDate, editId);
         if (roomConflict) {
           const rm = (this.rooms || []).find(r => r.id === booking.roomId);
-          alert(this.t("alert_room_conflict").replace("${room}", rm?.name || booking.roomId).replace("${event}", roomConflict.title));
+          this.notify(this.t("alert_room_conflict").replace("${room}", rm?.name || booking.roomId).replace("${event}", roomConflict.title), "danger");
           return;
         }
       }
@@ -699,12 +699,12 @@ export const eventFormMethods = {
     // Only validate FB cover image and Space for regular events (bypass for locked hours & room_only)
     if (entryType === "event") {
       if (!spaceId) {
-        alert(this.t("event_space_required"));
+        this.notify(this.t("event_space_required"), "danger");
         this.dom.eventSpaceSelect?.focus();
         return;
       }
       if (!facebookImage || !this.isFbImageValid) {
-        alert(this.t("event_image_required"));
+        this.notify(this.t("event_image_required"), "danger");
         return;
       }
     }
@@ -713,7 +713,7 @@ export const eventFormMethods = {
     const recurrenceMonths = this.dom.eventRecurrenceMonths ? parseInt(this.dom.eventRecurrenceMonths.value, 10) || 3 : 3;
     const scheduledHours = this.eventTimingMode === "async" ? [...this.eventAsyncHours] : [];
     if (this.eventTimingMode === "async" && scheduledHours.length < 2) {
-      alert(this.t("event_timing_async_minimum"));
+      this.notify(this.t("event_timing_async_minimum"), "warning");
       return;
     }
 
@@ -743,7 +743,7 @@ export const eventFormMethods = {
       if (idx !== -1) {
         const existingEvent = this.events[idx];
         if (!this.canEditEvent(existingEvent)) {
-          alert(this.t("alert_permission_denied"));
+          this.notify(this.t("alert_permission_denied"), "danger");
           return;
         }
         const socialStatus = isPublic ? (existingEvent.socialStatus || "pending") : "none";
@@ -751,7 +751,7 @@ export const eventFormMethods = {
         const relatedSeries = existingEvent.isRecurrent && existingEvent.recurrenceGroupId
           ? this.events.filter(ev => ev.recurrenceGroupId === existingEvent.recurrenceGroupId)
           : [];
-        const updateEntireSeries = relatedSeries.length > 1 && confirm(
+        const updateEntireSeries = relatedSeries.length > 1 && await this.confirmDialog(
           this.t("event_series_update_prompt").replace("{count}", String(relatedSeries.length))
         );
 

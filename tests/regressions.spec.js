@@ -1,6 +1,6 @@
 // Regression tests for bugs found in the audits (dead-code audit A1–A5).
 import { test, expect } from '@playwright/test';
-import { boot, login } from './helpers.js';
+import { boot, login, ADMIN_PW } from './helpers.js';
 
 test('A1: wizard back button is translated, not the raw key "cancel"', async ({ page }) => {
   const errors = await boot(page); await login(page, 'demo_admin');
@@ -83,5 +83,40 @@ test('P6.9: events saved by older builds (date/time fields only) are migrated an
   expect(stored).toMatchObject({ startDate: '2026-09-21', endDate: '2026-09-21', hour: '09:30' });
   expect(stored).not.toHaveProperty('date');
   expect(stored).not.toHaveProperty('time');
+  expect(errors).toEqual([]);
+});
+
+test('P9.7: validation messages are in-app toasts, not browser alerts', async ({ page }) => {
+  const errors = await boot(page); await login(page, 'demo_admin');
+  let nativeDialogs = 0; page.on('dialog', () => nativeDialogs++);
+  await page.click('#nav-schedule-btn');
+  await page.click('#wizard-next-btn'); // no title yet
+  await expect(page.locator('.toast')).toContainText(/titlu|title/i);
+  expect(nativeDialogs).toBe(0);
+  expect(errors).toEqual([]);
+});
+
+test('P9.7: deleting an event asks with an in-app confirm dialog', async ({ page }) => {
+  const errors = await boot(page); await login(page, 'admin', ADMIN_PW);
+  // create an event owned by admin
+  await page.click('#nav-schedule-btn');
+  await page.fill('#event-title-input', 'Delete Me Event');
+  await page.selectOption('#event-space-select', { index: 1 });
+  await page.click('#wizard-next-btn');
+  await page.fill('#event-date-input', '2026-09-25');
+  await page.fill('#event-hour-input', '11:00');
+  for (let i = 0; i < 5 && !(await page.locator('#save-event-btn').isVisible()); i++) await page.click('#wizard-next-btn');
+  await page.click('#btn-use-fb-sample'); await page.waitForTimeout(300);
+  await page.click('#save-event-btn');
+  await page.click('#nav-my-events-btn');
+  const card = page.locator('.my-event-card', { hasText: 'Delete Me Event' });
+  await card.locator('.btn-my-event-delete').click();
+  const dlg = page.locator('dialog.feedback-dialog');
+  await expect(dlg).toBeVisible();
+  await dlg.locator('button[value="cancel"]').click();
+  await expect(card).toBeVisible();
+  await card.locator('.btn-my-event-delete').click();
+  await dlg.locator('button[value="ok"]').click();
+  await expect(page.locator('#my-events-list-container')).not.toContainText('Delete Me Event');
   expect(errors).toEqual([]);
 });

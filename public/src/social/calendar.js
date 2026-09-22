@@ -70,7 +70,7 @@ export const socialCalendarMethods = {
       this.dom.btnTestShareLink.addEventListener("click", () => {
         const val = this.dom.postShareLink ? this.dom.postShareLink.value.trim() : "";
         if (!val) {
-          alert(this.t("alert_share_link_required"));
+          this.notify(this.t("alert_share_link_required"), "danger");
           return;
         }
         this.openShareLink(val);

@@ -70,7 +70,8 @@ export const utilMethods = {
       document.execCommand("copy");
       if (callback) callback();
     } catch (e) {
-      prompt(this.t("copied_label"), text);
+      // Clipboard unavailable: show the text so it can be copied by hand.
+      this.promptDialog(this.t("copy_manual_hint"), text);
     }
     document.body.removeChild(ta);
   },

@@ -648,7 +648,12 @@ export const TRANSLATIONS = {
     count_events_one: "{count} eveniment",
     count_posts_one: "{count} postare",
     // Post editor: caption counter
-    caption_over_limit: "depășește limita standard a platformei!"
+    caption_over_limit: "depășește limita standard a platformei!",
+    // Feedback dialogs
+    dialog_confirm: "Confirmă",
+    dialog_ok: "OK",
+    // Clipboard fallback
+    copy_manual_hint: "Copiați manual textul de mai jos:"
 
   },
 
@@ -1299,7 +1304,12 @@ export const TRANSLATIONS = {
     count_events_one: "{count} event",
     count_posts_one: "{count} post",
     // Post editor: caption counter
-    caption_over_limit: "exceeds the platform's standard limit!"
+    caption_over_limit: "exceeds the platform's standard limit!",
+    // Feedback dialogs
+    dialog_confirm: "Confirm",
+    dialog_ok: "OK",
+    // Clipboard fallback
+    copy_manual_hint: "Copy the text below manually:"
   }
 };
 

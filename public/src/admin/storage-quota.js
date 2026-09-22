@@ -179,9 +179,9 @@ export const storageQuotaMethods = {
       this.dom.cleanupSocialPreview.textContent = this.tf("cleanup_preview_social", { count: oldPublishedPosts.length });
     }
   },
-  executeCleanupPastEvents() {
+  async executeCleanupPastEvents() {
     if (this.isDemoAccount()) {
-      alert(this.t("demo_no_cleanup"));
+      this.notify(this.t("demo_no_cleanup"), "warning");
       return;
     }
     const filterVal = this.dom.cleanupEventAgeSelect ? this.dom.cleanupEventAgeSelect.value : "all-past";
@@ -189,12 +189,12 @@ export const storageQuotaMethods = {
     const toDelete = this.getPastEvents(days);
 
     if (toDelete.length === 0) {
-      alert(this.t("alert_no_past_events"));
+      this.notify(this.t("alert_no_past_events"), "warning");
       return;
     }
 
     const desc = filterVal === "all-past" ? this.t("cleanup_desc_all_past") : this.tf("cleanup_desc_older_than", { days });
-    if (!confirm(this.t("confirm_cleanup_delete").replace("${count}", toDelete.length).replace("${desc}", desc))) {
+    if (!await this.confirmDialog(this.t("confirm_cleanup_delete").replace("${count}", toDelete.length).replace("${desc}", desc))) {
       return;
     }
 
@@ -212,20 +212,20 @@ export const storageQuotaMethods = {
     this.renderEventsCalendar();
     this.updateSocialNotificationBadge();
 
-    alert(this.t("alert_events_deleted").replace("${count}", toDelete.length));
+    this.notify(this.t("alert_events_deleted").replace("${count}", toDelete.length), "success");
   },
-  executeStripPastImages() {
+  async executeStripPastImages() {
     if (this.isDemoAccount()) {
-      alert(this.t("demo_no_cleanup"));
+      this.notify(this.t("demo_no_cleanup"), "warning");
       return;
     }
     const pastEventsWithImage = this.getPastEvents(null).filter(e => !!e.facebookImage);
     if (pastEventsWithImage.length === 0) {
-      alert(this.t("alert_no_images_strip"));
+      this.notify(this.t("alert_no_images_strip"), "warning");
       return;
     }
 
-    if (!confirm(this.t("confirm_cleanup_strip").replace("${count}", pastEventsWithImage.length))) {
+    if (!await this.confirmDialog(this.t("confirm_cleanup_strip").replace("${count}", pastEventsWithImage.length))) {
       return;
     }
 
@@ -243,21 +243,21 @@ export const storageQuotaMethods = {
     this.renderAdminPanel();
     this.renderEventsCalendar();
 
-    alert(this.t("alert_images_stripped").replace("${count}", pastEventsWithImage.length));
+    this.notify(this.t("alert_images_stripped").replace("${count}", pastEventsWithImage.length), "success");
   },
-  executeCleanupSocialMedia() {
+  async executeCleanupSocialMedia() {
     if (this.isDemoAccount()) {
-      alert(this.t("demo_no_cleanup"));
+      this.notify(this.t("demo_no_cleanup"), "warning");
       return;
     }
     const todayStr = new Date().toISOString().slice(0, 10);
     const oldPublishedPosts = this.posts.filter(p => p.status === "published" && p.date < todayStr && p.mediaUrl);
     if (oldPublishedPosts.length === 0) {
-      alert(this.t("alert_no_media_purge"));
+      this.notify(this.t("alert_no_media_purge"), "warning");
       return;
     }
 
-    if (!confirm(this.t("confirm_cleanup_purge").replace("${count}", oldPublishedPosts.length))) {
+    if (!await this.confirmDialog(this.t("confirm_cleanup_purge").replace("${count}", oldPublishedPosts.length))) {
       return;
     }
 
@@ -274,6 +274,6 @@ export const storageQuotaMethods = {
     this.updateStorageQuotaDisplay();
     this.render();
 
-    alert(this.t("alert_media_purged").replace("${count}", oldPublishedPosts.length));
+    this.notify(this.t("alert_media_purged").replace("${count}", oldPublishedPosts.length), "success");
   }
 };

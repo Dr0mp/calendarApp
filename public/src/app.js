@@ -7,6 +7,7 @@ import { domRefsMethods } from "./core/dom-refs.js";
 import { bindMethods } from "./core/bind.js";
 import { routerMethods } from "./core/router.js";
 import { utilMethods } from "./core/utils.js";
+import { feedbackMethods } from "./core/feedback.js";
 import { authMethods } from "./auth.js";
 import { socialCalendarMethods } from "./social/calendar.js";
 import { postEditorMethods } from "./social/post-editor.js";
@@ -102,6 +103,7 @@ const MIXINS = [
   bindMethods,
   routerMethods,
   utilMethods,
+  feedbackMethods,
   authMethods,
   socialCalendarMethods,
   postEditorMethods,

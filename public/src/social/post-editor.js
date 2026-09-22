@@ -6,12 +6,12 @@ export const postEditorMethods = {
   openAddPostModal(preselectedDate = null, prefillData = null) {
     const requestedDate = prefillData?.date || preselectedDate;
     if (requestedDate && this.isPastEventDate(requestedDate)) {
-      alert(this.t("post_past_create_unavailable"));
+      this.notify(this.t("post_past_create_unavailable"), "warning");
       return;
     }
     const enabledPlatforms = this.platforms.filter(p => p.enabled !== false);
     if (enabledPlatforms.length === 0) {
-      alert(this.t("alert_platforms_disabled"));
+      this.notify(this.t("alert_platforms_disabled"), "info");
       return;
     }
 
@@ -281,7 +281,7 @@ export const postEditorMethods = {
     e.preventDefault();
 
     if (this.isDemoAccount()) {
-      alert(this.t("demo_no_save_post"));
+      this.notify(this.t("demo_no_save_post"), "warning");
       return;
     }
 
@@ -291,14 +291,14 @@ export const postEditorMethods = {
       if (urlText) {
         this.handleUrlApply();
       } else {
-        alert(this.t("alert_media_required"));
+        this.notify(this.t("alert_media_required"), "danger");
         return;
       }
     }
 
     const editId = this.dom.postEditId.value;
     if (!editId && this.isPastEventDate(this.dom.postDateInput.value)) {
-      alert(this.t("post_past_create_unavailable"));
+      this.notify(this.t("post_past_create_unavailable"), "warning");
       return;
     }
     const platformId = this.dom.postPlatformSelect.value;
@@ -356,7 +356,7 @@ export const postEditorMethods = {
     } else {
       // Local or network share path (e.g. \\server\share or f:\...)
       this.copyToClipboard(clean);
-      alert((this.t("alert_share_path_detail")).replace("${path}", clean));
+      this.notify((this.t("alert_share_path_detail")).replace("${path}", clean), "info");
     }
   },
   // Post Detail Modal
@@ -435,13 +435,13 @@ export const postEditorMethods = {
 
     this.dom.detailDialog.showModal();
   },
-  deleteCurrentDetailPost() {
+  async deleteCurrentDetailPost() {
     if (!this.currentDetailPostId) return;
     if (this.isDemoAccount()) {
-      alert(this.t("demo_no_delete"));
+      this.notify(this.t("demo_no_delete"), "warning");
       return;
     }
-    if (confirm(this.t("confirm_delete_post"))) {
+    if (await this.confirmDialog(this.t("confirm_delete_post"))) {
       this.posts = this.posts.filter(p => p.id !== this.currentDetailPostId);
       this.savePosts();
       this.dom.detailDialog.close();
@@ -452,7 +452,7 @@ export const postEditorMethods = {
     const post = this.posts.find(p => p.id === this.currentDetailPostId);
     if (!post) return;
     if (this.isDemoAccount()) {
-      alert(this.t("demo_no_save_post"));
+      this.notify(this.t("demo_no_save_post"), "warning");
       return;
     }
 
@@ -467,6 +467,6 @@ export const postEditorMethods = {
     this.savePosts();
     this.dom.detailDialog.close();
     this.render();
-    alert(this.t("alert_post_duplicated"));
+    this.notify(this.t("alert_post_duplicated"), "info");
   }
 };

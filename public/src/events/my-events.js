@@ -346,19 +346,19 @@ export const myEventsMethods = {
 
     this.dom.eventDetailDialog.showModal();
   },
-  deleteCurrentDetailEvent() {
+  async deleteCurrentDetailEvent() {
     const event = this.events.find(e => e.id === this.currentDetailEventId);
     if (!event) return;
 
     if (!this.canEditEvent(event)) {
-      alert(this.t("alert_permission_denied"));
+      this.notify(this.t("alert_permission_denied"), "danger");
       return;
     }
 
     if (event.isRecurrent && event.recurrenceGroupId) {
       const related = this.events.filter(e => e.recurrenceGroupId === event.recurrenceGroupId);
       if (related.length > 1) {
-        const deleteAll = confirm(
+        const deleteAll = await this.confirmDialog(
           this.t("confirm_delete_recurring_series").replace("${title}", event.title).replace("${total}", event.recurrenceTotal).replace("${count}", related.length).replace("${date}", event.startDate)
         );
         if (deleteAll) {
@@ -378,7 +378,7 @@ export const myEventsMethods = {
       }
     }
 
-    if (confirm(this.t("confirm_delete_event").replace("${title}", event.title))) {
+    if (await this.confirmDialog(this.t("confirm_delete_event").replace("${title}", event.title))) {
       this.events = this.events.filter(e => e.id !== event.id);
       this.saveEvents();
       this.updateSocialNotificationBadge();

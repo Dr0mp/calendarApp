@@ -7,7 +7,7 @@ export const adminUserMethods = {
   async handleCreateUser(e) {
     e.preventDefault();
     if (this.isDemoAccount()) {
-      alert(this.t("demo_no_admin_save"));
+      this.notify(this.t("demo_no_admin_save"), "warning");
       return;
     }
     const name = this.dom.newUserFullname.value.trim();
@@ -20,14 +20,14 @@ export const adminUserMethods = {
     try {
       const { res, data } = await apiRequest("POST", "/api/users", { name, username, password, role });
       if (!res.ok) {
-        alert(data.error || this.t("alert_username_taken").replace("${username}", username));
+        this.notify(data.error || this.t("alert_username_taken").replace("${username}", username), "danger");
         return;
       }
 
       await this.fetchServerUsers();
       this.dom.createUserForm.reset();
       this.renderAdminPanel();
-      alert(this.t("alert_user_created").replace("${name}", name));
+      this.notify(this.t("alert_user_created").replace("${name}", name), "success");
     } catch (err) {
       console.error("Create user error:", err);
     }
@@ -58,7 +58,7 @@ export const adminUserMethods = {
   async handleEditUserSubmit(e) {
     e.preventDefault();
     if (this.isDemoAccount()) {
-      alert(this.t("demo_no_admin_save"));
+      this.notify(this.t("demo_no_admin_save"), "warning");
       return;
     }
     const userId = this.dom.editUserId.value;
@@ -72,14 +72,14 @@ export const adminUserMethods = {
     const role = isSystemAdmin ? "admin" : this.dom.editUserRole.value;
 
     if (!name || !username) {
-      alert(this.t("alert_fill_required"));
+      this.notify(this.t("alert_fill_required"), "danger");
       return;
     }
 
     try {
       const { res, data } = await apiRequest("PUT", `/api/users/${userId}`, { name, username, password, role });
       if (!res.ok) {
-        alert(data.error || this.t("alert_username_in_use").replace("${username}", username));
+        this.notify(data.error || this.t("alert_username_in_use").replace("${username}", username), "danger");
         return;
       }
 
@@ -103,7 +103,7 @@ export const adminUserMethods = {
       await this.fetchServerUsers();
       this.dom.editUserDialog.close();
       this.renderAdminPanel();
-      alert(this.t("alert_user_updated").replace("${name}", name));
+      this.notify(this.t("alert_user_updated").replace("${name}", name), "success");
     } catch (err) {
       console.error("Edit user error:", err);
     }
@@ -113,25 +113,25 @@ export const adminUserMethods = {
     if (!user) return;
 
     if (this.isDemoAccount()) {
-      alert(this.t("demo_no_admin_save"));
+      this.notify(this.t("demo_no_admin_save"), "warning");
       return;
     }
 
     if (user.username.toLowerCase() === "admin") {
-      alert(this.t("alert_admin_no_delete"));
+      this.notify(this.t("alert_admin_no_delete"), "warning");
       return;
     }
 
     if (this.currentUser && this.currentUser.id === userId) {
-      alert(this.t("alert_cannot_delete_self"));
+      this.notify(this.t("alert_cannot_delete_self"), "danger");
       return;
     }
 
-    if (confirm(this.t("confirm_delete_user").replace("${name}", user.name))) {
+    if (await this.confirmDialog(this.t("confirm_delete_user").replace("${name}", user.name))) {
       try {
         const { res, data } = await apiRequest("DELETE", `/api/users/${userId}`);
         if (!res.ok) {
-          alert(data.error || (this.t("alert_delete_user_failed")));
+          this.notify(data.error || (this.t("alert_delete_user_failed")), "danger");
           return;
         }
 

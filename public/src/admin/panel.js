@@ -212,9 +212,9 @@ export const adminPanelMethods = {
     this.renderAdminSpaces();
     this.renderAdminRooms();
   },
-  adminDeleteEvent(eventId) {
+  async adminDeleteEvent(eventId) {
     if (this.isDemoAccount()) {
-      alert(this.t("demo_no_delete"));
+      this.notify(this.t("demo_no_delete"), "warning");
       return;
     }
     const evt = this.events.find(e => e.id === eventId);
@@ -223,7 +223,7 @@ export const adminPanelMethods = {
     if (evt.isRecurrent && evt.recurrenceGroupId) {
       const related = this.events.filter(e => e.recurrenceGroupId === evt.recurrenceGroupId);
       if (related.length > 1) {
-        const deleteAll = confirm(
+        const deleteAll = await this.confirmDialog(
           this.t("confirm_admin_delete_recurring").replace("${title}", evt.title).replace("${total}", evt.recurrenceTotal)
         );
         if (deleteAll) {
@@ -242,7 +242,7 @@ export const adminPanelMethods = {
       }
     }
 
-    if (confirm(this.t("confirm_admin_delete_event").replace("${title}", evt.title).replace("${creator}", evt.creatorName))) {
+    if (await this.confirmDialog(this.t("confirm_admin_delete_event").replace("${title}", evt.title).replace("${creator}", evt.creatorName))) {
       this.events = this.events.filter(e => e.id !== eventId);
       this.saveEvents();
       this.updateSocialNotificationBadge();

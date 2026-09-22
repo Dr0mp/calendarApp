@@ -43,7 +43,7 @@ export const adminVenueMethods = {
   handleCreateSpace(e) {
     e.preventDefault();
     if (this.isDemoAccount()) {
-      alert(this.t("demo_no_admin_save"));
+      this.notify(this.t("demo_no_admin_save"), "warning");
       return;
     }
     const name = this.dom.newSpaceName?.value.trim();
@@ -68,14 +68,14 @@ export const adminVenueMethods = {
     if (this.dom.createSpaceForm) this.dom.createSpaceForm.reset();
     this.renderAdminSpaces();
   },
-  handleDeleteSpace(id) {
+  async handleDeleteSpace(id) {
     if (this.isDemoAccount()) {
-      alert(this.t("demo_no_admin_save"));
+      this.notify(this.t("demo_no_admin_save"), "warning");
       return;
     }
     const space = (this.spaces || []).find(s => s.id === id);
     if (!space) return;
-    if (confirm(this.t("confirm_delete_space").replace("${name}", space.name))) {
+    if (await this.confirmDialog(this.t("confirm_delete_space").replace("${name}", space.name))) {
       this.spaces = this.spaces.filter(s => s.id !== id);
       this.saveSpaces();
       this.renderAdminSpaces();
@@ -83,7 +83,7 @@ export const adminVenueMethods = {
   },
   handleToggleSpace(id) {
     if (this.isDemoAccount()) {
-      alert(this.t("demo_no_admin_save"));
+      this.notify(this.t("demo_no_admin_save"), "warning");
       return;
     }
     const space = (this.spaces || []).find(s => s.id === id);
@@ -133,7 +133,7 @@ export const adminVenueMethods = {
   handleCreateRoom(e) {
     e.preventDefault();
     if (this.isDemoAccount()) {
-      alert(this.t("demo_no_admin_save"));
+      this.notify(this.t("demo_no_admin_save"), "warning");
       return;
     }
     const name = this.dom.newRoomName?.value.trim();
@@ -162,14 +162,14 @@ export const adminVenueMethods = {
     if (this.dom.createRoomForm) this.dom.createRoomForm.reset();
     this.renderAdminRooms();
   },
-  handleDeleteRoom(id) {
+  async handleDeleteRoom(id) {
     if (this.isDemoAccount()) {
-      alert(this.t("demo_no_admin_save"));
+      this.notify(this.t("demo_no_admin_save"), "warning");
       return;
     }
     const room = (this.rooms || []).find(r => r.id === id);
     if (!room) return;
-    if (confirm(this.t("confirm_delete_room").replace("${name}", room.name))) {
+    if (await this.confirmDialog(this.t("confirm_delete_room").replace("${name}", room.name))) {
       this.rooms = this.rooms.filter(r => r.id !== id);
       this.saveRooms();
       this.renderAdminRooms();
@@ -177,7 +177,7 @@ export const adminVenueMethods = {
   },
   handleToggleRoom(id) {
     if (this.isDemoAccount()) {
-      alert(this.t("demo_no_admin_save"));
+      this.notify(this.t("demo_no_admin_save"), "warning");
       return;
     }
     const room = (this.rooms || []).find(r => r.id === id);

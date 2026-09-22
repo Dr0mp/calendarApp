@@ -100,7 +100,7 @@ export const controlPanelMethods = {
         });
         ptItem.querySelector(".cp-delete-pt-btn").addEventListener("click", () => {
           if (platform.postTypes.length <= 1) {
-            alert(this.t("alert_posttype_required"));
+            this.notify(this.t("alert_posttype_required"), "danger");
             return;
           }
           platform.postTypes.splice(ptIdx, 1);
@@ -112,8 +112,8 @@ export const controlPanelMethods = {
       });
 
       // Add post type button
-      card.querySelector(".cp-add-pt-btn").addEventListener("click", () => {
-        const typeName = prompt(this.t("cp_new_post_type_prompt"));
+      card.querySelector(".cp-add-pt-btn").addEventListener("click", async () => {
+        const typeName = await this.promptDialog(this.t("cp_new_post_type_prompt"));
         if (typeName) {
           platform.postTypes.push({
             id: `${platform.id}-custom-${Date.now()}`,
@@ -136,8 +136,8 @@ export const controlPanelMethods = {
       // Remove platform
       const deletePlatformBtn = card.querySelector(".cp-delete-platform-btn");
       if (deletePlatformBtn) {
-        deletePlatformBtn.addEventListener("click", () => {
-          if (confirm(this.t("confirm_remove_platform").replace("${name}", platform.name))) {
+        deletePlatformBtn.addEventListener("click", async () => {
+          if (await this.confirmDialog(this.t("confirm_remove_platform").replace("${name}", platform.name))) {
             this.platforms = this.platforms.filter(p => p.id !== platform.id);
             this.savePlatforms();
             this.renderControlPanelPlatformsList();
@@ -152,7 +152,7 @@ export const controlPanelMethods = {
   handleAddPlatform(e) {
     e.preventDefault();
     if (this.isDemoAccount()) {
-      alert(this.t("demo_no_save"));
+      this.notify(this.t("demo_no_save"), "warning");
       return;
     }
     const name = this.dom.newPlatformName.value.trim();
@@ -209,14 +209,14 @@ export const controlPanelMethods = {
     this.dom.addPlatformForm.reset();
     this.renderControlPanelPlatformsList();
     this.render();
-    alert((this.t("alert_platform_added")).replace("${name}", name));
+    this.notify((this.t("alert_platform_added")).replace("${name}", name), "success");
   },
-  resetAllDefaults() {
+  async resetAllDefaults() {
     if (this.isDemoAccount()) {
-      alert(this.t("demo_no_save"));
+      this.notify(this.t("demo_no_save"), "warning");
       return;
     }
-    if (confirm(this.t("confirm_reset_platforms"))) {
+    if (await this.confirmDialog(this.t("confirm_reset_platforms"))) {
       localStorage.removeItem(STORAGE_PLATFORMS_KEY);
       localStorage.removeItem(STORAGE_POSTS_KEY);
       this.platforms = JSON.parse(JSON.stringify(DEFAULT_PLATFORMS));
@@ -225,7 +225,7 @@ export const controlPanelMethods = {
       this.savePosts();
       this.renderControlPanelPlatformsList();
       this.render();
-      alert(this.t("alert_reset_complete"));
+      this.notify(this.t("alert_reset_complete"), "success");
     }
   },
   exportData() {
@@ -245,7 +245,7 @@ export const controlPanelMethods = {
   },
   importData(e) {
     if (this.isDemoAccount()) {
-      alert(this.t("demo_no_save"));
+      this.notify(this.t("demo_no_save"), "warning");
       return;
     }
     const file = e.target.files[0];
@@ -267,9 +267,9 @@ export const controlPanelMethods = {
         }
         this.renderControlPanelPlatformsList();
         this.render();
-        alert(this.t("alert_import_success"));
+        this.notify(this.t("alert_import_success"), "success");
       } catch (err) {
-        alert(this.t("alert_import_fail"));
+        this.notify(this.t("alert_import_fail"), "danger");
       }
     };
     reader.readAsText(file);
