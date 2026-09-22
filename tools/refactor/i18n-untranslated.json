@@ -1,0 +1,1328 @@
+[
+ {
+  "idx": 59,
+  "start": 9337,
+  "tag": "span",
+  "id": "nav-user-name",
+  "attr": "text",
+  "value": "Demo Admin"
+ },
+ {
+  "idx": 60,
+  "start": 9403,
+  "tag": "span",
+  "id": "nav-user-role",
+  "attr": "text",
+  "value": "Demo"
+ },
+ {
+  "idx": 61,
+  "start": 9487,
+  "tag": "div",
+  "attr": "aria-label",
+  "value": "Page Navigation Tabs"
+ },
+ {
+  "idx": 65,
+  "start": 9767,
+  "tag": "span",
+  "attr": "text",
+  "value": "Calendar"
+ },
+ {
+  "idx": 78,
+  "start": 10816,
+  "tag": "span",
+  "attr": "text",
+  "value": "Social Calendar"
+ },
+ {
+  "idx": 84,
+  "start": 11555,
+  "tag": "div",
+  "attr": "aria-label",
+  "value": "Comută limba / Switch language"
+ },
+ {
+  "idx": 85,
+  "start": 11655,
+  "tag": "button",
+  "attr": "title",
+  "value": "Română"
+ },
+ {
+  "idx": 87,
+  "start": 11799,
+  "tag": "button",
+  "attr": "title",
+  "value": "English"
+ },
+ {
+  "idx": 88,
+  "start": 11904,
+  "tag": "button",
+  "attr": "title",
+  "value": "Switch to dark theme"
+ },
+ {
+  "idx": 88,
+  "start": 11904,
+  "tag": "button",
+  "attr": "aria-label",
+  "value": "Switch to dark theme"
+ },
+ {
+  "idx": 93,
+  "start": 12262,
+  "tag": "button",
+  "id": "nav-logout-btn",
+  "attr": "title",
+  "value": "Sign out"
+ },
+ {
+  "idx": 97,
+  "start": 12861,
+  "tag": "button",
+  "attr": "title",
+  "value": "Switch to dark theme"
+ },
+ {
+  "idx": 97,
+  "start": 12861,
+  "tag": "button",
+  "attr": "aria-label",
+  "value": "Switch to dark theme"
+ },
+ {
+  "idx": 102,
+  "start": 13218,
+  "tag": "div",
+  "attr": "aria-label",
+  "value": "Comută limba / Switch language"
+ },
+ {
+  "idx": 103,
+  "start": 13318,
+  "tag": "button",
+  "attr": "title",
+  "value": "Română"
+ },
+ {
+  "idx": 105,
+  "start": 13462,
+  "tag": "button",
+  "attr": "title",
+  "value": "English"
+ },
+ {
+  "idx": 119,
+  "start": 15156,
+  "tag": "button",
+  "attr": "title",
+  "value": "Previzualizare ca utilizator standard (fără salvare)"
+ },
+ {
+  "idx": 120,
+  "start": 15367,
+  "tag": "button",
+  "attr": "text",
+  "value": "Demo Administrator"
+ },
+ {
+  "idx": 120,
+  "start": 15367,
+  "tag": "button",
+  "attr": "title",
+  "value": "Previzualizare ca administrator (fără salvare)"
+ },
+ {
+  "idx": 126,
+  "start": 16521,
+  "tag": "div",
+  "attr": "title",
+  "value": "Social Planner"
+ },
+ {
+  "idx": 130,
+  "start": 16715,
+  "tag": "h1",
+  "attr": "text",
+  "value": "Social Calendar"
+ },
+ {
+  "idx": 131,
+  "start": 16885,
+  "tag": "div",
+  "attr": "aria-label",
+  "value": "Social Calendar Period and View Navigation"
+ },
+ {
+  "idx": 133,
+  "start": 17105,
+  "tag": "button",
+  "id": "prev-month-btn",
+  "attr": "aria-label",
+  "value": "Previous Month"
+ },
+ {
+  "idx": 137,
+  "start": 17477,
+  "tag": "button",
+  "id": "next-month-btn",
+  "attr": "aria-label",
+  "value": "Next Month"
+ },
+ {
+  "idx": 142,
+  "start": 18021,
+  "tag": "div",
+  "attr": "aria-label",
+  "value": "Calendar view switcher"
+ },
+ {
+  "idx": 145,
+  "start": 18343,
+  "tag": "button",
+  "id": "view-month-btn",
+  "attr": "text",
+  "value": "Calendar"
+ },
+ {
+  "idx": 145,
+  "start": 18343,
+  "tag": "button",
+  "id": "view-month-btn",
+  "attr": "title",
+  "value": "Calendar"
+ },
+ {
+  "idx": 163,
+  "start": 20497,
+  "tag": "div",
+  "id": "platform-filter-bar",
+  "attr": "aria-label",
+  "value": "Filter posts by platform"
+ },
+ {
+  "idx": 170,
+  "start": 21269,
+  "tag": "span",
+  "attr": "text",
+  "value": "• posts scheduled for"
+ },
+ {
+  "idx": 192,
+  "start": 23496,
+  "tag": "div",
+  "attr": "title",
+  "value": "Calendar"
+ },
+ {
+  "idx": 196,
+  "start": 23785,
+  "tag": "h1",
+  "attr": "text",
+  "value": "Calendar"
+ },
+ {
+  "idx": 197,
+  "start": 23948,
+  "tag": "div",
+  "id": "events-zoom-control",
+  "attr": "aria-label",
+  "value": "Calendar Period and Zoom Navigation"
+ },
+ {
+  "idx": 202,
+  "start": 24428,
+  "tag": "span",
+  "id": "events-current-month-label",
+  "attr": "text",
+  "value": "September 2026"
+ },
+ {
+  "idx": 213,
+  "start": 25548,
+  "tag": "button",
+  "id": "btn-zoom-yearly",
+  "attr": "title",
+  "value": "Zoom: Year (Overview & Quick Jump)"
+ },
+ {
+  "idx": 214,
+  "start": 25731,
+  "tag": "button",
+  "id": "btn-zoom-monthly",
+  "attr": "title",
+  "value": "Zoom: Month (Calendar Grid)"
+ },
+ {
+  "idx": 215,
+  "start": 25918,
+  "tag": "button",
+  "id": "btn-zoom-daily",
+  "attr": "title",
+  "value": "Zoom: Day (Hourly Timeline 8:00 AM – 10:00 PM)"
+ },
+ {
+  "idx": 225,
+  "start": 27069,
+  "tag": "nav",
+  "id": "events-user-filter-bar",
+  "attr": "aria-label",
+  "value": "Filter events by user"
+ },
+ {
+  "idx": 228,
+  "start": 27487,
+  "tag": "section",
+  "id": "schedule-page-shell",
+  "attr": "aria-label",
+  "value": "Programează eveniment"
+ },
+ {
+  "idx": 243,
+  "start": 28925,
+  "tag": "div",
+  "id": "my-events-filter-tabs",
+  "attr": "aria-label",
+  "value": "Filtru tip evenimente"
+ },
+ {
+  "idx": 272,
+  "start": 32718,
+  "tag": "div",
+  "attr": "title",
+  "value": "Administrator Dashboard"
+ },
+ {
+  "idx": 286,
+  "start": 33890,
+  "tag": "div",
+  "id": "admin-category-nav-bar",
+  "attr": "aria-label",
+  "value": "Admin Navigation Categories"
+ },
+ {
+  "idx": 332,
+  "start": 38675,
+  "tag": "option",
+  "attr": "text",
+  "value": "Administrator (Acces complet)"
+ },
+ {
+  "idx": 354,
+  "start": 40716,
+  "tag": "label",
+  "attr": "text",
+  "value": "Nume Spațiu / Sală *"
+ },
+ {
+  "idx": 355,
+  "start": 40787,
+  "tag": "input",
+  "id": "new-space-name",
+  "attr": "placeholder",
+  "value": "ex: Sala Mare (Conferințe)"
+ },
+ {
+  "idx": 357,
+  "start": 40966,
+  "tag": "label",
+  "attr": "text",
+  "value": "Capacitate"
+ },
+ {
+  "idx": 358,
+  "start": 41031,
+  "tag": "input",
+  "id": "new-space-capacity",
+  "attr": "placeholder",
+  "value": "ex: 50 persoane sau Nelimitat"
+ },
+ {
+  "idx": 360,
+  "start": 41208,
+  "tag": "label",
+  "attr": "text",
+  "value": "Culoare Identificare"
+ },
+ {
+  "idx": 363,
+  "start": 41473,
+  "tag": "label",
+  "attr": "text",
+  "value": "Dotări & Descriere"
+ },
+ {
+  "idx": 364,
+  "start": 41542,
+  "tag": "input",
+  "id": "new-space-desc",
+  "attr": "placeholder",
+  "value": "ex: Proiector 4K laser, sonorizare surround, tablă interactivă"
+ },
+ {
+  "idx": 366,
+  "start": 41810,
+  "tag": "button",
+  "id": "btn-create-space",
+  "attr": "text",
+  "value": "+ Adaugă Spațiu Nou"
+ },
+ {
+  "idx": 381,
+  "start": 43218,
+  "tag": "h2",
+  "id": "admin-rooms-title",
+  "attr": "text",
+  "value": "Camere de Cazare (Dormitoare Oaspeți & Traineri)"
+ },
+ {
+  "idx": 382,
+  "start": 43311,
+  "tag": "span",
+  "id": "admin-rooms-sub",
+  "attr": "text",
+  "value": "Rezervabile în calendar exclusiv de Moderatori și Administratori"
+ },
+ {
+  "idx": 386,
+  "start": 43609,
+  "tag": "label",
+  "attr": "text",
+  "value": "Denumire Cameră *"
+ },
+ {
+  "idx": 387,
+  "start": 43676,
+  "tag": "input",
+  "id": "new-room-name",
+  "attr": "placeholder",
+  "value": "ex: Camera 1 (Matrimonială)"
+ },
+ {
+  "idx": 389,
+  "start": 43855,
+  "tag": "label",
+  "attr": "text",
+  "value": "Tip Cameră"
+ },
+ {
+  "idx": 390,
+  "start": 43915,
+  "tag": "input",
+  "id": "new-room-type",
+  "attr": "placeholder",
+  "value": "ex: Matrimonială, Twin, Single, Suită"
+ },
+ {
+  "idx": 392,
+  "start": 44095,
+  "tag": "label",
+  "attr": "text",
+  "value": "Capacitate Oaspeți"
+ },
+ {
+  "idx": 393,
+  "start": 44167,
+  "tag": "input",
+  "id": "new-room-capacity",
+  "attr": "placeholder",
+  "value": "ex: 2 oaspeți"
+ },
+ {
+  "idx": 395,
+  "start": 44327,
+  "tag": "label",
+  "attr": "text",
+  "value": "Configurație Paturi"
+ },
+ {
+  "idx": 396,
+  "start": 44396,
+  "tag": "input",
+  "id": "new-room-beds",
+  "attr": "placeholder",
+  "value": "ex: 1 Pat King Size sau 2 Single"
+ },
+ {
+  "idx": 398,
+  "start": 44571,
+  "tag": "label",
+  "attr": "text",
+  "value": "Culoare Identificare"
+ },
+ {
+  "idx": 401,
+  "start": 44834,
+  "tag": "label",
+  "attr": "text",
+  "value": "Observații & Facilități"
+ },
+ {
+  "idx": 402,
+  "start": 44908,
+  "tag": "input",
+  "id": "new-room-notes",
+  "attr": "placeholder",
+  "value": "ex: Baie proprie, birou de lucru, vedere spre grădină, etaj 1"
+ },
+ {
+  "idx": 404,
+  "start": 45175,
+  "tag": "button",
+  "id": "btn-create-room",
+  "attr": "text",
+  "value": "+ Adaugă Cameră Nouă"
+ },
+ {
+  "idx": 419,
+  "start": 46581,
+  "tag": "h2",
+  "attr": "text",
+  "value": "Master Events Audit (All Users)"
+ },
+ {
+  "idx": 420,
+  "start": 46632,
+  "tag": "span",
+  "attr": "text",
+  "value": "Admin can edit, reassign, or delete any event"
+ },
+ {
+  "idx": 462,
+  "start": 49930,
+  "tag": "span",
+  "id": "storage-posts-count",
+  "attr": "text",
+  "value": "(8 posts)"
+ },
+ {
+  "idx": 474,
+  "start": 50892,
+  "tag": "button",
+  "id": "btn-sim-normal",
+  "attr": "text",
+  "value": "15% Normal"
+ },
+ {
+  "idx": 486,
+  "start": 52344,
+  "tag": "button",
+  "id": "close-social-notifications-btn",
+  "attr": "aria-label",
+  "value": "Close dialog"
+ },
+ {
+  "idx": 504,
+  "start": 54019,
+  "tag": "button",
+  "id": "close-edit-user-btn",
+  "attr": "aria-label",
+  "value": "Close dialog"
+ },
+ {
+  "idx": 522,
+  "start": 55514,
+  "tag": "option",
+  "attr": "text",
+  "value": "Administrator (Acces complet)"
+ },
+ {
+  "idx": 533,
+  "start": 56713,
+  "tag": "button",
+  "id": "close-storage-cleanup-btn",
+  "attr": "aria-label",
+  "value": "Close dialog"
+ },
+ {
+  "idx": 545,
+  "start": 57786,
+  "tag": "div",
+  "attr": "text",
+  "value": "Bulk Delete Past Events"
+ },
+ {
+  "idx": 546,
+  "start": 57879,
+  "tag": "p",
+  "attr": "text",
+  "value": "Permanently removes concluded events along with their uploaded 16:9 Facebook cover images."
+ },
+ {
+  "idx": 548,
+  "start": 58229,
+  "tag": "label",
+  "attr": "text",
+  "value": "Filter Age:"
+ },
+ {
+  "idx": 550,
+  "start": 58477,
+  "tag": "option",
+  "attr": "text",
+  "value": "All past events (prior to today)"
+ },
+ {
+  "idx": 551,
+  "start": 58556,
+  "tag": "option",
+  "attr": "text",
+  "value": "Events older than 14 days"
+ },
+ {
+  "idx": 552,
+  "start": 58622,
+  "tag": "option",
+  "attr": "text",
+  "value": "Events older than 30 days"
+ },
+ {
+  "idx": 553,
+  "start": 58688,
+  "tag": "option",
+  "attr": "text",
+  "value": "Events older than 60 days"
+ },
+ {
+  "idx": 555,
+  "start": 58951,
+  "tag": "div",
+  "id": "cleanup-preview-events",
+  "attr": "text",
+  "value": "Matches: 0 events (Est. 0.0 MB to free)"
+ },
+ {
+  "idx": 560,
+  "start": 59460,
+  "tag": "div",
+  "attr": "text",
+  "value": "Strip Images Only (Keep Event History)"
+ },
+ {
+  "idx": 561,
+  "start": 59568,
+  "tag": "p",
+  "attr": "text",
+  "value": "Keeps workshop titles, trainers, and enrolment records in your archive, but removes heavy cover photos to immediately reclaim ~95% of storage."
+ },
+ {
+  "idx": 563,
+  "start": 59973,
+  "tag": "span",
+  "id": "cleanup-strip-preview",
+  "attr": "text",
+  "value": "0 past events currently holding images"
+ },
+ {
+  "idx": 569,
+  "start": 60573,
+  "tag": "div",
+  "attr": "text",
+  "value": "Clear Published Social Media Attachments"
+ },
+ {
+  "idx": 570,
+  "start": 60683,
+  "tag": "p",
+  "attr": "text",
+  "value": "Removes heavy image/video attachments from social posts marked as \"Published\" prior to current date."
+ },
+ {
+  "idx": 572,
+  "start": 61046,
+  "tag": "span",
+  "id": "cleanup-social-preview",
+  "attr": "text",
+  "value": "0 published posts eligible"
+ },
+ {
+  "idx": 580,
+  "start": 61840,
+  "tag": "span",
+  "id": "event-dialog-action-text",
+  "attr": "text",
+  "value": "Schedule New Team Event"
+ },
+ {
+  "idx": 581,
+  "start": 61940,
+  "tag": "button",
+  "id": "close-event-dialog-btn",
+  "attr": "aria-label",
+  "value": "Close dialog"
+ },
+ {
+  "idx": 585,
+  "start": 62339,
+  "tag": "div",
+  "id": "event-entry-type-segmented",
+  "attr": "aria-label",
+  "value": "Tip Înregistrare"
+ },
+ {
+  "idx": 589,
+  "start": 62712,
+  "tag": "span",
+  "id": "lbl-entry-type-event",
+  "attr": "text",
+  "value": "Eveniment Public"
+ },
+ {
+  "idx": 593,
+  "start": 63036,
+  "tag": "span",
+  "id": "lbl-entry-type-locked",
+  "attr": "text",
+  "value": "Blocare Interval"
+ },
+ {
+  "idx": 597,
+  "start": 63361,
+  "tag": "span",
+  "id": "lbl-entry-type-room",
+  "attr": "text",
+  "value": "Doar Cazare"
+ },
+ {
+  "idx": 599,
+  "start": 63603,
+  "tag": "nav",
+  "id": "wizard-steps-indicator",
+  "attr": "aria-label",
+  "value": "Etape formular"
+ },
+ {
+  "idx": 603,
+  "start": 63947,
+  "tag": "strong",
+  "attr": "text",
+  "value": "Schedule Notice:"
+ },
+ {
+  "idx": 604,
+  "start": 63991,
+  "tag": "span",
+  "id": "event-date-warning-msg",
+  "attr": "text",
+  "value": "This date already has scheduled event(s)."
+ },
+ {
+  "idx": 609,
+  "start": 64456,
+  "tag": "strong",
+  "id": "smart-suggestion-title",
+  "attr": "text",
+  "value": "Schedule Assistant Suggestions"
+ },
+ {
+  "idx": 610,
+  "start": 64544,
+  "tag": "div",
+  "id": "smart-conflict-details",
+  "attr": "text",
+  "value": "Detected an existing booking at this time. Here are recommended openings:"
+ },
+ {
+  "idx": 616,
+  "start": 65462,
+  "tag": "span",
+  "attr": "text",
+  "value": "🔒 Mod Blocare Interval Activ:"
+ },
+ {
+  "idx": 617,
+  "start": 65537,
+  "tag": "p",
+  "attr": "text",
+  "value": "Acest interval va fi blocat în orar pentru a împiedica alte rezervări. Nu generează notificări de promovare social media pentru administratori și nu necesită copertă Facebook 16:9."
+ },
+ {
+  "idx": 620,
+  "start": 66280,
+  "tag": "span",
+  "attr": "text",
+  "value": "🛏️ Mod Doar Cazare Activ:"
+ },
+ {
+  "idx": 621,
+  "start": 66351,
+  "tag": "p",
+  "attr": "text",
+  "value": "Rezervare spații de cazare (camere). Nu necesită sală de desfășurare, bilete cu preț sau copertă social media."
+ },
+ {
+  "idx": 624,
+  "start": 66793,
+  "tag": "input",
+  "id": "event-title-input",
+  "attr": "placeholder",
+  "value": "ex: Masterclass: Producție Video"
+ },
+ {
+  "idx": 626,
+  "start": 67070,
+  "tag": "label",
+  "id": "lbl-event-space",
+  "attr": "text",
+  "value": "Spațiu / Sală Desfășurare *"
+ },
+ {
+  "idx": 635,
+  "start": 68120,
+  "tag": "span",
+  "id": "lbl-event-needs-room",
+  "attr": "text",
+  "value": "Necesită cazare (camere)?"
+ },
+ {
+  "idx": 636,
+  "start": 68225,
+  "tag": "span",
+  "attr": "text",
+  "value": "Doar Moderator / Admin"
+ },
+ {
+  "idx": 643,
+  "start": 69037,
+  "tag": "span",
+  "id": "lbl-btn-add-room-booking",
+  "attr": "text",
+  "value": "Adaugă cameră cazare"
+ },
+ {
+  "idx": 663,
+  "start": 71547,
+  "tag": "option",
+  "attr": "text",
+  "value": "2 Months"
+ },
+ {
+  "idx": 664,
+  "start": 71601,
+  "tag": "option",
+  "attr": "text",
+  "value": "3 Months"
+ },
+ {
+  "idx": 665,
+  "start": 71664,
+  "tag": "option",
+  "attr": "text",
+  "value": "4 Months"
+ },
+ {
+  "idx": 666,
+  "start": 71718,
+  "tag": "option",
+  "attr": "text",
+  "value": "5 Months"
+ },
+ {
+  "idx": 667,
+  "start": 71772,
+  "tag": "option",
+  "attr": "text",
+  "value": "6 Months"
+ },
+ {
+  "idx": 668,
+  "start": 71826,
+  "tag": "option",
+  "attr": "text",
+  "value": "9 Months"
+ },
+ {
+  "idx": 669,
+  "start": 71880,
+  "tag": "option",
+  "attr": "text",
+  "value": "12 Months (1 Year)"
+ },
+ {
+  "idx": 670,
+  "start": 71969,
+  "tag": "span",
+  "id": "event-recurrence-preview-hint",
+  "attr": "text",
+  "value": "Schedules monthly on the same day"
+ },
+ {
+  "idx": 689,
+  "start": 74048,
+  "tag": "input",
+  "id": "event-price-input",
+  "attr": "placeholder",
+  "value": "0 or Free"
+ },
+ {
+  "idx": 690,
+  "start": 74148,
+  "tag": "select",
+  "id": "event-price-currency",
+  "attr": "aria-label",
+  "value": "Currency"
+ },
+ {
+  "idx": 691,
+  "start": 74224,
+  "tag": "option",
+  "attr": "text",
+  "value": "RON"
+ },
+ {
+  "idx": 692,
+  "start": 74256,
+  "tag": "option",
+  "attr": "text",
+  "value": "EUR"
+ },
+ {
+  "idx": 695,
+  "start": 74541,
+  "tag": "input",
+  "id": "event-enroll-input",
+  "attr": "placeholder",
+  "value": "https://example.com/register"
+ },
+ {
+  "idx": 705,
+  "start": 75794,
+  "tag": "input",
+  "id": "event-fb-image-url",
+  "attr": "placeholder",
+  "value": "Or paste image URL (e.g. https://...)"
+ },
+ {
+  "idx": 708,
+  "start": 76208,
+  "tag": "div",
+  "id": "fb-status-icon",
+  "attr": "text",
+  "value": "Dimensions"
+ },
+ {
+  "idx": 709,
+  "start": 76266,
+  "tag": "div",
+  "id": "fb-status-text",
+  "attr": "text",
+  "value": "Detecting dimensions..."
+ },
+ {
+  "idx": 713,
+  "start": 76703,
+  "tag": "small",
+  "attr": "text",
+  "value": "Facebook Page & Event requirement: 16:9 landscape aspect ratio (e.g. 1920×1080 or 1200×675). Non-proportional dimensions (square 1:1, vertical 9:16) will be strictly rejected."
+ },
+ {
+  "idx": 716,
+  "start": 77232,
+  "tag": "textarea",
+  "id": "event-desc-input",
+  "attr": "placeholder",
+  "value": "Provide full description, syllabus, session overview..."
+ },
+ {
+  "idx": 718,
+  "start": 77518,
+  "tag": "button",
+  "id": "wizard-prev-btn",
+  "attr": "text",
+  "value": "Anulează"
+ },
+ {
+  "idx": 720,
+  "start": 77679,
+  "tag": "button",
+  "id": "wizard-next-btn",
+  "attr": "text",
+  "value": "Pasul Următor →"
+ },
+ {
+  "idx": 725,
+  "start": 78261,
+  "tag": "button",
+  "id": "close-event-detail-btn",
+  "attr": "aria-label",
+  "value": "Close dialog"
+ },
+ {
+  "idx": 729,
+  "start": 78639,
+  "tag": "span",
+  "attr": "text",
+  "value": "Facebook Page Cover (16:9)"
+ },
+ {
+  "idx": 732,
+  "start": 78964,
+  "tag": "span",
+  "id": "event-detail-type-badge",
+  "attr": "text",
+  "value": "Eveniment Public"
+ },
+ {
+  "idx": 733,
+  "start": 79138,
+  "tag": "span",
+  "id": "event-detail-space-badge",
+  "attr": "text",
+  "value": "📍 Spațiu"
+ },
+ {
+  "idx": 734,
+  "start": 79303,
+  "tag": "span",
+  "id": "event-detail-room-badge",
+  "attr": "text",
+  "value": "🛏️ Cazare"
+ },
+ {
+  "idx": 737,
+  "start": 79835,
+  "tag": "span",
+  "id": "event-detail-creator-pill",
+  "attr": "text",
+  "value": "Attached user"
+ },
+ {
+  "idx": 738,
+  "start": 79937,
+  "tag": "h3",
+  "id": "event-detail-heading",
+  "attr": "text",
+  "value": "Event Heading"
+ },
+ {
+  "idx": 742,
+  "start": 80265,
+  "tag": "strong",
+  "id": "event-detail-datetime",
+  "attr": "text",
+  "value": "2026-09-14 at 18:00 (2 hrs)"
+ },
+ {
+  "idx": 745,
+  "start": 80494,
+  "tag": "strong",
+  "id": "event-detail-price",
+  "attr": "text",
+  "value": "Free"
+ },
+ {
+  "idx": 747,
+  "start": 80700,
+  "tag": "span",
+  "attr": "text",
+  "value": "Spațiu / Sală"
+ },
+ {
+  "idx": 750,
+  "start": 80924,
+  "tag": "span",
+  "attr": "text",
+  "value": "Cameră Cazare"
+ },
+ {
+  "idx": 753,
+  "start": 81110,
+  "tag": "span",
+  "attr": "text",
+  "value": "Description:"
+ },
+ {
+  "idx": 757,
+  "start": 81738,
+  "tag": "span",
+  "attr": "text",
+  "value": "Open enrolment link"
+ },
+ {
+  "idx": 763,
+  "start": 82179,
+  "tag": "span",
+  "attr": "text",
+  "value": "View only: you can only edit or delete events you created."
+ },
+ {
+  "idx": 772,
+  "start": 83038,
+  "tag": "span",
+  "id": "post-dialog-action-text",
+  "attr": "text",
+  "value": "Schedule New Post"
+ },
+ {
+  "idx": 773,
+  "start": 83116,
+  "tag": "button",
+  "id": "close-post-dialog-btn",
+  "attr": "aria-label",
+  "value": "Close dialog"
+ },
+ {
+  "idx": 787,
+  "start": 84298,
+  "tag": "span",
+  "id": "spec-summary-badge",
+  "attr": "text",
+  "value": "Standard Spec"
+ },
+ {
+  "idx": 797,
+  "start": 85261,
+  "tag": "input",
+  "id": "post-title-input",
+  "attr": "placeholder",
+  "value": "e.g. 5 Strategies for Organic Reach in 2026"
+ },
+ {
+  "idx": 799,
+  "start": 85500,
+  "tag": "label",
+  "attr": "text",
+  "value": "Media Asset (Video / Photo / Photos) *"
+ },
+ {
+  "idx": 805,
+  "start": 85913,
+  "tag": "div",
+  "attr": "text",
+  "value": "or drag & drop files here"
+ },
+ {
+  "idx": 806,
+  "start": 85933,
+  "tag": "strong",
+  "attr": "text",
+  "value": "Click to upload"
+ },
+ {
+  "idx": 807,
+  "start": 86006,
+  "tag": "p",
+  "attr": "text",
+  "value": "Supports MP4, MOV, JPG, PNG, WebP (Validated to selected standard)"
+ },
+ {
+  "idx": 810,
+  "start": 86415,
+  "tag": "input",
+  "id": "media-url-input",
+  "attr": "placeholder",
+  "value": "Or paste media image/video URL..."
+ },
+ {
+  "idx": 811,
+  "start": 86551,
+  "tag": "button",
+  "id": "apply-url-btn",
+  "attr": "text",
+  "value": "Load URL"
+ },
+ {
+  "idx": 817,
+  "start": 87176,
+  "tag": "span",
+  "id": "preview-media-name",
+  "attr": "text",
+  "value": "No media selected"
+ },
+ {
+  "idx": 818,
+  "start": 87245,
+  "tag": "span",
+  "id": "preview-aspect-pill",
+  "attr": "text",
+  "value": "Ratio: 9:16"
+ },
+ {
+  "idx": 822,
+  "start": 87756,
+  "tag": "span",
+  "attr": "text",
+  "value": "For 4K Videos, RAWs, Drive, Dropbox, Network Shares"
+ },
+ {
+  "idx": 824,
+  "start": 88030,
+  "tag": "input",
+  "id": "post-share-link",
+  "attr": "placeholder",
+  "value": "e.g. https://drive.google.com/..., Dropbox link, or \\\\share\\assets\\video.mp4"
+ },
+ {
+  "idx": 828,
+  "start": 88484,
+  "tag": "small",
+  "attr": "text",
+  "value": "Keep large video masters and raw assets on your share and have the link at hand directly inside the post."
+ },
+ {
+  "idx": 832,
+  "start": 89022,
+  "tag": "span",
+  "id": "caption-counter",
+  "attr": "text",
+  "value": "0 / 2200 chars"
+ },
+ {
+  "idx": 833,
+  "start": 89152,
+  "tag": "textarea",
+  "id": "post-desc-input",
+  "attr": "placeholder",
+  "value": "Write caption, hashtags, mentions..."
+ },
+ {
+  "idx": 837,
+  "start": 89520,
+  "tag": "option",
+  "attr": "text",
+  "value": "Scheduled"
+ },
+ {
+  "idx": 838,
+  "start": 89577,
+  "tag": "option",
+  "attr": "text",
+  "value": "Published"
+ },
+ {
+  "idx": 839,
+  "start": 89634,
+  "tag": "option",
+  "attr": "text",
+  "value": "Draft"
+ },
+ {
+  "idx": 846,
+  "start": 90290,
+  "tag": "button",
+  "id": "close-detail-dialog-btn",
+  "attr": "aria-label",
+  "value": "Close dialog"
+ },
+ {
+  "idx": 852,
+  "start": 90834,
+  "tag": "h3",
+  "id": "detail-title",
+  "attr": "text",
+  "value": "Post Title"
+ },
+ {
+  "idx": 859,
+  "start": 91306,
+  "tag": "strong",
+  "id": "detail-post-type",
+  "attr": "text",
+  "value": "Feed Photo (1:1)"
+ },
+ {
+  "idx": 862,
+  "start": 91515,
+  "tag": "strong",
+  "id": "detail-media-format",
+  "attr": "text",
+  "value": "Single Photo"
+ },
+ {
+  "idx": 865,
+  "start": 91710,
+  "tag": "strong",
+  "id": "detail-status",
+  "attr": "text",
+  "value": "Scheduled"
+ },
+ {
+  "idx": 868,
+  "start": 92209,
+  "tag": "span",
+  "attr": "text",
+  "value": "Heavy media / video asset share link:"
+ },
+ {
+  "idx": 869,
+  "start": 92414,
+  "tag": "span",
+  "id": "detail-share-status-badge",
+  "attr": "text",
+  "value": "Linked"
+ },
+ {
+  "idx": 871,
+  "start": 92684,
+  "tag": "a",
+  "id": "detail-share-link-text",
+  "attr": "text",
+  "value": "https://..."
+ },
+ {
+  "idx": 873,
+  "start": 92996,
+  "tag": "button",
+  "id": "btn-detail-copy-share",
+  "attr": "title",
+  "value": "Copy link to clipboard"
+ },
+ {
+  "idx": 874,
+  "start": 93234,
+  "tag": "a",
+  "id": "btn-detail-open-share",
+  "attr": "title",
+  "value": "Open share folder / file in new tab"
+ },
+ {
+  "idx": 878,
+  "start": 93689,
+  "tag": "span",
+  "attr": "text",
+  "value": "Caption / Description:"
+ },
+ {
+  "idx": 890,
+  "start": 95112,
+  "tag": "button",
+  "id": "close-cp-dialog-btn",
+  "attr": "aria-label",
+  "value": "Close control panel"
+ },
+ {
+  "idx": 898,
+  "start": 95982,
+  "tag": "input",
+  "id": "new-platform-name",
+  "attr": "placeholder",
+  "value": "e.g. Threads, Pinterest, LinkedIn"
+ },
+ {
+  "idx": 904,
+  "start": 96566,
+  "tag": "input",
+  "id": "new-platform-domain",
+  "attr": "placeholder",
+  "value": "e.g. linkedin.com, threads.net, x.com"
+ },
+ {
+  "idx": 907,
+  "start": 96842,
+  "tag": "input",
+  "id": "new-platform-desc",
+  "attr": "placeholder",
+  "value": "e.g. Professional network or microblogging"
+ },
+ {
+  "idx": 921,
+  "start": 98414,
+  "tag": "button",
+  "id": "close-standards-dialog-btn",
+  "attr": "aria-label",
+  "value": "Close standards dialog"
+ }
+]
