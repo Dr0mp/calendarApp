@@ -1,5 +1,5 @@
 import fs from 'fs';
-import path from 'path';const D=path.resolve(process.argv[2]||'.')+'/';
+import path from 'path';const R0=path.resolve(process.argv[2]||'.');const D=(await import('fs')).existsSync(R0+'/public/index.html')?R0+'/public/':R0+'/';
 const {TRANSLATIONS}=await import('file://'+D+'i18n.js');
 const js=fs.readFileSync(D+'app.js','utf8'),html=fs.readFileSync(D+'index.html','utf8');
 const ro=Object.keys(TRANSLATIONS.ro),en=Object.keys(TRANSLATIONS.en);

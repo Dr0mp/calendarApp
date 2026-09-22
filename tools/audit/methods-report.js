@@ -1,5 +1,5 @@
 const fs=require('fs'),acorn=require('acorn'),walk=require('acorn-walk');
-const D=require('path').resolve(process.argv[2]||'.')+'/';const js=fs.readFileSync(D+'app.js','utf8');const html=fs.readFileSync(D+'index.html','utf8');
+const D=(p=>require('fs').existsSync(p+'/public/index.html')?p+'/public/':p+'/')(require('path').resolve(process.argv[2]||'.'));const js=fs.readFileSync(D+'app.js','utf8');const html=fs.readFileSync(D+'index.html','utf8');
 const ast=acorn.parse(js,{ecmaVersion:'latest',sourceType:'module',locations:true});
 const classes=[];walk.full(ast,n=>{if(n.type==='ClassDeclaration'||n.type==='ClassExpression')classes.push({name:n.id&&n.id.name,line:n.loc.start.line,end:n.loc.end.line,methods:n.body.body.filter(m=>m.type==='MethodDefinition'||m.type==='PropertyDefinition').map(m=>({k:m.key.name||m.key.value,l:m.loc.start.line,e:m.loc.end.line,kind:m.kind}))})});
 const refs=Object.create(null);walk.full(ast,n=>{if(n.type==='MemberExpression'&&!n.computed&&n.property.name)refs[n.property.name]=(refs[n.property.name]||0)+1;});

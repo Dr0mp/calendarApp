@@ -1,0 +1,49 @@
+// Regression tests for bugs found in the audits (dead-code audit A1–A5).
+import { test, expect } from '@playwright/test';
+import { boot, login } from './helpers.js';
+
+test('A1: wizard back button is translated, not the raw key "cancel"', async ({ page }) => {
+  const errors = await boot(page); await login(page, 'demo_admin');
+  await page.click('#nav-schedule-btn');
+  await expect(page.locator('#wizard-prev-btn')).toHaveText('Anulează');
+  expect(errors).toEqual([]);
+});
+
+test('A2: "today" follows the real clock, not 15 Sep 2026', async ({ page }) => {
+  await boot(page, { now: new Date('2026-11-03T10:00:00+02:00') }); await login(page, 'demo_admin');
+  await page.click('#nav-events-btn');
+  await page.click('#btn-zoom-monthly');
+  await expect(page.locator('#events-current-month-label')).toContainText('Noiembrie');
+  await page.click('#events-prev-month-btn');
+  await page.click('#events-today-btn');
+  await expect(page.locator('#events-current-month-label')).toContainText('Noiembrie');
+  await page.click('#nav-social-btn');
+  await expect(page.locator('#current-month-label')).toContainText('Noiembrie');
+});
+
+test('A3: a stale "show only what we have" preference no longer hides platforms', async ({ page }) => {
+  await boot(page, { storage: { social_cal_prefs_2026_v1: JSON.stringify({ showOnlyWhatWeHave: true }) } });
+  await login(page, 'demo_admin');
+  const withPref = await page.locator('#platform-filter-bar button').count();
+  const ctx2 = await page.context().browser().newContext({ baseURL: 'http://localhost:3100' });
+  const p2 = await ctx2.newPage(); await boot(p2); await login(p2, 'demo_admin');
+  const fresh = await p2.locator('#platform-filter-bar button').count();
+  await ctx2.close();
+  expect(withPref).toBe(fresh);
+});
+
+test('A4: a forged localStorage session does not open the app', async ({ page }) => {
+  await boot(page, { storage: { cal_suite_auth_session_v1: JSON.stringify({ id: 'user-admin', username: 'admin', name: 'X', role: 'admin' }) } });
+  await expect(page.locator('#direct-login-view')).toBeVisible();
+  await expect(page.locator('#universal-nav-bar')).toBeHidden();
+  expect(await page.evaluate(() => localStorage.getItem('cal_suite_auth_session_v1'))).toBeNull();
+});
+
+test('A5: notification cards carry the is-pending / is-promoted state classes', async ({ page }) => {
+  await boot(page); await login(page, 'demo_admin');
+  await page.click('#btn-social-event-notifications');
+  const cards = page.locator('#social-notifications-list .event-notification-card');
+  const n = await cards.count();
+  expect(n).toBeGreaterThan(0);
+  for (let i = 0; i < n; i++) await expect(cards.nth(i)).toHaveClass(/\bis-(pending|promoted)\b/);
+});

@@ -9,7 +9,7 @@ const n = (txt, re) => { const m = txt.match(re); return m ? m[1] : '?'; };
 const lines = f => fs.existsSync(path.join(root, f)) ? fs.readFileSync(path.join(root, f), 'utf8').split('\n').length : 0;
 const jsFiles = []; (function w(d){ for (const f of fs.readdirSync(d)) { const p = path.join(d, f); if (fs.statSync(p).isDirectory()) w(p); else if (f.endsWith('.js')) jsFiles.push(p); } })(path.join(root, fs.existsSync(path.join(root,'src')) ? 'src' : '.').replace(/\/\.$/, ''));
 const rows = [
-  ['styles.css lines', lines(fs.existsSync(path.join(root,'src')) ? 'src/styles.css' : 'styles.css') || lines('styles.css')],
+  ['styles.css lines', lines('public/styles.css') || lines('styles.css')],
   ['duplicate selectors', n(css, /SELECTORS DEFINED MULTIPLE TIMES \(same context\): (\d+)/)],
   ['overridden props', n(css, /PROPERTY OVERRIDDEN BY LATER RULE OF SAME SELECTOR: (\d+)/)],
   ['!important', n(css, /## !important: (\d+)/)],

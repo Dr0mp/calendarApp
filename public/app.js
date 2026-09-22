@@ -12,13 +12,14 @@ const STORAGE_USERS_KEY = "cal_suite_users_v1";
 const STORAGE_EVENTS_KEY = "cal_suite_events_v1";
 const STORAGE_SPACES_KEY = "cal_suite_spaces_v2";
 const STORAGE_ROOMS_KEY = "cal_suite_rooms_v2";
-const STORAGE_AUTH_SESSION_KEY = "cal_suite_auth_session_v1";
 const STORAGE_ACTIVE_APP_KEY = "cal_suite_active_app_v1";
 const STORAGE_STORAGE_SIM_KEY = "cal_suite_storage_sim_v1";
 const DEFAULT_STORAGE_QUOTA_BYTES = 8 * 1024 * 1024 * 1024; // 8 GB
 
 class SocialCalendarApp {
   constructor() {
+    this.cleanupLegacyStorage();
+
     // Platform & Social Posts Data
     this.platforms = this.loadPlatforms();
     this.posts = this.loadPosts();
@@ -28,7 +29,8 @@ class SocialCalendarApp {
     this.spaces = this.loadSpaces();
     this.rooms = this.loadRooms();
     this.events = this.loadEvents();
-    this.currentUser = this.loadCurrentUser();
+    // The server session (httpOnly cookie) is the only source of truth: initServerAuth() decides the view.
+    this.currentUser = null;
     this.eventEntryType = "event"; // 'event' | 'locked'
     this.adminActiveCategory = "users"; // 'users' | 'events' | 'spaces' | 'rooms' | 'storage' | 'all'
 
@@ -36,35 +38,23 @@ class SocialCalendarApp {
     this.storageQuotaBytes = DEFAULT_STORAGE_QUOTA_BYTES;
     this.simulatedStorageRatio = this.loadSimulatedStorage();
     
-    // Direct login routing:
-    // If not logged in -> 'login'
-    // If logged in user (role 'user') -> 'events'
-    // If logged in admin (role 'admin') -> saved activeApp from localStorage or 'social'
-    if (!this.currentUser) {
-      this.activeApp = "login";
-    } else if (this.currentUser.role === "user") {
-      this.activeApp = "events";
-    } else {
-      this.activeApp = localStorage.getItem(STORAGE_ACTIVE_APP_KEY) || "social";
-      if (this.activeApp === "login" || this.activeApp === "portal") this.activeApp = "social";
-      this.isSocialUnlocked = true;
-    }
+    this.activeApp = "login";
     this.pendingLoginTarget = null;
 
     // Social Calendar view state (defaults: Year, Toate Platformele)
-    this.currentYear = 2026;
-    this.currentMonth = 8; // September 2026
+    const today = new Date();
+    this.currentYear = today.getFullYear();
+    this.currentMonth = today.getMonth();
     this.selectedPlatformId = "all";
-    this.showOnlyWhatWeHave = false;
     this.viewMode = "year"; // 'year' | 'calendar' | 'feed'
     this.currentDetailPostId = null;
     this.currentPostMedia = null;
     this.socialSearchQuery = "";
 
     // Team Events Calendar view state (defaults: Year zoom, Toate users)
-    this.eventsCurrentYear = 2026;
-    this.eventsCurrentMonth = 8; // September 2026
-    this.eventsActiveDate = "2026-09-15";
+    this.eventsCurrentYear = today.getFullYear();
+    this.eventsCurrentMonth = today.getMonth();
+    this.eventsActiveDate = this.getTodayDateString();
     this.eventsSelectedUser = "all";
     this.eventsZoomLevel = "yearly"; // 'daily' | 'monthly' | 'yearly'
     this.eventsOffHoursExpanded = false;
@@ -87,7 +77,8 @@ class SocialCalendarApp {
     this.bindEvents();
     this.applyLanguage(this.currentLang, false);
 
-    // Set initial view
+    // Hide the UI until the server session check resolves (avoids flashing the login screen).
+    document.documentElement.classList.add("is-booting");
     this.setAppView(this.activeApp);
 
     // Initialize server-side auth handshake
@@ -365,38 +356,22 @@ class SocialCalendarApp {
   }
 
   // Current User Session
-  loadCurrentUser() {
+  // One-time removal of localStorage keys written by earlier builds.
+  cleanupLegacyStorage() {
+    const SCHEMA_KEY = "cal_suite_schema";
+    const SCHEMA_VERSION = 2;
     try {
-      const stored = localStorage.getItem(STORAGE_AUTH_SESSION_KEY);
-      if (stored) {
-        const u = JSON.parse(stored);
-        if (u && u.name) {
-          u.name = u.name.replace(/\s*\([^)]*\)/g, "").trim();
-        }
-        return u;
-      }
-    } catch (e) {}
-    return null;
-  }
-
-  saveCurrentUser(user) {
-    this.currentUser = user;
-    try {
-      if (user) {
-        localStorage.setItem(STORAGE_AUTH_SESSION_KEY, JSON.stringify(user));
-      } else {
-        localStorage.removeItem(STORAGE_AUTH_SESSION_KEY);
-      }
-    } catch (e) {}
+      if (Number(localStorage.getItem(SCHEMA_KEY)) >= SCHEMA_VERSION) return;
+      ["cal_suite_auth_session_v1", "cal_suite_spaces_v1", "cal_suite_rooms_v1"].forEach(k => localStorage.removeItem(k));
+      localStorage.setItem(SCHEMA_KEY, String(SCHEMA_VERSION));
+    } catch (e) {
+      console.warn("Legacy storage cleanup skipped:", e);
+    }
   }
 
   loadPrefs() {
     try {
       const prefs = JSON.parse(localStorage.getItem(STORAGE_PREFS_KEY) || "{}");
-      if (prefs.showOnlyWhatWeHave !== undefined) {
-        this.showOnlyWhatWeHave = prefs.showOnlyWhatWeHave;
-        if (this.dom.toggleShowOnlyHave) this.dom.toggleShowOnlyHave.checked = this.showOnlyWhatWeHave;
-      }
       if (prefs.selectedPlatformId && (prefs.selectedPlatformId === "all" || this.getPlatform(prefs.selectedPlatformId))) {
         const p = this.getPlatform(prefs.selectedPlatformId);
         if (p && p.enabled === false) {
@@ -445,7 +420,6 @@ class SocialCalendarApp {
   savePrefs() {
     try {
       localStorage.setItem(STORAGE_PREFS_KEY, JSON.stringify({
-        showOnlyWhatWeHave: this.showOnlyWhatWeHave,
         selectedPlatformId: this.selectedPlatformId,
         viewMode: this.viewMode,
         eventsZoomLevel: this.eventsZoomLevel,
@@ -500,7 +474,13 @@ class SocialCalendarApp {
 
   t(key, fallback = "") {
     const dict = TRANSLATIONS[this.currentLang] || TRANSLATIONS.ro;
-    return dict[key] !== undefined ? dict[key] : (fallback || key);
+    if (dict[key] !== undefined) return dict[key];
+    if (!this._missingKeys) this._missingKeys = new Set();
+    if (!this._missingKeys.has(key)) {
+      this._missingKeys.add(key);
+      console.warn(`[i18n] missing key "${key}" (${this.currentLang})`);
+    }
+    return fallback || key;
   }
 
   setLanguage(lang) {
@@ -597,9 +577,6 @@ class SocialCalendarApp {
       this.dom.viewFeedBtn.textContent = this.t("social_view_feed");
       this.dom.viewFeedBtn.title = this.t("social_view_feed");
     }
-    const showHaveLabel = document.querySelector(".filter-toggle-container .toggle-label");
-    if (showHaveLabel) showHaveLabel.textContent = this.t("social_toggle_only_have");
-
     const openControlPanelLbl = document.getElementById("lbl-open-control-panel") || this.dom.openControlPanelBtn?.querySelector("span");
     if (openControlPanelLbl) openControlPanelLbl.textContent = this.t("social_platforms_btn");
     if (this.dom.openControlPanelBtn) this.dom.openControlPanelBtn.title = this.t("social_platforms_btn");
@@ -811,10 +788,10 @@ class SocialCalendarApp {
     if (this.wizardStepsConfig) {
       this.renderWizardIndicator();
       if (this.dom.wizardPrevBtn) {
-        this.dom.wizardPrevBtn.textContent = this.wizardCurrentStep === 1 ? (this.t("cancel") || "Anulează") : (this.t("wizard_btn_back") || "← Înapoi");
+        this.dom.wizardPrevBtn.textContent = this.wizardCurrentStep === 1 ? (this.t("cancel")) : (this.t("wizard_btn_back"));
       }
       if (this.dom.wizardNextBtn) {
-        this.dom.wizardNextBtn.textContent = this.t("wizard_btn_next") || "Pasul Următor →";
+        this.dom.wizardNextBtn.textContent = this.t("wizard_btn_next");
       }
     }
 
@@ -973,7 +950,6 @@ class SocialCalendarApp {
       currentMonthLabel: document.getElementById("current-month-label"),
       platformFilterBar: document.getElementById("platform-filter-bar"),
       socialSearchInput: document.getElementById("social-search-input"),
-      toggleShowOnlyHave: document.getElementById("toggle-show-only-have"),
       viewMonthBtn: document.getElementById("view-month-btn"),
       viewYearBtn: document.getElementById("view-year-btn"),
       viewFeedBtn: document.getElementById("view-feed-btn"),
@@ -1410,20 +1386,15 @@ class SocialCalendarApp {
     this.dom.prevMonthBtn?.addEventListener("click", () => this.changeMonth(-1));
     this.dom.nextMonthBtn?.addEventListener("click", () => this.changeMonth(1));
     this.dom.todayBtn?.addEventListener("click", () => {
-      this.currentYear = 2026;
-      this.currentMonth = 8; // September 2026
+      const today = new Date();
+      this.currentYear = today.getFullYear();
+      this.currentMonth = today.getMonth();
       this.render();
     });
 
     this.dom.viewMonthBtn?.addEventListener("click", () => this.setViewMode("calendar"));
     this.dom.viewYearBtn?.addEventListener("click", () => this.setViewMode("year"));
     this.dom.viewFeedBtn?.addEventListener("click", () => this.setViewMode("feed"));
-
-    this.dom.toggleShowOnlyHave?.addEventListener("change", (e) => {
-      this.showOnlyWhatWeHave = e.target.checked;
-      this.savePrefs();
-      this.render();
-    });
 
     this.dom.socialSearchInput?.addEventListener("input", (e) => {
       this.socialSearchQuery = (e.target.value || "").trim().toLowerCase();
@@ -1914,11 +1885,6 @@ class SocialCalendarApp {
     enabledPlatforms.forEach(platform => {
       const count = platformPostCounts[platform.id] || 0;
 
-      // "Show Only What We Have" filter: hide platforms with 0 posts in this month
-      if (this.showOnlyWhatWeHave && count === 0) {
-        return;
-      }
-
       const tab = document.createElement("button");
       tab.type = "button";
       tab.className = `btn-filter-tab ${this.selectedPlatformId === platform.id ? "active" : ""}`;
@@ -2007,11 +1973,6 @@ class SocialCalendarApp {
       }
 
       const dayPosts = postsByDate[cellDateString] || [];
-
-      // "Show Only What We Have" condition
-      if (this.showOnlyWhatWeHave && isCurrentMonthCell && dayPosts.length === 0) {
-        cell.classList.add("empty-filtered-out");
-      }
 
       // Day Header
       const dayHeader = document.createElement("div");
@@ -2690,7 +2651,7 @@ class SocialCalendarApp {
     } else {
       // Local or network share path (e.g. \\server\share or f:\...)
       this.copyToClipboard(clean);
-      alert((this.t("alert_share_path_detail") || "File share path copied to clipboard.\n\n\"${path}\"\n\nYou can paste it directly into Windows File Explorer or the Run dialog.").replace("${path}", clean));
+      alert((this.t("alert_share_path_detail")).replace("${path}", clean));
     }
   }
 
@@ -2805,7 +2766,7 @@ class SocialCalendarApp {
     this.savePosts();
     this.dom.detailDialog.close();
     this.render();
-    alert(this.t("alert_post_duplicated") || "Post duplicated successfully as a draft.");
+    alert(this.t("alert_post_duplicated"));
   }
 
   // Control Panel Handling
@@ -2905,7 +2866,7 @@ class SocialCalendarApp {
         });
         ptItem.querySelector(".cp-delete-pt-btn").addEventListener("click", () => {
           if (platform.postTypes.length <= 1) {
-            alert(this.t("alert_posttype_required") || "A platform must have at least one post type.");
+            alert(this.t("alert_posttype_required"));
             return;
           }
           platform.postTypes.splice(ptIdx, 1);
@@ -3015,7 +2976,7 @@ class SocialCalendarApp {
     this.dom.addPlatformForm.reset();
     this.renderControlPanelPlatformsList();
     this.render();
-    alert((this.t("alert_platform_added") || 'Platform "${name}" added successfully!').replace("${name}", name));
+    alert((this.t("alert_platform_added")).replace("${name}", name));
   }
 
   resetAllDefaults() {
@@ -3032,7 +2993,7 @@ class SocialCalendarApp {
       this.savePosts();
       this.renderControlPanelPlatformsList();
       this.render();
-      alert(this.t("alert_reset_complete") || "Reset to 2026 standards complete.");
+      alert(this.t("alert_reset_complete"));
     }
   }
 
@@ -3076,9 +3037,9 @@ class SocialCalendarApp {
         }
         this.renderControlPanelPlatformsList();
         this.render();
-        alert(this.t("alert_import_success") || "Import successful!");
+        alert(this.t("alert_import_success"));
       } catch (err) {
-        alert(this.t("alert_import_fail") || "Failed to parse imported JSON file.");
+        alert(this.t("alert_import_fail"));
       }
     };
     reader.readAsText(file);
@@ -3214,7 +3175,7 @@ class SocialCalendarApp {
       const cleanName = (this.currentUser.name || this.currentUser.username || "").replace(/\s*\([^)]*\)/g, "").trim();
       this.dom.navUserName.textContent = cleanName;
       if (this.isDemoAccount()) {
-        this.dom.navUserRole.textContent = this.t("demo_badge") || "Demo";
+        this.dom.navUserRole.textContent = this.t("demo_badge");
         this.dom.navUserRole.className = "user-role-badge role-demo";
       } else {
         this.dom.navUserRole.textContent = this.currentUser.role;
@@ -3256,7 +3217,7 @@ class SocialCalendarApp {
       }
       if (this.dom.navUserRole) {
         if (this.isDemoAccount()) {
-          this.dom.navUserRole.textContent = this.t("demo_badge") || "Demo";
+          this.dom.navUserRole.textContent = this.t("demo_badge");
           this.dom.navUserRole.className = "user-role-badge role-demo";
         } else {
           this.dom.navUserRole.textContent = this.currentUser.role;
@@ -3294,6 +3255,14 @@ class SocialCalendarApp {
   // AUTHENTICATION & SERVER REST HANDLERS
   // =========================================================================
   async initServerAuth() {
+    try {
+      await this.resolveServerSession();
+    } finally {
+      document.documentElement.classList.remove("is-booting");
+    }
+  }
+
+  async resolveServerSession() {
     try {
       const res = await fetch("/api/auth/me", { credentials: "include" });
       if (res.ok) {
@@ -3452,7 +3421,6 @@ class SocialCalendarApp {
       await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
     } catch (err) {}
     try {
-      localStorage.removeItem(STORAGE_AUTH_SESSION_KEY);
       localStorage.removeItem(STORAGE_ACTIVE_APP_KEY);
     } catch (err) {}
     this.setAppView("login");
@@ -3466,7 +3434,7 @@ class SocialCalendarApp {
   changeEventsPeriod(delta) {
     if (this.eventsZoomLevel === "daily") {
       // Shift active week by 7 days
-      const [y, m, d] = (this.eventsActiveDate || "2026-09-15").split("-").map(Number);
+      const [y, m, d] = (this.eventsActiveDate || this.getTodayDateString()).split("-").map(Number);
       const curr = new Date(y, m - 1, d);
       curr.setDate(curr.getDate() + (delta * 7));
       const ny = curr.getFullYear();
@@ -3494,9 +3462,10 @@ class SocialCalendarApp {
   }
 
   jumpToEventsToday() {
-    this.eventsCurrentYear = 2026;
-    this.eventsCurrentMonth = 8; // September
-    this.eventsActiveDate = "2026-09-15";
+    const today = new Date();
+    this.eventsCurrentYear = today.getFullYear();
+    this.eventsCurrentMonth = today.getMonth();
+    this.eventsActiveDate = this.getTodayDateString();
     this.renderEventsCalendar();
   }
 
@@ -3737,7 +3706,7 @@ class SocialCalendarApp {
     list.forEach(evt => {
       const isPromoted = evt.socialStatus === "promoted";
       const card = document.createElement("div");
-      card.className = `event-notification-card ${isPromoted ? 'promoted' : 'pending'}`;
+      card.className = `event-notification-card ${isPromoted ? 'is-promoted' : 'is-pending'}`;
       
       const eventDate = evt.startDate || evt.date;
       const eventTime = evt.hour || evt.time;
@@ -3818,7 +3787,7 @@ class SocialCalendarApp {
   }
 
   getWeekDays(anchorDateStr) {
-    const [y, m, d] = (anchorDateStr || "2026-09-15").split("-").map(Number);
+    const [y, m, d] = (anchorDateStr || this.getTodayDateString()).split("-").map(Number);
     const anchor = new Date(y, m - 1, d);
     let dayOfWeek = anchor.getDay() - 1; // Mon=0, Tue=1, ..., Sun=6
     if (dayOfWeek < 0) dayOfWeek = 6;
@@ -5090,13 +5059,13 @@ class SocialCalendarApp {
 
     ownEvents.forEach(event => {
       const type = event.entryType || (event.roomId && !event.spaceId ? "room_only" : "event");
-      let typeLabel = this.t("event_type_event") || "Eveniment Public";
+      let typeLabel = this.t("event_type_event");
       let typeClass = "type-event";
       if (type === "room_only") {
-        typeLabel = this.t("event_type_room_only") || "Doar Cazare";
+        typeLabel = this.t("event_type_room_only");
         typeClass = "type-room_only";
       } else if (type === "locked") {
-        typeLabel = this.t("event_type_locked") || "Blocare Interval";
+        typeLabel = this.t("event_type_locked");
         typeClass = "type-locked";
       }
 
@@ -5165,14 +5134,14 @@ class SocialCalendarApp {
           <div style="display: flex; gap: 6px;">
             <button type="button" class="btn btn-secondary btn-sm btn-my-event-edit">
               <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkle"></use></svg>
-              <span>${this.t("event_detail_edit_btn") || "Editează"}</span>
+              <span>${this.t("event_detail_edit_btn")}</span>
             </button>
             <button type="button" class="btn btn-secondary btn-sm btn-my-event-view">
               <svg class="ui-icon" aria-hidden="true"><use href="#icon-calendar"></use></svg>
-              <span>${this.t("event_detail_title") || "Detalii"}</span>
+              <span>${this.t("event_detail_title")}</span>
             </button>
           </div>
-          <button type="button" class="btn btn-danger btn-sm btn-my-event-delete" title="${this.t("event_detail_delete_btn") || "Șterge"}">
+          <button type="button" class="btn btn-danger btn-sm btn-my-event-delete" title="${this.t("event_detail_delete_btn")}">
             <svg class="ui-icon" aria-hidden="true"><use href="#icon-trash"></use></svg>
           </button>
         </div>
@@ -5278,7 +5247,7 @@ class SocialCalendarApp {
 
       const label = document.createElement("span");
       label.className = "wizard-step-label";
-      label.textContent = this.t(step.labelKey) || step.labelKey;
+      label.textContent = this.t(step.labelKey);
 
       stepItem.appendChild(badge);
       stepItem.appendChild(label);
@@ -5330,9 +5299,9 @@ class SocialCalendarApp {
 
     if (this.dom.wizardPrevBtn) {
       if (isFirstStep) {
-        this.dom.wizardPrevBtn.textContent = this.t("cancel") || "Anulează";
+        this.dom.wizardPrevBtn.textContent = this.t("cancel");
       } else {
-        this.dom.wizardPrevBtn.textContent = this.t("wizard_btn_back") || "← Înapoi";
+        this.dom.wizardPrevBtn.textContent = this.t("wizard_btn_back");
       }
     }
 
@@ -5342,15 +5311,15 @@ class SocialCalendarApp {
         this.dom.saveEventBtn.style.display = "inline-flex";
         const entryType = this.eventEntryType || "event";
         if (entryType === "locked") {
-          this.dom.saveEventBtn.textContent = this.t("wizard_btn_save_locked") || "✓ Confirmă Blocarea";
+          this.dom.saveEventBtn.textContent = this.t("wizard_btn_save_locked");
         } else if (entryType === "room_only") {
-          this.dom.saveEventBtn.textContent = this.t("wizard_btn_save_room") || "✓ Salvează Cazarea";
+          this.dom.saveEventBtn.textContent = this.t("wizard_btn_save_room");
         } else {
-          this.dom.saveEventBtn.textContent = this.t("wizard_btn_save_event") || "✓ Salvează Evenimentul";
+          this.dom.saveEventBtn.textContent = this.t("wizard_btn_save_event");
         }
       } else {
         this.dom.wizardNextBtn.style.display = "inline-flex";
-        this.dom.wizardNextBtn.textContent = this.t("wizard_btn_next") || "Pasul Următor →";
+        this.dom.wizardNextBtn.textContent = this.t("wizard_btn_next");
         this.dom.saveEventBtn.style.display = "none";
       }
     }
@@ -5366,29 +5335,29 @@ class SocialCalendarApp {
     if (paneId === "wizard-step-pane-1") {
       const title = this.dom.eventTitleInput?.value.trim();
       if (!title) {
-        alert(this.t("wizard_val_title_req") || "Vă rugăm să introduceți titlul înainte de a continua.");
+        alert(this.t("wizard_val_title_req"));
         this.dom.eventTitleInput?.focus();
         return false;
       }
       if (type === "event") {
         const space = this.dom.eventSpaceSelect?.value;
         if (!space) {
-          alert(this.t("wizard_val_space_req") || "Vă rugăm să selectați o sală / spațiu de desfășurare.");
+          alert(this.t("wizard_val_space_req"));
           this.dom.eventSpaceSelect?.focus();
           return false;
         }
       } else if (type === "room_only") {
         if (!this.currentRoomBookings || this.currentRoomBookings.length === 0) {
-          alert(this.t("wizard_val_room_req") || "Vă rugăm să selectați cel puțin o cameră de cazare validă.");
+          alert(this.t("wizard_val_room_req"));
           return false;
         }
         for (const booking of this.currentRoomBookings) {
           if (!booking.roomId || !booking.startDate || !booking.endDate) {
-            alert(this.t("wizard_val_room_req") || "Vă rugăm să selectați cel puțin o cameră de cazare validă.");
+            alert(this.t("wizard_val_room_req"));
             return false;
           }
           if (booking.endDate < booking.startDate) {
-            alert(this.t("alert_room_dates_invalid") || "Data de check-out nu poate fi înainte de check-in.");
+            alert(this.t("alert_room_dates_invalid"));
             return false;
           }
         }
@@ -5396,27 +5365,27 @@ class SocialCalendarApp {
     } else if (paneId === "wizard-step-pane-2") {
       const date = this.dom.eventDateInput?.value;
       if (!date) {
-        alert(this.t("wizard_val_date_req") || "Vă rugăm să selectați data de desfășurare.");
+        alert(this.t("wizard_val_date_req"));
         this.dom.eventDateInput?.focus();
         return false;
       }
       if (!this.dom.eventEditId?.value && this.isPastEventDate(date)) {
-        alert(this.t("event_past_readonly") || "Nu puteți programa evenimente în trecut.");
+        alert(this.t("event_past_readonly"));
         return false;
       }
     } else if (paneId === "wizard-step-pane-3") {
       if (this.dom.eventNeedsRoom?.checked) {
         if (!this.currentRoomBookings || this.currentRoomBookings.length === 0) {
-          alert(this.t("wizard_val_room_req") || "Vă rugăm să selectați cel puțin o cameră de cazare validă.");
+          alert(this.t("wizard_val_room_req"));
           return false;
         }
         for (const booking of this.currentRoomBookings) {
           if (!booking.roomId || !booking.startDate || !booking.endDate) {
-            alert(this.t("wizard_val_room_req") || "Vă rugăm să selectați cel puțin o cameră de cazare validă.");
+            alert(this.t("wizard_val_room_req"));
             return false;
           }
           if (booking.endDate < booking.startDate) {
-            alert(this.t("alert_room_dates_invalid") || "Data de check-out nu poate fi înainte de check-in.");
+            alert(this.t("alert_room_dates_invalid"));
             return false;
           }
         }
@@ -5445,7 +5414,7 @@ class SocialCalendarApp {
     if (type === "room_only") {
       const isAllowed = this.canBookRooms();
       if (!isAllowed) {
-        alert(this.t("event_room_user_blocked_msg") || "Doar Moderatorii și Administratorii pot rezerva camere de cazare.");
+        alert(this.t("event_room_user_blocked_msg"));
         return;
       }
     }
@@ -5472,20 +5441,20 @@ class SocialCalendarApp {
     // 1. Dynamic Labels
     if (this.dom.lblEventTitle) {
       if (isRoomOnly) {
-        this.dom.lblEventTitle.textContent = this.t("lbl_event_title_room") || "Titlu Rezervare / Nume Oaspeți *";
+        this.dom.lblEventTitle.textContent = this.t("lbl_event_title_room");
       } else if (isLocked) {
-        this.dom.lblEventTitle.textContent = this.t("lbl_event_title_locked") || "Titlu Interval / Motiv Blocare *";
+        this.dom.lblEventTitle.textContent = this.t("lbl_event_title_locked");
       } else {
-        this.dom.lblEventTitle.textContent = this.t("lbl_event_title") || "Titlu Eveniment *";
+        this.dom.lblEventTitle.textContent = this.t("lbl_event_title");
       }
     }
     if (this.dom.lblEventDesc) {
       if (isRoomOnly) {
-        this.dom.lblEventDesc.textContent = this.t("lbl_event_desc_room") || "Observații Cazare / Detalii Oaspeți";
+        this.dom.lblEventDesc.textContent = this.t("lbl_event_desc_room");
       } else if (isLocked) {
-        this.dom.lblEventDesc.textContent = this.t("lbl_event_desc_locked") || "Observații Private / Note";
+        this.dom.lblEventDesc.textContent = this.t("lbl_event_desc_locked");
       } else {
-        this.dom.lblEventDesc.textContent = this.t("lbl_event_desc") || "Descriere Eveniment";
+        this.dom.lblEventDesc.textContent = this.t("lbl_event_desc");
       }
     }
 
@@ -5586,7 +5555,7 @@ class SocialCalendarApp {
   handleToggleNeedsRoom(checked) {
     const isAllowed = this.currentUser && (this.currentUser.role === "admin" || this.currentUser.role === "moderator");
     if (checked && !isAllowed) {
-      alert(this.t("event_room_user_blocked_msg") || "Doar Moderatorii și Administratorii pot rezerva camere de cazare.");
+      alert(this.t("event_room_user_blocked_msg"));
       if (this.dom.eventNeedsRoom) this.dom.eventNeedsRoom.checked = false;
       return;
     }
@@ -5614,21 +5583,21 @@ class SocialCalendarApp {
       row.className = "room-booking-row";
       row.innerHTML = `
         <div class="room-booking-field">
-          <label>${this.t("event_room_label") || "Cameră Cazare"}</label>
+          <label>${this.t("event_room_label")}</label>
           <select class="form-select room-select" data-index="${idx}">
-            <option value="">${this.t("event_room_select_placeholder") || "-- Alegeți camera --"}</option>
+            <option value="">${this.t("event_room_select_placeholder")}</option>
             ${availableRooms.map(rm => `<option value="${rm.id}" ${rm.id === booking.roomId ? 'selected' : ''}>${this.escapeHtml(rm.name)} (${rm.type || 'Standard'}, ${rm.capacity || 2} locuri)</option>`).join("")}
           </select>
         </div>
         <div class="room-booking-field">
-          <label>${this.t("event_room_checkin") || "Check-in"}</label>
+          <label>${this.t("event_room_checkin")}</label>
           <input type="date" class="form-input room-start-date" data-index="${idx}" value="${booking.startDate || ''}">
         </div>
         <div class="room-booking-field">
-          <label>${this.t("event_room_checkout") || "Check-out"}</label>
+          <label>${this.t("event_room_checkout")}</label>
           <input type="date" class="form-input room-end-date" data-index="${idx}" value="${booking.endDate || booking.startDate || ''}">
         </div>
-        <button type="button" class="btn-remove-room-booking" data-index="${idx}" title="${this.t("event_room_remove") || "Șterge"}">
+        <button type="button" class="btn-remove-room-booking" data-index="${idx}" title="${this.t("event_room_remove")}">
           <svg class="ui-icon" aria-hidden="true"><use href="#icon-trash"></use></svg>
         </button>
       `;
@@ -5657,7 +5626,7 @@ class SocialCalendarApp {
   handleAddRoomBookingRow(roomId = "", startDate = "", endDate = "") {
     const isAllowed = this.currentUser && (this.currentUser.role === "admin" || this.currentUser.role === "moderator");
     if (!isAllowed) {
-      alert(this.t("event_room_user_blocked_msg") || "Doar Moderatorii și Administratorii pot rezerva camere de cazare.");
+      alert(this.t("event_room_user_blocked_msg"));
       return;
     }
     if (!this.currentRoomBookings) this.currentRoomBookings = [];
@@ -5921,17 +5890,17 @@ class SocialCalendarApp {
       }
 
       if (!this.currentRoomBookings || this.currentRoomBookings.length === 0) {
-        alert(isRoomOnly ? (this.t("alert_room_required_room_only") || "Vă rugăm să adăugați cel puțin o cameră de cazare.") : (this.t("alert_room_required_event") || "Vă rugăm să adăugați cel puțin o cameră de cazare sau debifați opțiunea de cazare."));
+        alert(isRoomOnly ? (this.t("alert_room_required_room_only")) : (this.t("alert_room_required_event")));
         return;
       }
 
       for (const booking of this.currentRoomBookings) {
         if (!booking.roomId) {
-          alert(this.t("alert_room_select_all") || "Vă rugăm să selectați camera pentru toate înregistrările de cazare.");
+          alert(this.t("alert_room_select_all"));
           return;
         }
         if (!booking.startDate || !booking.endDate) {
-          alert(this.t("alert_room_dates_required") || "Vă rugăm să specificați data de check-in și check-out pentru fiecare cameră.");
+          alert(this.t("alert_room_dates_required"));
           return;
         }
         if (booking.endDate < booking.startDate) {
@@ -5979,7 +5948,7 @@ class SocialCalendarApp {
       if (idx !== -1) {
         const existingEvent = this.events[idx];
         if (!this.canEditEvent(existingEvent)) {
-          alert(this.t("alert_permission_denied") || "Permission denied.");
+          alert(this.t("alert_permission_denied"));
           return;
         }
 
@@ -6269,7 +6238,7 @@ class SocialCalendarApp {
     // Privacy protection on private/locked entries
     const canViewPrivateDesc = !isLocked || (this.currentUser && (this.currentUser.role === 'admin' || this.currentUser.role === 'moderator' || this.currentUser.id === event.creatorId || this.currentUser.username === event.creatorUsername));
     if (!canViewPrivateDesc) {
-      this.dom.eventDetailDesc.textContent = this.t("event_private_desc_hidden") || "Descrierea acestui interval privat este vizibilă doar pentru organizator și administratori.";
+      this.dom.eventDetailDesc.textContent = this.t("event_private_desc_hidden");
       this.dom.eventDetailDesc.style.fontStyle = "italic";
       this.dom.eventDetailDesc.style.opacity = "0.75";
     } else {
@@ -6317,7 +6286,7 @@ class SocialCalendarApp {
     if (!event) return;
 
     if (!this.canEditEvent(event)) {
-      alert(this.t("alert_permission_denied") || "Permission denied.");
+      alert(this.t("alert_permission_denied"));
       return;
     }
 
@@ -6344,7 +6313,7 @@ class SocialCalendarApp {
       }
     }
 
-    if (confirm((this.t("confirm_delete_event") || `Delete the event "${event.title}"?`).replace("${title}", event.title))) {
+    if (confirm(this.t("confirm_delete_event").replace("${title}", event.title))) {
       this.events = this.events.filter(e => e.id !== event.id);
       this.saveEvents();
       this.updateSocialNotificationBadge();
@@ -6442,11 +6411,11 @@ class SocialCalendarApp {
           <span class="user-role-badge ${user.role === 'admin' ? 'role-admin' : ''}">${user.role}</span>
         </td>
         <td><strong>${userEventCount}</strong> events</td>
-        <td style="color: var(--text-muted); font-size: 0.75rem;">${user.createdAt || '2026-09-01'}</td>
+        <td style="color: var(--text-muted); font-size: 0.75rem;">${user.createdAt || '—'}</td>
         <td>
           <div style="display: flex; gap: 6px; align-items: center;">
-            <button class="btn btn-secondary btn-sm btn-edit-user" data-uid="${user.id}" title="${isSystemAdmin ? 'Change Name & Password' : 'Edit User'}">${this.t("admin_edit_btn") || "Edit"}</button>
-            ${(isSystemAdmin || isSelf) ? '' : `<button class="btn btn-danger btn-sm btn-del-user" data-uid="${user.id}">${this.t("admin_delete_btn") || "Delete"}</button>`}
+            <button class="btn btn-secondary btn-sm btn-edit-user" data-uid="${user.id}" title="${isSystemAdmin ? 'Change Name & Password' : 'Edit User'}">${this.t("admin_edit_btn")}</button>
+            ${(isSystemAdmin || isSelf) ? '' : `<button class="btn btn-danger btn-sm btn-del-user" data-uid="${user.id}">${this.t("admin_delete_btn")}</button>`}
             ${isSystemAdmin ? '<span class="badge-subtle" style="color: #ef4444; font-size: 0.72rem; font-weight: 600;">Root Admin</span>' : ''}
           </div>
         </td>
@@ -6493,8 +6462,8 @@ class SocialCalendarApp {
         <td>
           <div style="font-weight: 700; color: var(--text-primary);">
             ${isLocked ? '🔒 ' : (isRoomOnly ? '🛏️ ' : '')}${this.escapeHtml(evt.title)}
-            ${isLocked ? `<span class="badge-subtle" style="color: #fbbf24; font-size: 0.68rem; margin-left: 4px;">${this.t("badge_locked_hours") || "Locked Hours"}</span>` : ''}
-            ${isRoomOnly ? `<span class="badge-subtle" style="color: #c084fc; font-size: 0.68rem; margin-left: 4px;">${this.t("badge_room_booking") || "Room Booking"}</span>` : ''}
+            ${isLocked ? `<span class="badge-subtle" style="color: #fbbf24; font-size: 0.68rem; margin-left: 4px;">${this.t("badge_locked_hours")}</span>` : ''}
+            ${isRoomOnly ? `<span class="badge-subtle" style="color: #c084fc; font-size: 0.68rem; margin-left: 4px;">${this.t("badge_room_booking")}</span>` : ''}
             ${evt.isRecurrent ? `<span class="badge-subtle" style="color: #38bdf8; font-size: 0.68rem; margin-left: 4px;">Month ${evt.recurrenceIndex}/${evt.recurrenceTotal}</span>` : ''}
           </div>
           <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-top: 3px;">
@@ -6505,7 +6474,7 @@ class SocialCalendarApp {
         </td>
         <td>
           <span class="promo-status-badge ${isLocked ? 'locked' : (isRoomOnly ? 'room_only' : (isPromoted ? 'promoted' : 'pending'))}" style="${isLocked ? 'background: rgba(245, 158, 11, 0.15); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3);' : (isRoomOnly ? 'background: rgba(168, 85, 247, 0.15); color: #c084fc; border-color: rgba(168, 85, 247, 0.3);' : '')}">
-            ${isLocked ? 'Private / Locked' : (isRoomOnly ? (this.t("badge_room_booking") || "Room Booking") : (isPromoted ? 'Promoted' : 'Awaiting promotion'))}
+            ${isLocked ? 'Private / Locked' : (isRoomOnly ? (this.t("badge_room_booking")) : (isPromoted ? 'Promoted' : 'Awaiting promotion'))}
           </span>
         </td>
         <td>
@@ -6541,7 +6510,7 @@ class SocialCalendarApp {
     (this.spaces || []).forEach(space => {
       const usageCount = this.events.filter(e => e.spaceId === space.id).length;
       const isEnabled = space.enabled !== false;
-      const countLabel = usageCount === 1 ? (this.t("yearly_events_count_singular") || "eveniment") : (this.t("yearly_events_count_plural") || "evenimente");
+      const countLabel = usageCount === 1 ? (this.t("yearly_events_count_singular")) : (this.t("yearly_events_count_plural"));
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>
@@ -6555,13 +6524,13 @@ class SocialCalendarApp {
         <td><strong>${usageCount}</strong> <span style="font-size: 0.78rem; color: var(--text-muted);">${countLabel}</span></td>
         <td>
           <span class="user-role-badge ${isEnabled ? 'role-admin' : ''}" style="${isEnabled ? 'background: rgba(34, 197, 94, 0.15); color: #4ade80; border-color: rgba(34, 197, 94, 0.3);' : 'background: rgba(148, 163, 184, 0.15); color: #94a3b8;'}">
-            ${isEnabled ? (this.t("cp_status_active") || 'Activ') : (this.t("cp_status_disabled") || 'Dezactivat')}
+            ${isEnabled ? (this.t("cp_status_active")) : (this.t("cp_status_disabled"))}
           </span>
         </td>
         <td>
           <div style="display: flex; gap: 6px; align-items: center;">
-            <button class="btn btn-secondary btn-sm btn-toggle-space" data-id="${space.id}">${isEnabled ? (this.t("btn_disable") || 'Dezactivează') : (this.t("btn_enable") || 'Activează')}</button>
-            <button class="btn btn-danger btn-sm btn-del-space" data-id="${space.id}">${this.t("admin_delete_btn") || "Șterge"}</button>
+            <button class="btn btn-secondary btn-sm btn-toggle-space" data-id="${space.id}">${isEnabled ? (this.t("btn_disable")) : (this.t("btn_enable"))}</button>
+            <button class="btn btn-danger btn-sm btn-del-space" data-id="${space.id}">${this.t("admin_delete_btn")}</button>
           </div>
         </td>
       `;
@@ -6609,7 +6578,7 @@ class SocialCalendarApp {
     }
     const space = (this.spaces || []).find(s => s.id === id);
     if (!space) return;
-    if (confirm((this.t("confirm_delete_space") || `Delete space "${space.name}"?`).replace("${name}", space.name))) {
+    if (confirm(this.t("confirm_delete_space").replace("${name}", space.name))) {
       this.spaces = this.spaces.filter(s => s.id !== id);
       this.saveSpaces();
       this.renderAdminSpaces();
@@ -6646,16 +6615,16 @@ class SocialCalendarApp {
         <td><span class="badge-subtle">${this.escapeHtml(room.type || 'Standard')}</span></td>
         <td><strong>${room.capacity || 2}</strong> <span style="font-size: 0.78rem; color: var(--text-muted);">${this.currentLang === 'ro' ? 'oaspeți' : 'guests'} (${room.beds || 1} ${this.currentLang === 'ro' ? 'paturi' : 'beds'})</span></td>
         <td><span style="color: var(--text-muted); font-size: 0.8rem;">${this.escapeHtml(room.notes || '-')}</span></td>
-        <td><strong>${usageCount}</strong> <span style="font-size: 0.78rem; color: var(--text-muted);">${this.t("admin_th_room_bookings") || (this.currentLang === 'ro' ? 'rezervări' : 'bookings')}</span></td>
+        <td><strong>${usageCount}</strong> <span style="font-size: 0.78rem; color: var(--text-muted);">${this.t("admin_th_room_bookings")}</span></td>
         <td>
           <span class="user-role-badge ${isEnabled ? 'role-admin' : ''}" style="${isEnabled ? 'background: rgba(168, 85, 247, 0.15); color: #c084fc; border-color: rgba(168, 85, 247, 0.3);' : 'background: rgba(148, 163, 184, 0.15); color: #94a3b8;'}">
-            ${isEnabled ? (this.t("cp_status_active") || 'Activ') : (this.t("cp_status_disabled") || 'Dezactivat')}
+            ${isEnabled ? (this.t("cp_status_active")) : (this.t("cp_status_disabled"))}
           </span>
         </td>
         <td>
           <div style="display: flex; gap: 6px; align-items: center;">
-            <button class="btn btn-secondary btn-sm btn-toggle-room" data-id="${room.id}">${isEnabled ? (this.t("btn_disable") || 'Dezactivează') : (this.t("btn_enable") || 'Activează')}</button>
-            <button class="btn btn-danger btn-sm btn-del-room" data-id="${room.id}">${this.t("admin_delete_btn") || "Șterge"}</button>
+            <button class="btn btn-secondary btn-sm btn-toggle-room" data-id="${room.id}">${isEnabled ? (this.t("btn_disable")) : (this.t("btn_enable"))}</button>
+            <button class="btn btn-danger btn-sm btn-del-room" data-id="${room.id}">${this.t("admin_delete_btn")}</button>
           </div>
         </td>
       `;
@@ -6707,7 +6676,7 @@ class SocialCalendarApp {
     }
     const room = (this.rooms || []).find(r => r.id === id);
     if (!room) return;
-    if (confirm((this.t("confirm_delete_room") || `Delete room "${room.name}"?`).replace("${name}", room.name))) {
+    if (confirm(this.t("confirm_delete_room").replace("${name}", room.name))) {
       this.rooms = this.rooms.filter(r => r.id !== id);
       this.saveRooms();
       this.renderAdminRooms();
@@ -6875,7 +6844,7 @@ class SocialCalendarApp {
 
         const data = await res.json();
         if (!res.ok) {
-          alert(data.error || (this.t("alert_delete_user_failed") || "Failed to delete user"));
+          alert(data.error || (this.t("alert_delete_user_failed")));
           return;
         }
 

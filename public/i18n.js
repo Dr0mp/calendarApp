@@ -5,6 +5,11 @@ export const TRANSLATIONS = {
   ro: {
     // Top Universal Navigation
     nav_brand: "",
+    cancel: "Anulează",
+    event_type_event: "Eveniment Public",
+    event_type_room_only: "Doar Cazare",
+    event_type_locked: "Blocare Interval",
+    event_image_required: "Adăugați o imagine de copertă Facebook validă (16:9) pentru evenimentele publice.",
     nav_events: "Calendar",
     nav_schedule: "Programează eveniment",
     nav_my_events: "Evenimentele mele",
@@ -748,6 +753,11 @@ export const TRANSLATIONS = {
   en: {
     // Top Universal Navigation
     nav_brand: "",
+    cancel: "Cancel",
+    event_type_event: "Public Event",
+    event_type_room_only: "Accommodation Only",
+    event_type_locked: "Locked Interval",
+    event_image_required: "Add a valid Facebook cover image (16:9) for public events.",
     nav_events: "Calendar",
     nav_schedule: "Schedule Event",
     nav_my_events: "My Events",

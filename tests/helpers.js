@@ -1,10 +1,13 @@
 export const FIXED_NOW = new Date('2026-09-15T10:00:00+03:00');
 
-export async function boot(page, { theme = 'dark', lang = 'ro' } = {}) {
-  await page.clock.setFixedTime(FIXED_NOW);
+export async function boot(page, { theme = 'dark', lang = 'ro', now = FIXED_NOW, storage = {} } = {}) {
+  await page.clock.setFixedTime(now);
   const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
-  page.on('console', m => { if (m.type() === 'error' && !/401|Failed to load resource/.test(m.text())) errors.push('console: ' + m.text()); });
+  page.on('console', m => {
+    if (m.type() === 'error' && !/401|Failed to load resource/.test(m.text())) errors.push('console: ' + m.text());
+    if (m.type() === 'warning' && m.text().includes('[i18n]')) errors.push('i18n: ' + m.text());
+  });
   page.on('dialog', d => d.accept());
   // Deterministic, offline: stub every external image (Unsplash samples, Google favicons).
   const svg = (w, h, fill) => `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}"><rect width="100%" height="100%" fill="${fill}"/></svg>`;
@@ -13,14 +16,15 @@ export async function boot(page, { theme = 'dark', lang = 'ro' } = {}) {
     const m = url.match(/[?&]w=(\d+).*?[?&]h=(\d+)/);
     route.fulfill({ status: 200, contentType: 'image/svg+xml', body: m ? svg(m[1], m[2], '#6b7280') : svg(64, 64, '#9ca3af') });
   });
-  await page.addInitScript(([theme, lang]) => {
+  await page.addInitScript(([theme, lang, storage]) => {
     if (!sessionStorage.getItem('__seeded')) {
       localStorage.clear();
       localStorage.setItem('cal_suite_theme_v1', theme);
       localStorage.setItem('cal_suite_lang_v1', lang);
+      for (const [k, v] of Object.entries(storage)) localStorage.setItem(k, v);
       sessionStorage.setItem('__seeded', '1');
     }
-  }, [theme, lang]);
+  }, [theme, lang, storage]);
   await page.goto('/');
   return errors;
 }
