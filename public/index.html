@@ -1003,17 +1003,17 @@
       <div class="wizard-step-pane" id="wizard-step-pane-2">
         <div class="form-grid">
           <div class="form-group" id="event-date-group">
-            <label data-i18n="dropin_date_label" for="event-date-input" id="lbl-event-date">Data *</label>
+            <label data-i18n="event_form_date_label" for="event-date-input" id="lbl-event-date">Data *</label>
             <input type="date" id="event-date-input" class="form-input" required>
           </div>
 
           <div class="form-group" id="event-hour-group">
-            <label data-i18n="dropin_hour_label" for="event-hour-input" id="lbl-event-hour">Ora de Început *</label>
+            <label data-i18n="event_form_hour_label" for="event-hour-input" id="lbl-event-hour">Ora de Început *</label>
             <input type="time" id="event-hour-input" class="form-input" value="18:00" required>
           </div>
 
           <div class="form-group" id="event-duration-group">
-            <label data-i18n="dropin_duration_label" for="event-duration-input" id="lbl-event-duration">Durată (Ore) *</label>
+            <label data-i18n="event_form_duration_label" for="event-duration-input" id="lbl-event-duration">Durată (Ore) *</label>
             <input type="number" id="event-duration-input" class="form-input" min="0.5" max="24" step="0.5" value="2" placeholder="ex: 2" required>
           </div>
 
@@ -1021,11 +1021,11 @@
           <div class="form-group form-full recurrence-box u-bg-white-3 u-border u-rounded-md u-pt-10 u-pr-14 u-pb-10 u-pl-14 u-mb-6" id="event-recurrence-group">
             <label class="checkbox-label u-flex u-items-center u-gap-8 u-fw-700 u-cursor-pointer u-color-primary u-mb-0">
               <input class="u-w-16 u-h-16 u-accent-primary" type="checkbox" id="event-is-recurrent">
-              <span data-i18n="dropin_recurrent_label">Eveniment Recurent</span>
+              <span data-i18n="event_form_recurrent_label">Eveniment Recurent</span>
             </label>
             <div class="u-mt-10 u-pt-8 u-border-t" id="event-recurrence-options" style="display: none;">
               <div class="u-flex u-items-center u-gap-10 u-wrap">
-                <label class="u-text-xs u-color-secondary u-mb-0" data-i18n="dropin_recurrent_repeat" for="event-recurrence-months">Se repetă timp de:</label>
+                <label class="u-text-xs u-color-secondary u-mb-0" data-i18n="event_form_recurrent_repeat" for="event-recurrence-months">Se repetă timp de:</label>
                 <select id="event-recurrence-months" class="form-select u-maxw-160 u-text-xs u-pt-4 u-pr-8 u-pb-4 u-pl-8">
                   <option data-i18n="recurrence_months_2" value="2">2 luni</option>
                   <option data-i18n="recurrence_months_3" value="3" selected>3 luni</option>
@@ -1070,7 +1070,7 @@
         <div class="form-grid">
           <!-- Pricing and Enrolment (Public Events) -->
           <div class="form-group event-public-field" id="event-pricing-group">
-            <label data-i18n="dropin_price_label" for="event-price-input">Preț *</label>
+            <label data-i18n="event_form_price_label" for="event-price-input">Preț *</label>
             <div class="price-field-group">
               <input data-i18n-placeholder="event_price_placeholder" type="text" id="event-price-input" class="form-input" placeholder="0 sau Gratuit">
               <select data-i18n-aria-label="aria_currency" id="event-price-currency" class="form-select" aria-label="Monedă"><option value="RON">RON</option><option value="EUR">EUR</option></select>
@@ -1078,7 +1078,7 @@
           </div>
 
           <div class="form-group event-public-field" id="event-enroll-group">
-            <label data-i18n="dropin_enroll_label" for="event-enroll-input">Link Înscriere / Înregistrare *</label>
+            <label data-i18n="event_form_enroll_label" for="event-enroll-input">Link Înscriere / Înregistrare *</label>
             <input type="url" id="event-enroll-input" class="form-input" placeholder="https://example.com/register">
           </div>
 
@@ -1089,11 +1089,11 @@
 
           <!-- Facebook Page Image (16:9 Landscape) -->
           <div class="form-group form-full event-public-field" id="event-fb-cover-group">
-            <label data-i18n="dropin_fb_image_label" for="event-fb-image-file">Imagine Copertă pentru Pagina de Facebook &amp; Social (Format Strict 16:9) *</label>
+            <label data-i18n="event_form_fb_image_label" for="event-fb-image-file">Imagine Copertă pentru Pagina de Facebook &amp; Social (Format Strict 16:9) *</label>
             <div class="fb-upload-container">
               <div class="u-flex u-gap-8 u-mb-8">
                 <input type="file" id="event-fb-image-file" class="form-input u-flex-1" accept="image/*">
-                <button data-i18n="dropin_use_sample_btn" type="button" id="btn-use-fb-sample" class="btn btn-secondary u-text-2xs u-nowrap">Folosește Model 16:9</button>
+                <button data-i18n="event_form_use_sample_btn" type="button" id="btn-use-fb-sample" class="btn btn-secondary u-text-2xs u-nowrap">Folosește Model 16:9</button>
               </div>
               <input data-i18n-placeholder="event_fb_url_placeholder" type="url" id="event-fb-image-url" class="form-input u-mb-8" placeholder="Sau lipiți URL-ul imaginii (ex: https://...)">
               <input type="hidden" id="event-fb-image-data" value="">

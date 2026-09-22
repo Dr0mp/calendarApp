@@ -1,6 +1,7 @@
 # Helpers for the hardcoded-string sweep: exact replacements + new keys appended to both languages.
 import json
-ROOT = '/root/cal/public/src/'
+import os
+ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'public', 'src') + os.sep
 NEW_KEYS = {}
 def R(path, pairs):
     s = open(ROOT + path, encoding='utf8').read()

@@ -100,7 +100,7 @@ export const i18nMethods = {
       this.renderMyEventsPage();
     }
     const evDialogTitleLabel = document.querySelector("label[for='event-title-input']");
-    if (evDialogTitleLabel) evDialogTitleLabel.textContent = this.t("dropin_title_label");
+    if (evDialogTitleLabel) evDialogTitleLabel.textContent = this.t("event_form_title_label");
     const evDialogMatrixHint = document.querySelector("#event-free-hours-board")?.previousElementSibling?.querySelector("span");
     if (evDialogMatrixHint) evDialogMatrixHint.textContent = this.t("event_matrix_hint");
     document.querySelectorAll("input[name='event-timing-mode']").forEach(input => {
@@ -108,7 +108,7 @@ export const i18nMethods = {
       if (label) label.lastChild.textContent = ` ${this.t(input.value === "async" ? "event_timing_async" : "event_timing_consecutive")}`;
     });
     const evDialogDescLabel = document.querySelector("label[for='event-desc-input']");
-    if (evDialogDescLabel) evDialogDescLabel.textContent = this.t("dropin_desc_label");
+    if (evDialogDescLabel) evDialogDescLabel.textContent = this.t("event_form_desc_label");
     if (this.dom.saveEventBtn) this.dom.saveEventBtn.textContent = this.t("event_save_btn");
     if (this.wizardStepsConfig) {
       this.renderWizardIndicator();
