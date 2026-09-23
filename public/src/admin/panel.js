@@ -46,6 +46,14 @@ export const adminPanelMethods = {
     this.dom.adminCatTabs?.forEach(tab => {
       tab.classList.toggle("is-active", (tab.dataset.adminCat || "all") === category);
     });
+    // Phones: the tab strip scrolls sideways; keep the active tab centred (instant, page doesn't move).
+    const activeTab = [...(this.dom.adminCatTabs || [])].find(t => t.classList.contains("is-active"));
+    const strip = activeTab?.parentElement;
+    if (strip && strip.scrollWidth > strip.clientWidth) {
+      const tabBox = activeTab.getBoundingClientRect();
+      const stripBox = strip.getBoundingClientRect();
+      strip.scrollLeft += (tabBox.left + tabBox.width / 2) - (stripBox.left + stripBox.width / 2);
+    }
 
     const sections = [
       { key: "users", el: this.dom.adminUsersSection },

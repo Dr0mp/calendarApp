@@ -106,6 +106,26 @@ CSS refactors were also checked with `tools/audit/css-diff.mjs`. It compares the
   - the storage texts had "8 GB" hardcoded.
 - **Tests:** 6 new tests cover data shared across browsers, permissions, demo isolation, uploads and the storage panel. The suite now has 73 tests.
 
+## Phones and tablets (added after the clean-up)
+
+- **Bottom tab bar up to 900px:** Calendar, Schedule, My events, Social and More. The More sheet holds language, theme, passkeys and sign-out.
+- **Phones (≤640px):**
+  - Month grids use colour bars, and tapping a day opens it.
+  - The day timeline shows one day at a time.
+  - Admin tables become labelled cards, and dialogs fill the screen.
+  - Toolbars stack, and touch targets are at least 36–44px.
+  - No screen scrolls sideways; a test checks this on every view.
+- **Fixed along the way:**
+  - The admin spaces section showed the events-audit title and column headers. That's restored.
+  - The "moderator" role option was labelled "Administrator".
+  - The feed showed "(1 post)" and "+ Add Post" in English, with dates in the browser's language.
+  - Prices printed "Free (Team Internal) RON".
+  - The light-theme scheduling notices had low contrast.
+- **Tests:**
+  - A new `tests/mobile.spec.js` checks that nothing overflows, that the tab bar stays at the bottom, and covers the More sheet, tap-a-day, table cards and dialog sizes.
+  - There are now 9 phone screenshots.
+  - Visual captures now grow the viewport to the page height first: Chromium sometimes painted icons blank during full-page captures.
+
 ## Decisions I made for you (from the plan's defaults)
 
 | # | Decision |

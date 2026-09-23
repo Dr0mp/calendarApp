@@ -384,6 +384,7 @@ export const socialCalendarMethods = {
         const postCard = document.createElement("div");
         postCard.className = "post-card-pill";
         postCard.style.borderLeftColor = platform ? platform.color : "var(--primary)";
+        postCard.style.setProperty("--pill-accent", platform ? platform.color : "var(--primary)");
 
         const mediaIcon = post.mediaType === "video" ? this.t("media_video") : (post.mediaCount > 1 ? this.tf("media_gallery", { count: post.mediaCount }) : this.t("media_photo"));
 
@@ -410,6 +411,13 @@ export const socialCalendarMethods = {
       });
 
       cell.appendChild(postsContainer);
+      // Phones: posts show as colour bars; tapping a day with posts opens them in the feed.
+      if (dayPosts.length) {
+        cell.addEventListener("click", e => {
+          if (!this.isPhoneLayout() || e.target.closest(".btn-add-day")) return;
+          this.openFeedAtDate(cellDateString);
+        });
+      }
       this.dom.calendarDaysGrid.appendChild(cell);
     }
   },
@@ -496,6 +504,12 @@ export const socialCalendarMethods = {
     }
   },
   // Chronological Feed List View (Show only scheduled items cleanly)
+  openFeedAtDate(dateStr) {
+    this.setViewMode("feed");
+    requestAnimationFrame(() => {
+      this.dom.feedView.querySelector(`.feed-day-group[data-date="${dateStr}"]`)?.scrollIntoView({ block: "start" });
+    });
+  },
   renderFeedView(filteredPosts) {
     this.dom.feedView.innerHTML = "";
 
@@ -530,18 +544,19 @@ export const socialCalendarMethods = {
     Object.keys(grouped).forEach(dateStr => {
       const datePosts = grouped[dateStr];
       const dateObj = new Date(dateStr + "T00:00:00");
-      const dateFormatted = dateObj.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric", year: "numeric" });
+      const dateFormatted = dateObj.toLocaleDateString(this.locale(), { weekday: "short", month: "short", day: "numeric", year: "numeric" });
 
       const dayGroup = document.createElement("div");
       dayGroup.className = "feed-day-group";
+      dayGroup.dataset.date = dateStr;
 
       dayGroup.innerHTML = `
         <div class="feed-day-header">
           <div class="feed-day-title">
             <span class="day-date-tag">${dateFormatted}</span>
-            <span class="u-text-2xs u-fw-500 u-color-muted">(${datePosts.length} ${datePosts.length === 1 ? 'post' : 'posts'})</span>
+            <span class="u-text-2xs u-fw-500 u-color-muted">(${this.tn("count_posts", datePosts.length)})</span>
           </div>
-          <button class="btn btn-secondary btn-sm btn-feed-add" data-date="${dateStr}">+ Add Post</button>
+          <button class="btn btn-secondary btn-sm btn-feed-add" data-date="${dateStr}">+ ${this.t("social_new_post_btn")}</button>
         </div>
         <div class="feed-posts-grid"></div>
       `;

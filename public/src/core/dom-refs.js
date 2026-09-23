@@ -31,6 +31,13 @@ export const domRefsMethods = {
       navUserName: document.getElementById("nav-user-name"),
       navUserRole: document.getElementById("nav-user-role"),
       navLogoutBtn: document.getElementById("nav-logout-btn"),
+      navMoreBtn: document.getElementById("nav-more-btn"),
+      navMoreSheet: document.getElementById("nav-more-sheet"),
+      navMoreTitle: document.getElementById("nav-more-title"),
+      navMoreRole: document.getElementById("nav-more-role"),
+      closeNavMoreBtn: document.getElementById("close-nav-more-btn"),
+      morePasskeysBtn: document.getElementById("more-passkeys-btn"),
+      moreLogoutBtn: document.getElementById("more-logout-btn"),
 
       // Direct Login View
       directLoginView: document.getElementById("direct-login-view"),

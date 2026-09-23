@@ -5441,3 +5441,312 @@ button.timeline-time-header-spacer:hover {
   color: rgb(var(--purple-400));
   border-color: rgb(var(--purple-500) / 0.3);
 }
+
+/* ========================================================================= */
+/* RESPONSIVE: TABLET (≤900px) AND PHONE (≤640px)                             */
+/* Kept together at the end so it wins over the component rules above.        */
+/* ========================================================================= */
+
+/* Light theme: scheduling notices were pale yellow/violet text on pale fills. */
+:root[data-theme="light"] .event-date-warning-box { color: rgb(var(--amber-700)); }
+:root[data-theme="light"] .event-date-warning-box strong { color: rgb(var(--amber-700)); }
+:root[data-theme="light"] .smart-suggestion-header strong { color: rgb(var(--violet-600)); }
+:root[data-theme="light"] .smart-conflict-details { color: rgb(var(--amber-700)); }
+
+/* Short tab labels and the "More" tab exist only for small screens. */
+.nav-tab-short,
+.nav-more-btn { display: none; }
+
+/* "More" sheet (phones): slides up from the bottom. */
+.nav-more-sheet {
+  margin: auto 0 0 0;
+  width: 100%;
+  max-width: 100%;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.nav-more-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.nav-more-who { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.nav-more-who strong { font-size: var(--text-base); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nav-more-list { display: flex; flex-direction: column; padding: 6px 0 10px; }
+.nav-more-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 52px;
+  padding: 0 18px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.nav-more-action {
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  width: 100%;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.nav-more-action .ui-icon { width: 20px; height: 20px; color: var(--text-muted); }
+.nav-more-action.is-danger,
+.nav-more-action.is-danger .ui-icon { color: rgb(var(--red-400)); }
+
+@media (max-width: 900px) {
+  /* Phones and tablets: bottom tab bar + "More" sheet (the top bar can't fit everything). */
+  .nav-tab-label { display: none; }
+  .nav-tab-short { display: inline; }
+  .nav-user-pill .user-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* ---- Top bar: who you are + admin; everything else is in "More" ---- */
+  .universal-nav-bar {
+    height: calc(52px + env(safe-area-inset-top));
+    padding: env(safe-area-inset-top) 12px 0;
+    /* backdrop-filter would make the bar the containing block of the fixed bottom tabs */
+    backdrop-filter: none;
+  }
+  .universal-nav-container { gap: 8px; }
+  .universal-nav-bar .nav-right .lang-switcher-pill,
+  .universal-nav-bar .nav-right .theme-toggle,
+  .universal-nav-bar #nav-passkeys-btn,
+  .universal-nav-bar #nav-logout-btn { display: none !important; }
+  .nav-user-pill { height: 34px; padding: 0 10px; min-width: 0; }
+  .nav-user-pill .user-name { max-width: 46vw; }
+
+  /* ---- Bottom tab bar ---- */
+  .nav-menu-tabs {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 130;
+    height: calc(60px + env(safe-area-inset-bottom));
+    padding: 0 4px env(safe-area-inset-bottom);
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 0;
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border-subtle);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 -6px 18px rgb(0 0 0 / 0.25);
+  }
+  .nav-menu-tabs .nav-tab-btn {
+    height: 60px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    padding: 0 2px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    font-size: var(--text-3xs);
+    font-weight: 600;
+    min-width: 0;
+  }
+  .nav-menu-tabs .nav-tab-btn:hover { transform: none; background: transparent; }
+  .nav-menu-tabs .nav-tab-btn .ui-icon { width: 22px; height: 22px; }
+  .nav-menu-tabs .nav-tab-btn.is-active {
+    color: var(--primary-bright) !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: inset 0 2px 0 var(--primary-bright) !important;
+  }
+  .nav-tab-short { max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+  .nav-more-btn { display: inline-flex; }
+  #nav-my-events-count-badge {
+    position: absolute;
+    top: 6px;
+    left: calc(50% + 6px);
+    margin: 0 !important;
+  }
+
+  /* Page content must not hide behind the bottom bar. */
+  body:has(#universal-nav-bar:not([style*="display: none"])) {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom));
+  }
+  body:has(#universal-nav-bar:not([style*="display: none"])) .toast-region {
+    bottom: calc(72px + env(safe-area-inset-bottom));
+  }
+  .toast-region { left: 12px; right: 12px; max-width: none; }
+
+  :root[data-theme="light"] .nav-menu-tabs { box-shadow: 0 -4px 14px rgb(var(--slate-900) / 0.08); }
+  :root[data-theme="light"] .nav-menu-tabs .nav-tab-btn,
+  :root[data-theme="light"] .nav-menu-tabs .nav-tab-btn:hover { background: transparent; border: none; }
+  :root[data-theme="light"] .nav-menu-tabs .nav-tab-btn.is-active {
+    color: var(--primary) !important;
+    background: transparent !important;
+    box-shadow: inset 0 2px 0 var(--primary) !important;
+  }
+
+  /* The week timeline scrolls inside its own box instead of widening the page. */
+  .daily-timeline-container { overflow-x: auto; }
+}
+
+@media (max-width: 640px) {
+  /* ---- Page headers: stack title, period toolbar and actions ---- */
+  .app-header .header-top,
+  #social-calendar-app .social-header-top {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 10px 12px;
+  }
+  .brand-info h1,
+  .header-main-title { font-size: var(--text-xl); }
+  .brand-logo { width: 34px; height: 34px; }
+
+  /* Period + view toolbar (social and events): period on one row, view switcher below */
+  .calendar-unified-nav-block {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 6px;
+    gap: 6px;
+    box-sizing: border-box;
+  }
+  .nav-block-divider { display: none; }
+  .nav-block-period,
+  .nav-block-zoom { flex: 1 1 100%; min-width: 0; }
+  .nav-block-period-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .nav-block-icon-btn { width: 40px; height: 40px; flex-shrink: 0; }
+  .nav-block-today-btn { min-height: 36px; }
+  .nav-block-zoom-tabs { flex: 1; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); }
+  .nav-block-zoom-btn,
+  .zoom-level-btn { justify-content: center; min-height: 36px; padding: 4px 6px; }
+
+  .header-actions { width: 100%; gap: 8px; }
+  .header-actions > .btn { flex: 1 1 auto; justify-content: center; min-height: 40px; }
+
+  .social-main-shell { padding: 12px 12px 24px; }
+  .app-main { padding-left: 12px; padding-right: 12px; }
+
+  /* ---- Month grids (social + events): compact days, items as colour bars ---- */
+  .calendar-days-grid { gap: 3px; padding: 4px; grid-auto-rows: minmax(58px, auto); }
+  .calendar-day-cell,
+  .calendar-day-cell.is-today { min-height: 58px; padding: 4px; border-radius: var(--radius-sm); }
+  .calendar-day-cell.weekend-cell::before { display: none; }
+  .calendar-day-cell .day-header { margin-bottom: 3px; }
+  .calendar-day-cell .day-number { font-size: var(--text-xs); }
+  .calendar-day-cell.is-today .day-number { width: 20px; height: 20px; }
+  .calendar-day-cell .btn-add-day,
+  .calendar-day-cell .past-schedule-message { display: none; }
+  .weekday { padding: 8px 0; font-size: var(--text-3xs); letter-spacing: 0; }
+  .calendar-day-cell .day-posts-container { flex-direction: column; gap: 2px; max-height: none; overflow: hidden; }
+  .calendar-day-cell .post-card-pill,
+  .calendar-day-cell .event-card-pill {
+    height: 5px;
+    min-height: 0;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 3px;
+    background: var(--pill-accent, var(--primary)) !important;
+    box-shadow: none !important;
+    pointer-events: none; /* the whole day is the tap target */
+    overflow: hidden;
+  }
+  .calendar-day-cell .post-card-pill > *,
+  .calendar-day-cell .event-card-pill > * { display: none !important; }
+
+  /* ---- Day timeline: one day (the JS renders only the active day on phones) ---- */
+  .daily-timeline-header-bar,
+  .daily-timeline-body { min-width: 0; }
+  .timeline-time-col,
+  .timeline-time-header-spacer { width: 56px; min-width: 56px; font-size: var(--text-3xs); }
+  .timeline-day-header-cell,
+  .timeline-day-column { min-width: 0; }
+
+  /* ---- Dialogs: nearly full screen ---- */
+  dialog:not(.nav-more-sheet) {
+    width: calc(100vw - 16px) !important;
+    max-width: calc(100vw - 16px) !important;
+    min-width: 0 !important;
+    max-height: calc(100dvh - 16px);
+    border-radius: var(--radius-lg);
+  }
+  .dialog-header { padding: 12px 14px; gap: 8px; }
+  .dialog-header h2 { font-size: var(--text-lg); }
+  .dialog-body { padding: 14px; max-height: calc(100dvh - 150px); }
+  .dialog-footer { padding: 10px 14px; flex-wrap: wrap; }
+  .dialog-footer .btn { flex: 1 1 auto; justify-content: center; min-height: 40px; }
+  .dialog-close-btn { width: 40px; height: 40px; flex-shrink: 0; }
+
+  /* Control panel dialog */
+  #btn-cp-header-add-platform { display: none; }
+  #control-panel-dialog .dialog-footer > div { width: 100%; flex-wrap: wrap; }
+  .cp-posttype-item { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .cp-posttype-item > :first-child { grid-column: 1 / span 2; grid-row: 1; }
+  .cp-posttype-item > :last-child { grid-column: 3; grid-row: 1; justify-self: end; }
+
+  /* Promotion queue: title on its own lines, action full width */
+  #social-notifications-modal .event-notification-card { flex-direction: column; align-items: stretch; }
+  #social-notifications-modal .notif-title { white-space: normal; }
+  .social-notifications-list { max-height: none; }
+
+  /* Schedule page */
+  #schedule-page-form-host { padding: 14px; border-radius: var(--radius-md); }
+  .schedule-page-shell { padding-top: 8px; }
+  .suggestion-card { flex-wrap: wrap; }
+  .suggestion-info { flex: 1 1 100%; }
+  .suggestion-card .btn,
+  .suggestion-card button { flex: 1 1 100%; justify-content: center; min-height: 36px; }
+
+  /* ---- Admin ---- */
+  .admin-category-filter-tabs,
+  .my-events-filter-tabs { display: flex; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+  .admin-category-filter-tabs .btn-filter-tab,
+  .my-events-filter-tabs .btn-filter-tab { flex: 0 0 auto; white-space: nowrap; }
+  /* Entry type switcher (event / lock / rooms): three equal columns, labels may wrap */
+  .my-events-filter-tabs.entry-type-segmented-nav { display: grid; width: 100%; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); overflow: visible; }
+  .my-events-filter-tabs .btn-entry-type { white-space: normal; justify-content: center; text-align: center; padding: 8px 6px; }
+  #control-panel-dialog .dialog-header { flex-wrap: nowrap; }
+  #control-panel-dialog .dialog-header h2 { min-width: 0; }
+  .admin-card { padding: 14px; }
+  .admin-card-header { flex-direction: column; align-items: stretch; gap: 8px; }
+  .admin-card-header > div { flex-wrap: wrap; }
+  .admin-card-header .badge-subtle { white-space: normal; }
+
+  /* Tables become cards: one card per row, each value under its column name */
+  .standards-table-wrapper { overflow-x: visible; }
+  .standards-table thead { display: none; }
+  .standards-table,
+  .standards-table tbody,
+  .standards-table tr,
+  .standards-table td { display: block; width: 100%; box-sizing: border-box; }
+  .standards-table tr {
+    margin-bottom: 10px;
+    padding: 6px 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+  }
+  .standards-table td { padding: 6px 12px; border: none; }
+  .standards-table td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 2px;
+    font-size: var(--text-3xs);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .standards-table tr:hover td { background: transparent; }
+
+  /* Detail dialogs: label above value; long links wrap on their own line */
+  .detail-meta-item { display: block; }
+  .detail-meta-item strong { display: block; overflow-wrap: anywhere; }
+  #detail-share-link-text { flex: 1 1 100%; word-break: normal; overflow-wrap: anywhere; }
+  /* Two-column form rows stack */
+  .form-row-2 { grid-template-columns: 1fr !important; }
+
+}
+
+:root[data-theme="light"] .nav-more-action.is-danger,
+:root[data-theme="light"] .nav-more-action.is-danger .ui-icon { color: rgb(var(--red-600)); }

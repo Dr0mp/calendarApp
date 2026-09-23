@@ -63,6 +63,12 @@ export const routerMethods = {
         }
       });
     }
+    // Phones: the "More" sheet in the bottom tab bar.
+    this.dom.navMoreBtn?.addEventListener("click", () => this.openNavMoreSheet());
+    this.dom.closeNavMoreBtn?.addEventListener("click", () => this.dom.navMoreSheet?.close());
+    this.dom.navMoreSheet?.addEventListener("click", e => { if (e.target === this.dom.navMoreSheet) this.dom.navMoreSheet.close(); });
+    this.dom.morePasskeysBtn?.addEventListener("click", () => { this.dom.navMoreSheet?.close(); this.openPasskeysDialog(); });
+    this.dom.moreLogoutBtn?.addEventListener("click", () => { this.dom.navMoreSheet?.close(); this.handleLogout(); });
     if (this.dom.navLogoutBtn) {
       this.dom.navLogoutBtn.addEventListener("click", () => this.handleLogout());
     }
@@ -178,6 +184,12 @@ export const routerMethods = {
     }
 
     this.updateUserNavDisplay();
+  },
+  openNavMoreSheet() {
+    if (!this.currentUser || !this.dom.navMoreSheet) return;
+    this.dom.navMoreTitle.textContent = this.dom.navUserName?.textContent || this.currentUser.username;
+    this.dom.navMoreRole.textContent = `@${this.currentUser.username} · ${this.dom.navUserRole?.textContent || ""}`;
+    this.dom.navMoreSheet.showModal();
   },
   updateUserNavDisplay() {
     if (!this.dom || !this.dom.navUserPill) return;

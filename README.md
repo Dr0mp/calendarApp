@@ -29,6 +29,18 @@ Users can sign in with a passkey (Windows Hello, Touch ID, a phone or a security
 - **Requirements:** the browser only allows passkeys over HTTPS, or on `localhost`. A passkey is tied to the domain it was created on: passkeys made on `localhost` won't work on your real domain, and vice versa. When you deploy, set `APP_ORIGINS` in `.env` to the exact address users open, for example `https://calendar.example.com`.
 - **Library:** the passkey code uses [`@passwordless-id/webauthn`](https://webauthn.passwordless.id/), on the server and in the browser (served from `/vendor/webauthn.js`). Passkeys are stored in `users.json`. Only the public key is stored, never a secret.
 
+## Phones and tablets
+
+The app is responsive; there is no separate mobile version.
+
+- **Up to 900px wide** (phones and tablets): navigation moves to a bottom tab bar: Calendar, Schedule, My events, Social (admins) and More. **More** opens a sheet with language, theme, passkeys and sign-out. The admin cog stays in the top bar.
+- **Up to 640px wide** (phones):
+  - Month calendars show each item as a colour bar. Tap a day to open it: the events calendar opens that day's timeline, and the social calendar opens the feed at that date.
+  - The day timeline shows one day, and the arrows move one day at a time.
+  - Admin tables turn into cards, one card per row, with each value under its column name.
+  - Dialogs fill the screen.
+- Everything lives in the responsive section at the end of `public/styles.css`. `isPhoneLayout()` in `public/src/core/utils.js` is the matching JS check.
+
 ## Where data lives
 
 Everything is on the server, so every browser and device sees the same data.
@@ -71,7 +83,7 @@ docs/                  clean-up report
 
 | Command | What it does |
 |---|---|
-| `npm test` | Playwright tests: smoke flows, security and data-permission checks, and visual regression (34 screenshots) |
+| `npm test` | Playwright tests: smoke flows, security and data-permission checks, phone layout, and visual regression (37 screenshots, 9 of them on a phone) |
 | `npm run test:update-screens` | Re-record the screenshots after an intended visual change |
 | `npm run lint` | Syntax check of every JS file |
 | `npm run metrics` | Code-health metrics (duplicate CSS, unused code, inline styles…) |

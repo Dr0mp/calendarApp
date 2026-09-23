@@ -138,3 +138,20 @@ test('schedule page restored by a reload is a fresh, initialised form', async ({
   await page.click('#wizard-next-btn');
   await expect(page.locator('#save-event-btn')).toHaveText('Confirm Lock');
 });
+
+test('admin spaces table has its own title and column headers; moderator option is labelled Moderator', async ({ page }) => {
+  await boot(page); await login(page, 'demo_admin');
+  await page.click('#nav-admin-btn'); await page.click('#admin-cat-spaces');
+  await expect(page.locator('#admin-spaces-title')).toHaveText('Spații și Săli de Evenimente');
+  await expect(page.locator('#admin-spaces-section thead th').first()).toHaveText('Spațiu / Sală');
+  await expect(page.locator('#new-user-role option[value="moderator"]')).toContainText('Moderator');
+  await expect(page.locator('#edit-user-role option[value="moderator"]')).toContainText('Moderator');
+});
+
+test('feed day headers follow the app language', async ({ page }) => {
+  await boot(page, { lang: 'en' }); await login(page, 'demo_admin');
+  await page.click('#nav-social-btn'); await page.click('#view-feed-btn');
+  const header = page.locator('.feed-day-group').first();
+  await expect(header).toContainText(/\(1 post\)|\(\d+ posts\)/);
+  await expect(header.locator('.btn-feed-add')).toHaveText('+ New Post');
+});

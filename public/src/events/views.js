@@ -8,6 +8,11 @@ export const eventViewMethods = {
     // =========================================================================
     // 6. TEAM EVENTS CALENDAR & DROP-IN SCHEDULER
     // =========================================================================
+    // Crossing the phone breakpoint changes what the calendars render (one day vs a week, dots vs cards).
+    window.matchMedia("(max-width: 640px)").addEventListener("change", () => {
+      if (this.activeApp === "events" && this.eventsLayoutMode === "panel") this.renderEventsCalendar();
+      if (this.activeApp === "social") this.render();
+    });
     this.dom.eventsPrevMonthBtn?.addEventListener("click", () => this.changeEventsPeriod(-1));
     this.dom.eventsNextMonthBtn?.addEventListener("click", () => this.changeEventsPeriod(1));
     this.dom.eventsTodayBtn?.addEventListener("click", () => this.jumpToEventsToday());
@@ -136,10 +141,10 @@ export const eventViewMethods = {
   // =========================================================================
   changeEventsPeriod(delta) {
     if (this.eventsZoomLevel === "daily") {
-      // Shift active week by 7 days
+      // Shift the active week by 7 days (phones show one day, so they move by one)
       const [y, m, d] = (this.eventsActiveDate || this.getTodayDateString()).split("-").map(Number);
       const curr = new Date(y, m - 1, d);
-      curr.setDate(curr.getDate() + (delta * 7));
+      curr.setDate(curr.getDate() + delta * (this.isPhoneLayout() ? 1 : 7));
       const ny = curr.getFullYear();
       const nm = String(curr.getMonth() + 1).padStart(2, "0");
       const nd = String(curr.getDate()).padStart(2, "0");
@@ -289,7 +294,10 @@ export const eventViewMethods = {
       const startM = `${shortMonthNames[startD.getMonth()]} ${startD.getDate()}`;
       const endM = `${shortMonthNames[endD.getMonth()]} ${endD.getDate()}, ${endD.getFullYear()}`;
       const rangeTitle = `${startM} – ${endM}`;
-      this.dom.eventsCurrentMonthLabel.textContent = rangeTitle;
+      const [ay, am, ad] = this.eventsActiveDate.split("-").map(Number);
+      this.dom.eventsCurrentMonthLabel.textContent = this.isPhoneLayout()
+        ? new Date(ay, am - 1, ad).toLocaleDateString(this.locale(), { weekday: "short", day: "numeric", month: "short", year: "numeric" })
+        : rangeTitle;
     } else if (this.eventsZoomLevel === "yearly") {
       const yearTitle = `${this.t("yearly_overview_title")} ${this.eventsCurrentYear}`;
       this.dom.eventsCurrentMonthLabel.textContent = yearTitle;
@@ -417,7 +425,9 @@ export const eventViewMethods = {
   renderEventsDailyTimeline(filteredEvents) {
     if (!this.dom.dailyTimelineHeaderBar || !this.dom.dailyTimelineBody) return;
 
-    const weekDays = this.getWeekDays(this.eventsActiveDate);
+    // Phones show only the active day; desktop shows its whole week.
+    const fullWeek = this.getWeekDays(this.eventsActiveDate);
+    const weekDays = this.isPhoneLayout() ? fullWeek.filter(d => d.dateStr === this.eventsActiveDate) : fullWeek;
     const today = new Date();
     const realTodayStr = this.getTodayDateString();
 
@@ -723,6 +733,7 @@ export const eventViewMethods = {
           eventPill.classList.add("is-room-only-pill");
         }
         eventPill.style.borderLeft = `5px solid ${theme.accent}`;
+        eventPill.style.setProperty("--pill-accent", theme.accent);
         eventPill.style.setProperty("--event-fill", this.getEventSurface(theme));
         eventPill.style.boxShadow = `0 2px 10px ${theme.glow}`;
 

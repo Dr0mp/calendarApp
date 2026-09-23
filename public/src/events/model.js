@@ -119,7 +119,8 @@ export const eventModelMethods = {
   },
   formatEventPrice(event) {
     if (!event?.price || String(event.price).trim().toLowerCase() === "free") return this.t("event_free");
-    return `${event.price} ${event.currency || "RON"}`;
+    // A currency only makes sense after a number ("45 RON"), not after free text like "Free (Team Internal)".
+    return /^\s*\d/.test(String(event.price)) ? `${event.price} ${event.currency || "RON"}` : String(event.price);
   },
   getWeekDays(anchorDateStr) {
     const [y, m, d] = (anchorDateStr || this.getTodayDateString()).split("-").map(Number);

@@ -25,6 +25,7 @@ export const passkeyMethods = {
   updatePasskeyNav() {
     const show = Boolean(this.currentUser && !this.currentUser.isDemo && supported());
     this.dom.navPasskeysBtn?.toggleAttribute("hidden", !show);
+    this.dom.morePasskeysBtn?.toggleAttribute("hidden", !show);
   },
 
   // User cancelled the browser prompt / timed out: not an error worth shouting about.

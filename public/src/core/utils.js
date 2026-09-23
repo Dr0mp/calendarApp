@@ -75,6 +75,26 @@ export const utilMethods = {
     }
     document.body.removeChild(ta);
   },
+  // Tables become stacked cards on phones; each cell shows its column name (data-label).
+  // Watching tbody means every renderer gets this without having to remember it.
+  bindResponsiveTables() {
+    const label = table => {
+      const heads = [...table.querySelectorAll("thead th")].map(th => th.textContent.trim());
+      table.querySelectorAll("tbody tr").forEach(tr => {
+        [...tr.children].forEach((td, i) => {
+          if (heads[i] && !td.hasAttribute("colspan")) td.dataset.label = heads[i];
+        });
+      });
+    };
+    document.querySelectorAll("table.standards-table").forEach(table => {
+      label(table);
+      new MutationObserver(() => label(table)).observe(table, { childList: true, subtree: true, characterData: true });
+    });
+  },
+  // Phone layout (matches the ≤640px breakpoint in styles.css).
+  isPhoneLayout() {
+    return window.matchMedia("(max-width: 640px)").matches;
+  },
   getTodayDateString() {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;

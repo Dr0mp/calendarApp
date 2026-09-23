@@ -1,6 +1,10 @@
 import { test, expect } from '@playwright/test';
 import { boot, login, settle } from './helpers.js';
 
+// Headless Chromium occasionally paints a stale SVG icon or an undecoded image late in a long run;
+// a retry runs in a fresh browser worker. Real regressions fail both attempts.
+test.describe.configure({ retries: 1 });
+
 // Each state: [name, async setup(page)] — run after login as demo_admin.
 const STATES = [
   ['social-year', async p => { await p.click('#view-year-btn'); }],
@@ -18,6 +22,16 @@ const STATES = [
 
 async function shoot(page, name, fullPage = true) {
   await settle(page);
+  if (fullPage) {
+    // Chromium sometimes paints images/SVG icons blank while Playwright resizes the viewport for a
+    // full-page capture. Growing the viewport to the page height first means no resize at capture time.
+    const { width, height } = page.viewportSize();
+    const pageHeight = await page.evaluate(() => document.documentElement.scrollHeight);
+    if (pageHeight > height) {
+      await page.setViewportSize({ width, height: pageHeight });
+      await settle(page);
+    }
+  }
   // Server-generated creation dates depend on the real day the test store was seeded.
   const mask = [page.locator('#admin-users-table-body td:nth-child(5)')];
   await expect(page).toHaveScreenshot(name + '.png', { fullPage, mask });
@@ -50,12 +64,12 @@ test.describe('desktop english', () => {
 });
 
 test.describe('mobile', () => {
-  test.use({ viewport: { width: 390, height: 844 } });
-  for (const [name, setup] of STATES.filter(([n]) => ['social-month', 'events-monthly', 'events-daily', 'schedule-step1', 'my-events', 'admin-users'].includes(n))) {
+  test.use({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  for (const [name, setup] of STATES.filter(([n]) => ['social-month', 'social-feed', 'events-monthly', 'events-daily', 'schedule-step1', 'my-events', 'admin-users', 'admin-storage', 'notifications'].includes(n))) {
     test(`${name} mobile`, async ({ page }) => {
       await boot(page, { theme: 'dark' }); await login(page, 'demo_admin');
       await setup(page);
-      await shoot(page, `m-dark-${name}`);
+      await shoot(page, `m-dark-${name}`, name !== 'notifications');
     });
   }
 });

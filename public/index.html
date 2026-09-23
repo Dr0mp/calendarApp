@@ -2,7 +2,7 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title data-i18n="doc_title">Calendar Social Multi-Platformă</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%232563eb' d='M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1Zm12 8H5v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9Z'/></svg>">
@@ -33,6 +33,8 @@
     <symbol id="icon-x-mark" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/></symbol>
     <symbol id="icon-key" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M15.75 1.5a6.75 6.75 0 0 0-6.651 7.906c.067.39-.032.717-.221.906l-6.5 6.499a3 3 0 0 0-.878 2.121v2.818c0 .414.336.75.75.75H6a.75.75 0 0 0 .75-.75v-1.5h1.5A.75.75 0 0 0 9 19.5V18h1.5a.75.75 0 0 0 .53-.22l2.658-2.658c.19-.189.517-.288.906-.22A6.75 6.75 0 1 0 15.75 1.5Zm0 3a.75.75 0 0 0 0 1.5A2.25 2.25 0 0 1 18 8.25a.75.75 0 0 0 1.5 0 3.75 3.75 0 0 0-3.75-3.75Z" clip-rule="evenodd"/></symbol>
     <symbol id="icon-finger-print" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M12 3.75a6.715 6.715 0 0 0-3.722 1.118.75.75 0 1 1-.828-1.25 8.25 8.25 0 0 1 12.8 6.883c0 3.014-.574 5.897-1.62 8.543a.75.75 0 0 1-1.395-.551A21.69 21.69 0 0 0 18.75 10.5 6.75 6.75 0 0 0 12 3.75ZM6.157 5.739a.75.75 0 0 1 .21 1.04A6.715 6.715 0 0 0 5.25 10.5c0 1.613-.463 3.12-1.265 4.393a.75.75 0 0 1-1.27-.8A6.715 6.715 0 0 0 3.75 10.5c0-1.68.503-3.246 1.367-4.55a.75.75 0 0 1 1.04-.211ZM12 7.5a3 3 0 0 0-3 3c0 3.1-1.176 5.927-3.105 8.056a.75.75 0 1 1-1.112-1.008A10.459 10.459 0 0 0 7.5 10.5a4.5 4.5 0 1 1 9 0c0 .547-.022 1.09-.067 1.626a.75.75 0 0 1-1.495-.123c.041-.495.062-.996.062-1.503a3 3 0 0 0-3-3Zm0 2.25a.75.75 0 0 1 .75.75c0 3.908-1.424 7.485-3.781 10.238a.75.75 0 0 1-1.14-.975A14.19 14.19 0 0 0 11.25 10.5a.75.75 0 0 1 .75-.75Zm3.239 5.183a.75.75 0 0 1 .515.927 19.417 19.417 0 0 1-2.585 5.544.75.75 0 0 1-1.243-.84 17.915 17.915 0 0 0 2.386-5.116.75.75 0 0 1 .927-.515Z" clip-rule="evenodd"/></symbol>
+    <symbol id="icon-ellipsis" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M4.5 12a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm6 0a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm6 0a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z" clip-rule="evenodd"/></symbol>
+    <symbol id="icon-logout" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm10.72 4.72a.75.75 0 0 1 1.06 0l3 3a.75.75 0 0 1 0 1.06l-3 3a.75.75 0 1 1-1.06-1.06l1.72-1.72H9a.75.75 0 0 1 0-1.5h10.94l-1.72-1.72a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/></symbol>
     <symbol id="icon-cog" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 0 0-.986.57c-.166.115-.311.127-.417.067L6.2 5.176c-.792-.452-1.802-.27-2.387.426L2.477 7.205c-.585.696-.514 1.74.16 2.342l1.02.912c.11.098.156.244.135.39a7.429 7.429 0 0 0 0 1.292c.021.146-.025.292-.135.39l-1.02.912c-.674.602-.745 1.646-.16 2.342l1.336 1.603c.585.696 1.595.878 2.387.426l1.15-.698c.106-.06.251-.048.417.067.314.218.644.41.986.57.182.088.277.228.297.349l.178 1.071c.151.905.933 1.568 1.85 1.568h2.044c.917 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.115-.26.297-.349.342-.16.672-.351.986-.57.166-.114.311-.126.417-.066l1.15.698c.792.452 1.802.27 2.387-.426l1.336-1.603c.585-.696.514-1.74-.16-2.342l-1.02-.912c-.11-.098-.156-.244-.135-.39a7.429 7.429 0 0 0 0-1.292c-.021-.146.025-.292.135-.39l1.02-.912c.674-.602.745-1.646.16-2.342l-1.336-1.603c-.585-.696-1.595-.878-2.387-.426l-1.15.698c-.106.06-.251.048-.417-.067a7.493 7.493 0 0 0-.986-.57c-.182-.088-.277-.228-.297-.349l-.178-1.071A1.875 1.875 0 0 0 13.122 2.25h-2.044Zm1.022 6.75a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z" clip-rule="evenodd"/></symbol>
   </svg>
 
@@ -47,17 +49,21 @@
         </div>
         <div data-i18n-aria-label="aria_page_nav_tabs" class="nav-menu-tabs" role="tablist" aria-label="Navigare între pagini">
           <button type="button" id="nav-events-btn" class="nav-tab-btn" data-target="events" role="tab" aria-selected="true">
-            <svg class="ui-icon" aria-hidden="true"><use href="#icon-calendar"></use></svg><span data-i18n="nav_events" class="nav-tab-label">Calendar</span>
+            <svg class="ui-icon" aria-hidden="true"><use href="#icon-calendar"></use></svg><span data-i18n="nav_events" class="nav-tab-label">Calendar</span><span data-i18n="nav_events_short" class="nav-tab-short">Calendar</span>
           </button>
           <button type="button" id="nav-schedule-btn" class="nav-tab-btn" data-target="schedule" role="tab" aria-selected="false">
-            <svg class="ui-icon" aria-hidden="true"><use href="#icon-plus"></use></svg><span data-i18n="nav_schedule" class="nav-tab-label">Programează eveniment</span>
+            <svg class="ui-icon" aria-hidden="true"><use href="#icon-plus"></use></svg><span data-i18n="nav_schedule" class="nav-tab-label">Programează eveniment</span><span data-i18n="nav_schedule_short" class="nav-tab-short">Programează</span>
           </button>
           <button type="button" id="nav-my-events-btn" class="nav-tab-btn" data-target="my-events" role="tab" aria-selected="false">
-            <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkle"></use></svg><span data-i18n="nav_my_events" class="nav-tab-label">Evenimentele mele</span>
+            <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkle"></use></svg><span data-i18n="nav_my_events" class="nav-tab-label">Evenimentele mele</span><span data-i18n="nav_my_events_short" class="nav-tab-short">Ale mele</span>
             <span id="nav-my-events-count-badge" class="badge-subtle u-text-3xs u-pt-2 u-pr-6 u-pb-2 u-pl-6 u-ml-4">0</span>
           </button>
           <button type="button" id="nav-social-btn" class="nav-tab-btn" data-target="social" role="tab" aria-selected="false">
-            <svg class="ui-icon" aria-hidden="true"><use href="#icon-megaphone"></use></svg><span data-i18n="nav_social" class="nav-tab-label">Social Calendar</span>
+            <svg class="ui-icon" aria-hidden="true"><use href="#icon-megaphone"></use></svg><span data-i18n="nav_social" class="nav-tab-label">Social Calendar</span><span data-i18n="nav_social_short" class="nav-tab-short">Social</span>
+          </button>
+          <!-- Phones only: account, language, theme and sign-out live in this sheet -->
+          <button type="button" id="nav-more-btn" class="nav-tab-btn nav-more-btn" aria-haspopup="dialog" aria-controls="nav-more-sheet">
+            <svg class="ui-icon" aria-hidden="true"><use href="#icon-ellipsis"></use></svg><span data-i18n="nav_more" class="nav-tab-short">Mai mult</span>
           </button>
         </div>
       </div>
@@ -86,6 +92,43 @@
       </div>
     </div>
   </nav>
+
+  <!-- Phones: "More" sheet opened from the bottom tab bar -->
+  <dialog id="nav-more-sheet" class="nav-more-sheet" aria-labelledby="nav-more-title">
+    <div class="nav-more-head">
+      <span class="user-avatar"><svg class="ui-icon" aria-hidden="true"><use href="#icon-user"></use></svg></span>
+      <div class="nav-more-who">
+        <strong id="nav-more-title">—</strong>
+        <span id="nav-more-role" class="u-text-2xs u-color-muted"></span>
+      </div>
+      <button type="button" class="dialog-close-btn" id="close-nav-more-btn" data-i18n-aria-label="close_dialog" aria-label="Închide"><svg class="ui-icon" aria-hidden="true"><use href="#icon-x-mark"></use></svg></button>
+    </div>
+    <div class="nav-more-list">
+      <div class="nav-more-row">
+        <span data-i18n="nav_more_language">Limba</span>
+        <div data-i18n-aria-label="aria_lang_switch" class="lang-switcher-pill" role="group" aria-label="Comută limba">
+          <button type="button" class="lang-btn is-active" data-lang="ro" title="Română">RO</button>
+          <span class="lang-divider">|</span>
+          <button type="button" class="lang-btn" data-lang="en" title="English">EN</button>
+        </div>
+      </div>
+      <div class="nav-more-row">
+        <span data-i18n="nav_more_theme">Temă</span>
+        <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to light theme" title="Switch to light theme">
+          <svg class="ui-icon theme-icon-dark" aria-hidden="true"><use href="#icon-moon"></use></svg>
+          <svg class="ui-icon theme-icon-light" aria-hidden="true"><use href="#icon-sun"></use></svg>
+        </button>
+      </div>
+      <button type="button" class="nav-more-row nav-more-action" id="more-passkeys-btn" hidden>
+        <span data-i18n="passkeys_title">Chei de acces (passkeys)</span>
+        <svg class="ui-icon" aria-hidden="true"><use href="#icon-key"></use></svg>
+      </button>
+      <button type="button" class="nav-more-row nav-more-action is-danger" id="more-logout-btn">
+        <span data-i18n="nav_logout">Deconectare</span>
+        <svg class="ui-icon" aria-hidden="true"><use href="#icon-logout"></use></svg>
+      </button>
+    </div>
+  </dialog>
 
   <!-- ========================================================================= -->
   <!-- 0. DIRECT LOGIN VIEW (Default Screen for Unauthenticated Users)           -->
@@ -506,7 +549,7 @@
               <label data-i18n="admin_user_role_label" for="new-user-role">Rol Cont *</label>
               <select id="new-user-role" class="form-select">
                 <option data-i18n="admin_role_standard" value="user">Utilizator Standard (Programează evenimente proprii)</option>
-                <option data-i18n="admin_role_admin" value="moderator">Administrator (Drepturi complete în workspace)</option>
+                <option data-i18n="admin_role_moderator" value="moderator">Moderator (Rezervă cazare &amp; gestionează sesiuni)</option>
                 <option data-i18n="role_option_admin_full" value="admin">Administrator (Acces complet)</option>
               </select>
             </div>
@@ -539,8 +582,8 @@
       <section class="admin-card u-mt-24" id="admin-spaces-section">
         <div class="admin-card-header">
           <div class="u-flex u-items-center u-gap-10">
-            <h2 data-i18n="admin_sec_audit_title" id="admin-spaces-title">Audit Centralizat Evenimente (Toți Utilizatorii)</h2>
-            <span data-i18n="admin_sec_audit_sub" class="badge-subtle" id="admin-spaces-sub">Administratorul poate modifica, reatribui sau șterge orice eveniment din sistem</span>
+            <h2 data-i18n="admin_sec_spaces_title" id="admin-spaces-title">Spații și Săli de Evenimente</h2>
+            <span data-i18n="admin_sec_spaces_sub" class="badge-subtle" id="admin-spaces-sub">Gestionați locațiile pentru organizarea sesiunilor</span>
           </div>
         </div>
 
@@ -572,12 +615,12 @@
           <table class="standards-table">
             <thead>
               <tr>
-                <th data-i18n="admin_th_datetime">Data &amp; Ora</th>
-                <th data-i18n="admin_th_title">Titlu Eveniment</th>
-                <th data-i18n="admin_th_social_status">Stare Promovare</th>
-                <th data-i18n="admin_th_organizer">Organizator</th>
-                <th data-i18n="admin_th_enroll_price">Înscriere / Preț</th>
-                <th data-i18n="admin_th_actions">Acțiuni</th>
+                <th data-i18n="admin_th_space_name">Spațiu / Sală</th>
+                <th data-i18n="admin_th_space_cap">Capacitate</th>
+                <th data-i18n="admin_th_space_desc">Dotări &amp; Descriere</th>
+                <th data-i18n="admin_th_space_events">Evenimente Programate</th>
+                <th data-i18n="admin_th_space_status">Stare</th>
+                <th data-i18n="admin_th_space_actions">Acțiuni</th>
               </tr>
             </thead>
             <tbody id="admin-spaces-table-body">
@@ -816,8 +859,8 @@
       <div class="form-group u-mb-20">
         <label data-i18n="edit_user_role_label" for="edit-user-role">Rol Cont *</label>
         <select id="edit-user-role" class="form-select" required>
-          <option data-i18n="edit_user_role_user" value="user">Utilizator (Doar Calendar Evenimente)</option>
-          <option data-i18n="role_moderator" value="moderator">Moderator</option>
+          <option data-i18n="admin_role_standard" value="user">Utilizator Standard (Programează evenimente proprii)</option>
+          <option data-i18n="admin_role_moderator" value="moderator">Moderator (Rezervă cazare &amp; gestionează sesiuni)</option>
           <option data-i18n="role_option_admin_full" value="admin">Administrator (Acces complet)</option>
         </select>
       </div>
@@ -1333,7 +1376,7 @@
             <span data-i18n="post_share_hint_title" class="badge-subtle u-text-2xs u-color-sky u-bg-sky-400-10">Pentru video 4K, RAW, Drive, Dropbox, share-uri de rețea</span>
           </div>
           <div class="share-link-input-row u-flex u-gap-8">
-            <input data-i18n-placeholder="post_share_placeholder" type="text" id="post-share-link" class="form-input u-flex-1" placeholder="ex: https://drive.google.com/..., link Dropbox sau \sharessetsideo.mp4">
+            <input data-i18n-placeholder="post_share_placeholder" type="text" id="post-share-link" class="form-input u-flex-1" placeholder="ex: https://drive.google.com/..., link Dropbox sau \\share\assets\video.mp4">
             <button type="button" id="btn-test-share-link" class="btn btn-secondary btn-sm u-nowrap">Test Link <svg class="ui-icon u-w-11 u-h-11 u-valign-middle"><use href="#icon-external-link"></use></svg></button>
           </div>
           <small class="u-color-muted u-text-2xs u-block u-mt-4" data-i18n="post_share_help">Păstrați masterele video mari și fișierele RAW pe share și aveți linkul la îndemână direct în postare.</small>

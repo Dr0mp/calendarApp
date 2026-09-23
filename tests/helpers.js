@@ -56,6 +56,12 @@ export async function login(page, username, password = 'demo123', { ui = false }
 export async function settle(page) {
   await page.mouse.move(0, 0);
   await page.evaluate(() => document.fonts && document.fonts.ready);
+  // Views re-render after the workspace loads: wait for their requests, then for every image to decode.
+  await page.waitForLoadState('networkidle').catch(() => {});
+  await page.evaluate(() => Promise.race([
+    Promise.all([...document.images].map(img => (img.complete ? (img.naturalWidth ? img.decode() : null) : new Promise(r => { img.addEventListener("load", r); img.addEventListener("error", r); }))?.catch?.(() => {}))),
+    new Promise(r => setTimeout(r, 5000))
+  ]));
   await page.waitForTimeout(500);
 }
 
