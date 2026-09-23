@@ -42,6 +42,7 @@
   --emerald-50: 236 253 245;
   --emerald-400: 52 211 153;
   --emerald-500: 16 185 129;
+  --emerald-600: 5 150 105;
   --emerald-700: 4 120 87;
   --sky-100: 224 242 254;
   --sky-400: 56 189 248;
@@ -436,6 +437,25 @@ input:checked + .slider:before {
 .btn-primary:active {
   transform: translateY(0);
   box-shadow: 0 1px 4px var(--primary-glow);
+}
+
+/* Final "save / confirm" action (last wizard step) */
+.btn-success {
+  background: rgb(var(--emerald-600));
+  color: rgb(var(--white));
+  border-color: rgb(var(--emerald-500) / 0.5);
+}
+
+.btn-success:hover {
+  background: rgb(var(--emerald-700));
+  border-color: rgb(var(--emerald-500));
+  box-shadow: 0 4px 14px rgb(var(--emerald-600) / 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-success:active {
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 /* Tier 2: Secondary / Outlined Action */

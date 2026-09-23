@@ -263,6 +263,9 @@ export const eventViewMethods = {
 
     if (isSchedule) {
       this.mountEventForm("page");
+      // Restored straight into the schedule page (e.g. after a reload): start a fresh form
+      // instead of showing the raw, uninitialised markup.
+      if (!this.eventFormOpen) this.openAddEventModal(null, true);
     } else if (isMyEvents) {
       this.mountEventForm("dialog");
       this.renderMyEventsPage();

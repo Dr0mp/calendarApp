@@ -109,7 +109,7 @@ export const i18nMethods = {
     });
     const evDialogDescLabel = document.querySelector("label[for='event-desc-input']");
     if (evDialogDescLabel) evDialogDescLabel.textContent = this.t("event_form_desc_label");
-    if (this.dom.saveEventBtn) this.dom.saveEventBtn.textContent = this.t("event_save_btn");
+    if (this.dom.saveEventBtn) this.dom.saveEventBtn.textContent = this.saveEventButtonLabel();
     if (this.wizardStepsConfig) {
       this.renderWizardIndicator();
       if (this.dom.wizardPrevBtn) {

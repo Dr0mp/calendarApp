@@ -120,3 +120,19 @@ test('P9.7: deleting an event asks with an in-app confirm dialog', async ({ page
   await expect(page.locator('#my-events-list-container')).not.toContainText('Delete Me Event');
   expect(errors).toEqual([]);
 });
+
+test('schedule page restored by a reload is a fresh, initialised form', async ({ page }) => {
+  await boot(page); await login(page, 'demo');
+  await page.click('#nav-schedule-btn');
+  await page.reload();
+  await expect(page.locator('#wizard-steps-indicator .wizard-step-item')).not.toHaveCount(0);
+  await expect(page.locator('#save-event-btn')).toBeHidden();
+  await expect(page.locator('#wizard-next-btn')).toBeVisible();
+  await expect(page.locator('#btn-entry-type-room')).toBeHidden(); // demo user can't book rooms
+  expect(await page.locator('#event-space-select option').count()).toBeGreaterThan(1);
+  await page.click('#btn-entry-type-locked');
+  await page.locator('[data-lang="en"]:visible').click();
+  await page.fill('#event-title-input', 'Maintenance');
+  await page.click('#wizard-next-btn');
+  await expect(page.locator('#save-event-btn')).toHaveText('Confirm Lock');
+});

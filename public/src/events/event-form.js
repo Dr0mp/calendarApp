@@ -451,10 +451,9 @@ export const eventFormMethods = {
       target.appendChild(this.dom.eventForm);
       target.appendChild(this.dom.eventDialogFooter);
     }
-
-    if (this.dom.saveEventBtn) this.dom.saveEventBtn.style.display = "inline-flex";
   },
   closeEventForm() {
+    this.eventFormOpen = false;
     if (this.eventsLayoutMode === "schedule") {
       this.eventsLayoutMode = "panel";
       this.setEventsLayoutMode("panel");
@@ -483,6 +482,7 @@ export const eventFormMethods = {
     }
 
     this.mountEventForm(asPage ? "page" : "dialog");
+    this.eventFormOpen = true;
 
     this.dom.eventEditId.value = "";
     this.dom.eventDialogActionText.textContent = this.t("event_dialog_create_title");
@@ -544,6 +544,7 @@ export const eventFormMethods = {
       return;
     }
 
+    this.eventFormOpen = true;
     this.dom.eventEditId.value = event.id;
     this.dom.eventDialogActionText.textContent = this.t("event_dialog_edit_title");
     this.dom.eventTitleInput.value = event.title;

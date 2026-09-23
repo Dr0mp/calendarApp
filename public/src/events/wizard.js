@@ -138,20 +138,17 @@ export const wizardMethods = {
       if (isLastStep) {
         this.dom.wizardNextBtn.style.display = "none";
         this.dom.saveEventBtn.style.display = "inline-flex";
-        const entryType = this.eventEntryType || "event";
-        if (entryType === "locked") {
-          this.dom.saveEventBtn.textContent = this.t("wizard_btn_save_locked");
-        } else if (entryType === "room_only") {
-          this.dom.saveEventBtn.textContent = this.t("wizard_btn_save_room");
-        } else {
-          this.dom.saveEventBtn.textContent = this.t("wizard_btn_save_event");
-        }
+        this.dom.saveEventBtn.textContent = this.saveEventButtonLabel();
       } else {
         this.dom.wizardNextBtn.style.display = "inline-flex";
         this.dom.wizardNextBtn.textContent = this.t("wizard_btn_next");
         this.dom.saveEventBtn.style.display = "none";
       }
     }
+  },
+  saveEventButtonLabel() {
+    const type = this.eventEntryType || "event";
+    return this.t(type === "locked" ? "wizard_btn_save_locked" : type === "room_only" ? "wizard_btn_save_room" : "wizard_btn_save_event");
   },
   validateCurrentWizardStep() {
     const currentConfig = this.wizardStepsConfig?.[this.wizardCurrentStep - 1];
