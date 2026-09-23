@@ -1,9 +1,9 @@
 // Step 2 of the data-i18n migration: annotate index.html from i18n-map.json (minus conflicts),
 // write the Romanian text into the static markup, and delete the now-redundant simple
 // statements from applyLanguage(). Verify afterwards by re-running i18n-map.mjs.
-import fs from 'fs'; import path from 'path';
-const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
-const { TRANSLATIONS } = await import(path.join(ROOT, 'public/src/data/i18n.js'));
+import fs from 'fs'; import path from 'path'; import { fileURLToPath, pathToFileURL } from 'url';
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const { TRANSLATIONS } = await import(pathToFileURL(path.join(ROOT, 'public/src/data/i18n.js')).href);
 const RO = TRANSLATIONS.ro;
 const map = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools/refactor/i18n-map.json'), 'utf8'));
 const conflicts = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools/refactor/i18n-conflicts.json'), 'utf8'));

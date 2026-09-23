@@ -1,9 +1,9 @@
 // Finds static index.html text/placeholder/title that stays identical in RO and EN (i.e. never translated).
-import fs from 'fs'; import path from 'path'; import { createRequire } from 'module';
+import fs from 'fs'; import path from 'path'; import { fileURLToPath, pathToFileURL } from 'url'; import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const { Parser } = require('../audit/node_modules/htmlparser2');
 const { chromium } = require('playwright');
-const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const html = fs.readFileSync(path.join(ROOT, 'public/index.html'), 'utf8');
 const tags = []; const stack = [];
 const parser = new Parser({

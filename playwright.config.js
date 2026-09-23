@@ -5,7 +5,8 @@ export default defineConfig({
   fullyParallel: false,
   workers: 1,
   reporter: [['list']],
-  snapshotPathTemplate: '{testDir}/__screens__/{arg}{ext}',
+  // Baselines are per OS (fonts render differently); record once per OS with `npm run test:update-screens`.
+  snapshotPathTemplate: '{testDir}/__screens__/{platform}/{arg}{ext}',
   expect: { toHaveScreenshot: { maxDiffPixels: 100, // absorbs Chromium text anti-aliasing jitter (~40px); any real change is far larger
      animations: 'disabled', caret: 'hide' } },
   use: { baseURL: 'http://localhost:3100', viewport: { width: 1280, height: 800 }, locale: 'ro-RO', timezoneId: 'Europe/Bucharest' },

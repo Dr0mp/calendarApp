@@ -2,11 +2,11 @@
 // Serves an instrumented index.html (every start tag gets data-src-idx), makes t() return
 // a marker, re-runs applyLanguage(), and reads the markers back from the DOM.
 // Output: tools/refactor/i18n-map.json  [{ idx, start, tag, attr, key, textOnly }]
-import fs from 'fs'; import path from 'path'; import { createRequire } from 'module';
+import fs from 'fs'; import path from 'path'; import { fileURLToPath, pathToFileURL } from 'url'; import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const { Parser } = require('../audit/node_modules/htmlparser2');
 const { chromium } = require('playwright');
-const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const html = fs.readFileSync(path.join(ROOT, 'public/index.html'), 'utf8');
 
 // record start-tag positions in source order

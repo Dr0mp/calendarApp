@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';const R0=path.resolve(process.argv[2]||'.');const D=(await import('fs')).existsSync(R0+'/public/index.html')?R0+'/public/':R0+'/';
-import {createRequire} from 'module';const SF=createRequire(import.meta.url)('./src-files.cjs');const {TRANSLATIONS}=await import('file://'+SF.i18nPath(D));
+import {createRequire} from 'module';const SF=createRequire(import.meta.url)('./src-files.cjs');const {TRANSLATIONS}=await import((await import('url')).pathToFileURL(SF.i18nPath(D)).href);
 const js=SF.readApp(D),html=fs.readFileSync(D+'index.html','utf8');
 const ro=Object.keys(TRANSLATIONS.ro),en=Object.keys(TRANSLATIONS.en);
 console.log('ro',ro.length,'en',en.length);

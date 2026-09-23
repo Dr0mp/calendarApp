@@ -3,10 +3,10 @@
 // several app states and both themes. Catches cascade changes the screenshots can't see
 // (closed dialogs, hidden panels, other breakpoints).
 // Usage: node tools/audit/css-diff.mjs [gitRef=HEAD]   (test server must run on :3100)
-import { execSync } from 'child_process'; import fs from 'fs'; import path from 'path'; import { createRequire } from 'module';
+import { execSync } from 'child_process'; import fs from 'fs'; import path from 'path'; import { fileURLToPath, pathToFileURL } from 'url'; import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
-const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const ref = process.argv[2] || 'HEAD';
 
 // The properties that decide what a user sees (layout, box, colour, type, effects).

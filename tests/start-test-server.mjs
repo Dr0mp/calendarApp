@@ -1,5 +1,5 @@
 // Starts the app server on :3100 with a throwaway users store so tests never touch the real users.json.
-import fs from 'fs'; import path from 'path'; import os from 'os';
+import fs from 'fs'; import path from 'path'; import os from 'os'; import { pathToFileURL } from 'url';
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'cal-users-'));
 Object.assign(process.env, {
   PORT: '3100',
@@ -11,4 +11,5 @@ Object.assign(process.env, {
   // Playwright restarts workers after failures, which re-logs in; don't let that trip the limiter.
   LOGIN_RATE_LIMIT_MAX: '1000',
 });
-await import(path.resolve('server.js'));
+// pathToFileURL: on Windows an absolute path (F:\...) is not a valid ESM import specifier.
+await import(pathToFileURL(path.resolve('server.js')).href);

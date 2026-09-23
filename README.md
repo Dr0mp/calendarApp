@@ -52,4 +52,6 @@ docs/                  clean-up report
 | `npm run metrics` | Code-health metrics (duplicate CSS, unused code, inline styles…) |
 | `npm run check` | All of the above |
 
+**Screenshots are stored per operating system** (`tests/__screens__/<platform>/`) because fonts render differently on Windows, macOS and Linux. The first time you run the tests on a new OS, record its baselines with `npm run test:update-screens`, then run `npm test`.
+
 The tests start their own server on port 3100 with a temporary users store, so they never touch `users.json`.
