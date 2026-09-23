@@ -1,22 +1,14 @@
 // Admin: storage usage, quota alerts and cleanup.
 // Mixed into SocialCalendarApp.prototype by src/app.js; `this` is the app instance.
-import { DEFAULT_STORAGE_QUOTA_BYTES } from "../constants.js";
 
 export const storageQuotaMethods = {
+  // Real usage comes from the server (events + posts, including their media files) against the cap.
   calculateStorageUsage() {
-    let eventsBytes = 0;
-    this.events.forEach(evt => {
-      // Byte length of entire event record including heavy base64/URL covers
-      eventsBytes += JSON.stringify(evt).length;
-    });
-
-    let postsBytes = 0;
-    this.posts.forEach(post => {
-      postsBytes += JSON.stringify(post).length;
-    });
-
-    const realUsedBytes = eventsBytes + postsBytes;
-    const quotaBytes = this.storageQuotaBytes || DEFAULT_STORAGE_QUOTA_BYTES;
+    const stats = this.storageStats || {};
+    const eventsBytes = stats.eventsBytes || 0;
+    const postsBytes = stats.postsBytes || 0;
+    const realUsedBytes = stats.usedBytes || 0;
+    const quotaBytes = stats.capBytes || 8 * 1024 ** 3;
 
     let usedBytes = realUsedBytes;
     if (this.simulatedStorageRatio !== null && !isNaN(this.simulatedStorageRatio)) {
@@ -40,6 +32,10 @@ export const storageQuotaMethods = {
       isSimulated: this.simulatedStorageRatio !== null
     };
   },
+  // Bytes of an uploaded media file on this server (0 for external links).
+  mediaBytes(url) {
+    return (url && this.storageStats?.files?.[url]) || 0;
+  },
   updateStorageQuotaDisplay() {
     const stats = this.calculateStorageUsage();
 
@@ -48,11 +44,11 @@ export const storageQuotaMethods = {
       if (stats.isCritical) {
         this.dom.navAdminQuotaBadge.style.display = "inline-flex";
         this.dom.navAdminQuotaBadge.textContent = "!";
-        this.dom.navAdminQuotaBadge.title = `${this.t("notif_level_critical")}: ${stats.percentUsed.toFixed(1)}% / 8 GB`;
+        this.dom.navAdminQuotaBadge.title = `${this.t("notif_level_critical")}: ${stats.percentUsed.toFixed(1)}% / ${this.formatBytes(stats.quotaBytes)}`;
       } else if (stats.isWarning) {
         this.dom.navAdminQuotaBadge.style.display = "inline-flex";
         this.dom.navAdminQuotaBadge.textContent = "!";
-        this.dom.navAdminQuotaBadge.title = `${this.t("notif_level_warning")}: ${stats.percentUsed.toFixed(1)}% / 8 GB`;
+        this.dom.navAdminQuotaBadge.title = `${this.t("notif_level_warning")}: ${stats.percentUsed.toFixed(1)}% / ${this.formatBytes(stats.quotaBytes)}`;
       } else {
         this.dom.navAdminQuotaBadge.style.display = "none";
       }
@@ -70,7 +66,7 @@ export const storageQuotaMethods = {
           this.dom.quotaBannerTitle.textContent = this.t("admin_quota_alert_title") + ` (${stats.percentUsed.toFixed(1)}%)`;
         }
         if (this.dom.quotaBannerDesc) {
-          this.dom.quotaBannerDesc.textContent = this.t("admin_quota_alert_desc");
+          this.dom.quotaBannerDesc.textContent = this.tf("admin_quota_alert_desc", { cap: this.formatBytes(stats.quotaBytes) });
         }
       } else {
         this.dom.adminQuotaAlertBanner.style.display = "none";
@@ -82,7 +78,10 @@ export const storageQuotaMethods = {
       this.dom.adminStorageUsedText.textContent = this.formatBytes(stats.usedBytes);
     }
     if (this.dom.adminStorageTotalText) {
-      this.dom.adminStorageTotalText.textContent = `${this.t("admin_storage_used_sub")} (${this.formatBytes(stats.quotaBytes)})${stats.isSimulated ? ' [Sim]' : ''}`;
+      this.dom.adminStorageTotalText.textContent = `${this.tf("admin_storage_used_sub", { cap: this.formatBytes(stats.quotaBytes) })}${stats.isSimulated ? ' [Sim]' : ''}`;
+    }
+    if (this.dom.adminQuotaLimitBadge) {
+      this.dom.adminQuotaLimitBadge.textContent = this.tf("admin_storage_cap_badge", { cap: this.formatBytes(stats.quotaBytes) });
     }
     if (this.dom.adminStoragePctBadge) {
       this.dom.adminStoragePctBadge.textContent = `${stats.percentUsed.toFixed(1)}%`;
@@ -154,7 +153,7 @@ export const storageQuotaMethods = {
 
     let estimatedBytes = 0;
     pastEvents.forEach(e => {
-      estimatedBytes += JSON.stringify(e).length;
+      estimatedBytes += JSON.stringify(e).length + this.mediaBytes(e.facebookImage);
     });
 
     if (this.dom.cleanupPreviewEvents) {
@@ -165,7 +164,7 @@ export const storageQuotaMethods = {
     const pastEventsWithImage = this.getPastEvents(null).filter(e => !!e.facebookImage);
     let stripBytes = 0;
     pastEventsWithImage.forEach(e => {
-      stripBytes += (e.facebookImage || "").length;
+      stripBytes += this.mediaBytes(e.facebookImage);
     });
 
     if (this.dom.cleanupStripPreview) {
@@ -180,10 +179,6 @@ export const storageQuotaMethods = {
     }
   },
   async executeCleanupPastEvents() {
-    if (this.isDemoAccount()) {
-      this.notify(this.t("demo_no_cleanup"), "warning");
-      return;
-    }
     const filterVal = this.dom.cleanupEventAgeSelect ? this.dom.cleanupEventAgeSelect.value : "all-past";
     const days = filterVal === "all-past" ? null : parseInt(filterVal, 10);
     const toDelete = this.getPastEvents(days);
@@ -215,10 +210,6 @@ export const storageQuotaMethods = {
     this.notify(this.t("alert_events_deleted").replace("${count}", toDelete.length), "success");
   },
   async executeStripPastImages() {
-    if (this.isDemoAccount()) {
-      this.notify(this.t("demo_no_cleanup"), "warning");
-      return;
-    }
     const pastEventsWithImage = this.getPastEvents(null).filter(e => !!e.facebookImage);
     if (pastEventsWithImage.length === 0) {
       this.notify(this.t("alert_no_images_strip"), "warning");
@@ -246,10 +237,6 @@ export const storageQuotaMethods = {
     this.notify(this.t("alert_images_stripped").replace("${count}", pastEventsWithImage.length), "success");
   },
   async executeCleanupSocialMedia() {
-    if (this.isDemoAccount()) {
-      this.notify(this.t("demo_no_cleanup"), "warning");
-      return;
-    }
     const todayStr = new Date().toISOString().slice(0, 10);
     const oldPublishedPosts = this.posts.filter(p => p.status === "published" && p.date < todayStr && p.mediaUrl);
     if (oldPublishedPosts.length === 0) {

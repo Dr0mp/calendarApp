@@ -17,7 +17,7 @@ Node/Express server (authentication + user management) and a vanilla-JS single-p
 ## Accounts
 
 - `admin`: the full administrator. Its password is set through `ADMIN_INITIAL_PASSWORD`, as described above.
-- `demo` / `demo_admin`: read-only preview accounts that appear on the login screen. The password is `DEMO_PASSWORD` (default `demo123`). Set `ENABLE_DEMO_ACCOUNTS=0` to disable them.
+- `demo` / `demo_admin`: try-out accounts that appear on the login screen. The password is `DEMO_PASSWORD` (default `demo123`). They work on their **own copy of the sample content**, never on your real data, and can change it freely. That copy is reset to the sample content every time the server starts and every night at `DEMO_RESET_HOUR` (default 03:00). They can't change user accounts or passkeys, and they only see the demo accounts in the user lists. Set `ENABLE_DEMO_ACCOUNTS=0` to disable them.
 
 ## Passkeys
 
@@ -31,13 +31,27 @@ Users can sign in with a passkey (Windows Hello, Touch ID, a phone or a security
 
 ## Where data lives
 
-- **Users:** on the server, in `users.json`. Passwords are stored as bcrypt hashes. This file is git-ignored.
-- **Posts, events, spaces and rooms:** in each browser's `localStorage`. They are **not** shared between devices or browsers. Moving them to the server would be a separate piece of work.
+Everything is on the server, so every browser and device sees the same data.
+
+| What | Where |
+|---|---|
+| User accounts and passkeys | `users.json` (passwords as bcrypt hashes) |
+| Posts, events, platforms, spaces, rooms | `data/workspace.json` |
+| Uploaded images and videos | `data/uploads/` (the JSON stores only their URLs) |
+| Demo accounts' data and uploads | `data/demo.json`, `data/demo-uploads/` (recreated on every start and every night) |
+| Per-browser preferences: language, theme, last view | the browser's `localStorage` |
+
+- **First start:** if `data/workspace.json` doesn't exist, it's created as a copy of the sample content. From then on it's your data. To start over, stop the server, delete `data/workspace.json` and `data/uploads/`, and start it again.
+- **Backups:** copy `users.json` and the whole `data/` folder while the server is stopped (or at a quiet moment). Both are git-ignored.
+- **Storage cap:** events and posts (their records plus the media files they use) count against `STORAGE_CAP_GB` (default 8). Admin → Storage shows the usage. When the cap is reached, uploads and new content are refused until you free space with the cleanup tools. The demo workspace has its own small cap (`DEMO_STORAGE_CAP_MB`, default 200) because the demo password is public.
+- **Uploads:** JPG, PNG, WebP, GIF, MP4, MOV and WebM, recognised by their content, not their name. The size limit is `MAX_UPLOAD_MB` (default 100). Files that no record uses are deleted automatically: right away when a record stops using them, or after an hour when a form was cancelled.
+- **Permissions (checked by the server):** admins can change everything. Other users can create events and change or delete only their own. Room bookings are for admins and moderators. Posts, platforms, spaces and rooms are admin-only.
 
 ## Project layout
 
 ```
-server.js              Express server: auth, users API, serves public/ only
+server.js              Express server: auth, users API, workspace data API, serves public/ only
+lib/data-store.js      workspace JSON store: sync with permission checks, uploads, storage usage
 public/index.html      markup (static labels carry data-i18n keys)
 public/styles.css      tokens -> components -> utilities (u-*)
 public/src/app.js      SocialCalendarApp: state + mixin registration
@@ -46,7 +60,8 @@ public/src/auth.js     session, login/logout, user list
 public/src/social/     social calendar, post editor, control panel, promotion queue
 public/src/events/     event model, calendar views, event form, wizard, My Events
 public/src/admin/      admin panel, users, venues, storage quota
-public/src/data/       translations (RO/EN) and seed data
+public/src/data/       translations (RO/EN) and the sample content (seed for new installs and demo)
+data/                  your data (created on first start, git-ignored)
 tests/                 Playwright: smoke, security, regressions, visual (screenshots in tests/__screens__)
 tools/audit/           code-health metrics and safe clean-up scripts (see its README)
 docs/                  clean-up report
@@ -56,7 +71,7 @@ docs/                  clean-up report
 
 | Command | What it does |
 |---|---|
-| `npm test` | Playwright tests: smoke flows, security checks and visual regression (34 screenshots) |
+| `npm test` | Playwright tests: smoke flows, security and data-permission checks, and visual regression (34 screenshots) |
 | `npm run test:update-screens` | Re-record the screenshots after an intended visual change |
 | `npm run lint` | Syntax check of every JS file |
 | `npm run metrics` | Code-health metrics (duplicate CSS, unused code, inline styles…) |
@@ -64,4 +79,4 @@ docs/                  clean-up report
 
 **Screenshots are stored per operating system** (`tests/__screens__/<platform>/`) because fonts render differently on Windows, macOS and Linux. The first time you run the tests on a new OS, record its baselines with `npm run test:update-screens`, then run `npm test`.
 
-The tests start their own server on port 3100 with a temporary users store, so they never touch `users.json`.
+The tests start their own server on port 3100 with a temporary users store and data folder, so they never touch `users.json` or `data/`. Each test starts from the sample content.

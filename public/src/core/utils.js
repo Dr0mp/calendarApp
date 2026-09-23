@@ -80,7 +80,7 @@ export const utilMethods = {
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
   },
   // =========================================================================
-  // 8 GB STORAGE QUOTA & PAST EVENTS CLEANUP METHODS
+  // STORAGE QUOTA & PAST EVENTS CLEANUP METHODS
   // =========================================================================
   formatBytes(bytes, decimals = 2) {
     if (!bytes || bytes <= 0) return "0.00 B";

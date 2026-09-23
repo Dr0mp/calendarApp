@@ -9,3 +9,4 @@ tests/__screens_actual__/
 tools/audit/node_modules/
 tools/audit/*.txt
 __pycache__/
+data/

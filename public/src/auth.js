@@ -28,7 +28,7 @@ export const authMethods = {
         const data = await res.json();
         if (data.authenticated && data.user) {
           this.currentUser = data.user;
-          await this.fetchServerUsers();
+          await Promise.all([this.loadWorkspaceOrWarn(), this.fetchServerUsers()]);
           if (this.currentUser.role === "admin") {
             const savedApp = localStorage.getItem(STORAGE_ACTIVE_APP_KEY) || "social";
             this.setAppView(savedApp === "login" ? "social" : savedApp);
@@ -86,7 +86,7 @@ export const authMethods = {
   // After a successful password or passkey sign-in.
   async completeLogin(user) {
     this.currentUser = user;
-    await this.fetchServerUsers();
+    await Promise.all([this.loadWorkspaceOrWarn(), this.fetchServerUsers()]);
     // Honour the page that asked for a login (e.g. the admin panel), when the role allows it.
     const target = this.pendingLoginTarget;
     this.pendingLoginTarget = null;
@@ -97,6 +97,14 @@ export const authMethods = {
     }
     this.updateUserNavDisplay();
   },
+  async loadWorkspaceOrWarn() {
+    try {
+      await this.loadWorkspace();
+    } catch (err) {
+      console.warn(err);
+      this.notify(this.t("sync_error_load"), "danger");
+    }
+  },
   // Any action that needs a session sends the visitor to the login screen, then back.
   openLoginDialog(targetApp = "events") {
     this.pendingLoginTarget = targetApp;
@@ -104,6 +112,7 @@ export const authMethods = {
   },
   async handleLogout() {
     this.currentUser = null;
+    this.resetWorkspaceState();
     try {
       await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
     } catch (err) { warnStorage(err); }

@@ -150,6 +150,9 @@ export const i18nMethods = {
       }
     }
 
+    // Storage texts carry the server's cap ({cap}), so they're filled in code, not by data-i18n.
+    if (this.currentUser?.role === "admin") this.updateStorageQuotaDisplay();
+
     // Document title & lang attribute
     document.title = this.t("doc_title");
     document.documentElement.lang = lang;

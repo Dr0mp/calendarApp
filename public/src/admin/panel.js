@@ -92,7 +92,7 @@ export const adminPanelMethods = {
     const countRooms = document.getElementById("admin-count-rooms");
     if (countRooms) countRooms.textContent = this.rooms.length;
     const countStorage = document.getElementById("admin-count-storage");
-    if (countStorage) countStorage.textContent = "8 GB";
+    if (countStorage) countStorage.textContent = this.formatBytes(this.calculateStorageUsage().quotaBytes);
 
     // Apply active category filter
     this.setAdminCategory(this.adminActiveCategory || "users");
@@ -213,10 +213,6 @@ export const adminPanelMethods = {
     this.renderAdminRooms();
   },
   async adminDeleteEvent(eventId) {
-    if (this.isDemoAccount()) {
-      this.notify(this.t("demo_no_delete"), "warning");
-      return;
-    }
     const evt = this.events.find(e => e.id === eventId);
     if (!evt) return;
 

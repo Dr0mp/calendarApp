@@ -25,6 +25,8 @@ export async function boot(page, { theme = 'dark', lang = 'ro', now = FIXED_NOW,
       sessionStorage.setItem('__seeded', '1');
     }
   }, [theme, lang, storage]);
+  // Every test starts from the sample content.
+  await page.request.post('/api/test/reset-data');
   await page.goto('/');
   return errors;
 }

@@ -11,6 +11,8 @@ import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import cors from "cors";
 import { server as webauthn } from "@passwordless-id/webauthn";
+import { DataStore, COLLECTIONS } from "./lib/data-store.js";
+import * as SEED from "./public/src/data/seed-data.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -28,9 +30,19 @@ const TOKEN_TTL_HOURS = Number(process.env.TOKEN_TTL_HOURS) || 12;
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "").split(",").map(s => s.trim()).filter(Boolean);
 const COOKIE_SECURE = process.env.COOKIE_SECURE === "1";
 const ENABLE_DEMO_ACCOUNTS = process.env.ENABLE_DEMO_ACCOUNTS !== "0";
-// Demo accounts are read-only previews (see blockDemoWrites); their password is shown on the login screen.
+// Demo accounts work on their own sample workspace (reset daily) and cannot change users/passkeys
+// (see blockDemoWrites). Their password is shown on the login screen.
 const DEMO_PASSWORD = process.env.DEMO_PASSWORD || "demo123";
 const MIN_PASSWORD_LENGTH = 10;
+// Workspace data (posts, events, venues...) and uploaded media live here.
+const DATA_DIR = path.resolve(process.env.DATA_DIR || path.join(__dirname, "data"));
+// Storage cap for events + posts (records and their media). The admin panel shows usage against it.
+const STORAGE_CAP_BYTES = Math.round((Number(process.env.STORAGE_CAP_GB) || 8) * 1024 ** 3);
+// The demo login is public, so its uploads get a small cap of their own.
+const DEMO_STORAGE_CAP_BYTES = Math.round((Number(process.env.DEMO_STORAGE_CAP_MB) || 200) * 1024 ** 2);
+const MAX_UPLOAD_BYTES = Math.round((Number(process.env.MAX_UPLOAD_MB) || 100) * 1024 ** 2);
+// Hour (server local time) at which the demo workspace is reset to the sample content every day.
+const DEMO_RESET_HOUR = Number(process.env.DEMO_RESET_HOUR ?? 3);
 // Passkeys (WebAuthn) are bound to the site's origin. List every address people open the app at.
 const APP_ORIGINS = (process.env.APP_ORIGINS || `http://localhost:${PORT},http://127.0.0.1:${PORT}`)
   .split(",").map(s => s.trim().replace(/\/$/, "")).filter(Boolean);
@@ -143,6 +155,25 @@ function validatePassword(password, username) {
 }
 
 // =========================================================================
+// 1b. WORKSPACE DATA — real workspace + demo workspace (see lib/data-store.js)
+// =========================================================================
+const sampleContent = () => structuredClone({
+  platforms: SEED.DEFAULT_PLATFORMS, posts: SEED.INITIAL_POSTS, events: SEED.INITIAL_EVENTS,
+  spaces: SEED.DEFAULT_SPACES, rooms: SEED.DEFAULT_ROOMS
+});
+// A new install starts with a copy of the sample content; after that the file is yours.
+const workspace = new DataStore({
+  file: path.join(DATA_DIR, "workspace.json"), uploadsDir: path.join(DATA_DIR, "uploads"),
+  urlPrefix: "/uploads", seed: sampleContent, capBytes: STORAGE_CAP_BYTES
+});
+// Demo accounts can edit freely; everything they change is thrown away on restart and every night.
+const demoWorkspace = new DataStore({
+  file: path.join(DATA_DIR, "demo.json"), uploadsDir: path.join(DATA_DIR, "demo-uploads"),
+  urlPrefix: "/demo-uploads", seed: sampleContent, capBytes: DEMO_STORAGE_CAP_BYTES
+});
+const storeFor = user => (user && user.isDemo ? demoWorkspace : workspace);
+
+// =========================================================================
 // 2. EXPRESS APP & SECURITY MIDDLEWARE
 // =========================================================================
 const app = express();
@@ -170,7 +201,9 @@ if (ALLOWED_ORIGINS.length) {
   app.use(cors({ origin: ALLOWED_ORIGINS, credentials: true }));
 }
 
-app.use(express.json({ limit: "100kb" }));
+// Small JSON bodies everywhere, except workspace sync batches, which get their own larger limit.
+const smallJson = express.json({ limit: "100kb" });
+app.use((req, res, next) => (req.path.startsWith("/api/data/") ? next() : smallJson(req, res, next)));
 app.use(cookieParser());
 
 const loginLimiter = rateLimit({
@@ -393,12 +426,15 @@ app.delete("/api/users/:id/passkeys", requireAdmin, blockDemoWrites, async (req,
 // =========================================================================
 
 // Minimal directory (names/colours) for every signed-in user — used by the events user filter.
+// Demo visitors only ever see the demo accounts, never the real team.
+const visibleUsers = viewer => (viewer.isDemo ? users.filter(u => u.isDemo) : users);
+
 app.get("/api/users/directory", requireAuth, (req, res) => {
-  res.json(users.map(u => ({ id: u.id, username: u.username, name: u.name, role: u.role, color: u.color, avatar: u.avatar, isDemo: Boolean(u.isDemo) })));
+  res.json(visibleUsers(req.user).map(u => ({ id: u.id, username: u.username, name: u.name, role: u.role, color: u.color, avatar: u.avatar, isDemo: Boolean(u.isDemo) })));
 });
 
 app.get("/api/users", requireAdmin, (req, res) => {
-  res.json(users.map(sanitizeUser));
+  res.json(visibleUsers(req.user).map(sanitizeUser));
 });
 
 app.post("/api/users", requireAdmin, blockDemoWrites, async (req, res) => {
@@ -483,12 +519,66 @@ app.delete("/api/users/:id", requireAdmin, blockDemoWrites, async (req, res) => 
   res.json({ success: true, message: `User "${targetUser.name}" deleted successfully` });
 });
 
+// =========================================================================
+// 4b. WORKSPACE DATA ENDPOINTS
+// =========================================================================
+const isStaff = user => user.role === "admin" || user.role === "moderator";
+const sameJson = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
+
+// Who may change what. Mirrors the rules in the browser (canEditEvent, canBookRooms, admin-only screens).
+function authorizeChange(user, collection) {
+  return (action, item, existing) => {
+    if (collection !== "events") return user.role === "admin" ? null : "admin_only";
+    if (user.role === "admin") return null;
+    if (action === "order") return "admin_only";
+    if (existing && existing.creatorId !== user.id) return "not_your_event";
+    if (item) {
+      if (item.creatorId !== user.id) return "not_your_event";
+      const bookingChanged = item.entryType === "room_only" || !sameJson(item.roomBookings?.length ? item.roomBookings : null, existing?.roomBookings?.length ? existing.roomBookings : null);
+      if (bookingChanged && !isStaff(user)) return "rooms_staff_only";
+    }
+    return null;
+  };
+}
+
+app.get("/api/data", requireAuth, (req, res) => {
+  res.json(storeFor(req.user).snapshot());
+});
+
+app.post("/api/data/:collection/sync", requireAuth, express.json({ limit: "5mb" }), async (req, res) => {
+  const { collection } = req.params;
+  if (!COLLECTIONS.includes(collection)) return res.status(404).json({ error: "Unknown collection" });
+  const result = await storeFor(req.user).sync(collection, req.body, authorizeChange(req.user, collection));
+  if (result.status !== 200) return res.status(result.status).json({ code: result.code, error: result.code });
+  res.json({ success: true, storage: result.storage });
+});
+
+app.post("/api/uploads", requireAuth, express.raw({ type: () => true, limit: MAX_UPLOAD_BYTES }), async (req, res) => {
+  if (!Buffer.isBuffer(req.body) || !req.body.length) return res.status(400).json({ code: "empty_upload", error: "empty_upload" });
+  const result = await storeFor(req.user).saveUpload(req.body);
+  if (result.status !== 201) return res.status(result.status).json({ code: result.code, error: result.code });
+  res.status(201).json({ url: result.url, type: result.type, storage: result.storage });
+});
+
+// Test-only: put both workspaces back to the sample content between tests.
+if (process.env.NODE_ENV === "test") {
+  app.post("/api/test/reset-data", async (req, res) => {
+    await workspace.init({ reset: true });
+    await demoWorkspace.init({ reset: true });
+    res.json({ success: true });
+  });
+}
+
 app.use("/api", (req, res) => res.status(404).json({ error: "Not found" }));
 
 // =========================================================================
 // 5. STATIC ASSETS — only the public/ folder is ever served
 // =========================================================================
 app.use(express.static(PUBLIC_DIR, { index: "index.html", dotfiles: "deny" }));
+// Uploaded media: random file names, types checked on upload, never executed or sniffed.
+const mediaOpts = { dotfiles: "deny", index: false, maxAge: "30d", immutable: true, setHeaders: r => r.setHeader("X-Content-Type-Options", "nosniff") };
+app.use("/uploads", express.static(workspace.uploadsDir, mediaOpts));
+app.use("/demo-uploads", express.static(demoWorkspace.uploadsDir, mediaOpts));
 // Browser build of the passkey library, served from node_modules (same origin, allowed by the CSP).
 app.get("/vendor/webauthn.js", (req, res) => {
   res.type("text/javascript").sendFile(path.join(__dirname, "node_modules/@passwordless-id/webauthn/dist/browser/webauthn.min.js"));
@@ -505,9 +595,29 @@ app.use((req, res) => res.status(404).send("Not found"));
 // 6. STARTUP
 // =========================================================================
 initUsersStore();
+try {
+  await workspace.init();
+  await demoWorkspace.init({ reset: true });
+} catch (e) {
+  console.error(`[FATAL] ${e.message}`);
+  process.exit(1);
+}
+
+// Hourly: drop media nobody saved, and reset the demo workspace once a day at DEMO_RESET_HOUR.
+let lastDemoReset = new Date().toDateString();
+setInterval(() => {
+  workspace.collectGarbage();
+  demoWorkspace.collectGarbage();
+  const now = new Date();
+  if (now.getHours() >= DEMO_RESET_HOUR && now.toDateString() !== lastDemoReset) {
+    lastDemoReset = now.toDateString();
+    demoWorkspace.init({ reset: true }).then(() => console.log("Demo workspace reset to sample content."));
+  }
+}, 60 * 60 * 1000).unref();
 
 const server = http.createServer(app);
 server.listen(PORT, () => {
   console.log(`\nSocial Calendar running at http://localhost:${PORT}`);
-  console.log(`Users store: ${USERS_FILE}\n`);
+  console.log(`Users store: ${USERS_FILE}`);
+  console.log(`Data folder: ${DATA_DIR}\n`);
 });

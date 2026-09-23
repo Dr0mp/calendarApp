@@ -120,12 +120,12 @@
         <div id="direct-login-error-msg" class="auth-error-msg" style="display: none;"></div>
 
 
-        <!-- Quick 1-Click Demo Accounts (Read-Only Preview) -->
+        <!-- Quick 1-Click Demo Accounts (sample workspace, reset daily) -->
         <div class="quick-demo-logins u-mt-18 u-mb-22">
-          <span class="u-text-2xs u-color-muted u-block u-mb-8 u-fw-600" data-i18n="direct_login_demo_title">Conturi demonstrative (Doar vizualizare / Read-Only):</span>
+          <span class="u-text-2xs u-color-muted u-block u-mb-8 u-fw-600" data-i18n="direct_login_demo_title">Conturi demonstrative (datele se resetează zilnic):</span>
           <div class="u-flex u-gap-8 u-wrap">
-            <button data-i18n-title="direct_login_demo_user_title" data-i18n="direct_login_demo_user" type="button" class="btn-demo-chip direct-demo-chip" data-user="demo" title="Previzualizare ca utilizator standard (fără salvare)">Demo Utilizator</button>
-            <button data-i18n-title="direct_login_demo_admin_title" data-i18n="direct_login_demo_admin" type="button" class="btn-demo-chip direct-demo-chip" data-user="demo_admin" title="Previzualizare ca administrator (fără salvare)">Demo Administrator</button>
+            <button data-i18n-title="direct_login_demo_user_title" data-i18n="direct_login_demo_user" type="button" class="btn-demo-chip direct-demo-chip" data-user="demo" title="Încercați ca utilizator standard, pe date demonstrative">Demo Utilizator</button>
+            <button data-i18n-title="direct_login_demo_admin_title" data-i18n="direct_login_demo_admin" type="button" class="btn-demo-chip direct-demo-chip" data-user="demo_admin" title="Încercați ca administrator, pe date demonstrative">Demo Administrator</button>
           </div>
         </div>
 
@@ -444,28 +444,28 @@
       <div class="my-events-toolbar admin-toolbar">
         <div data-i18n-aria-label="aria_admin_categories" class="my-events-filter-tabs admin-category-filter-tabs" id="admin-category-nav-bar" role="radiogroup" aria-label="Categorii panou administrare">
           <button type="button" class="btn-filter-tab is-active" data-admin-cat="all" id="admin-cat-all">
-            <span data-i18n="admin_cat_all" data-i18n="admin_cat_all">Toate Secțiunile</span>
+            <span data-i18n="admin_cat_all">Toate Secțiunile</span>
             <span class="filter-tab-badge" id="admin-count-all">5</span>
           </button>
           <button type="button" class="btn-filter-tab" data-admin-cat="users" id="admin-cat-users">
-            <span data-i18n="admin_cat_users" data-i18n="admin_cat_users">Conturi Utilizatori</span>
+            <span data-i18n="admin_cat_users">Conturi Utilizatori</span>
             <span class="filter-tab-badge" id="admin-count-users">4</span>
           </button>
           <button type="button" class="btn-filter-tab" data-admin-cat="events" id="admin-cat-events">
-            <span data-i18n="admin_cat_events" data-i18n="admin_cat_events">Toate Evenimentele</span>
+            <span data-i18n="admin_cat_events">Toate Evenimentele</span>
             <span class="filter-tab-badge" id="admin-count-events">5</span>
           </button>
           <button type="button" class="btn-filter-tab" data-admin-cat="spaces" id="admin-cat-spaces">
-            <span data-i18n="admin_cat_spaces" data-i18n="admin_cat_spaces">Săli &amp; Spații</span>
+            <span data-i18n="admin_cat_spaces">Săli &amp; Spații</span>
             <span class="filter-tab-badge" id="admin-count-spaces">3</span>
           </button>
           <button type="button" class="btn-filter-tab" data-admin-cat="rooms" id="admin-cat-rooms">
-            <span data-i18n="admin_cat_rooms" data-i18n="admin_cat_rooms">Camere Cazare</span>
+            <span data-i18n="admin_cat_rooms">Camere Cazare</span>
             <span class="filter-tab-badge" id="admin-count-rooms">4</span>
           </button>
           <button type="button" class="btn-filter-tab" data-admin-cat="storage" id="admin-cat-storage">
-            <span data-i18n="admin_cat_storage" data-i18n="admin_cat_storage">Stocare &amp; Mentenanță</span>
-            <span class="filter-tab-badge" id="admin-count-storage">8 GB</span>
+            <span data-i18n="admin_cat_storage">Stocare &amp; Mentenanță</span>
+            <span class="filter-tab-badge" id="admin-count-storage"></span>
           </button>
         </div>
       </div>
@@ -475,7 +475,7 @@
           <span class="quota-banner-icon" id="quota-banner-icon">!</span>
           <div>
             <strong data-i18n="admin_quota_alert_title" class="quota-banner-title" id="quota-banner-title">Alertă Cotă Spațiu de Stocare</strong>
-            <p data-i18n="admin_quota_alert_desc" class="quota-banner-desc" id="quota-banner-desc">Spațiul de stocare al site-ului se apropie de limita de 8.00 GB. Vă rugăm să curățați evenimentele vechi pentru a evita problemele la încărcare.</p>
+            <p class="quota-banner-desc" id="quota-banner-desc"></p>
           </div>
         </div>
         <button data-i18n="admin_quota_cleanup_btn" type="button" class="btn btn-primary btn-sm" id="btn-quota-banner-cleanup">Curăță Spațiul Acum</button>
@@ -500,7 +500,7 @@
             </div>
             <div class="form-group">
               <label data-i18n="admin_user_pass_label" for="new-user-password">Parolă *</label>
-              <input data-i18n-placeholder="admin_user_pass_placeholder" type="password" id="new-user-password" class="form-input" placeholder="Minim 4 caractere" required>
+              <input data-i18n-placeholder="admin_user_pass_placeholder" type="password" id="new-user-password" class="form-input" placeholder="Minim 10 caractere" required>
             </div>
             <div class="form-group">
               <label data-i18n="admin_user_role_label" for="new-user-role">Rol Cont *</label>
@@ -520,12 +520,12 @@
           <table class="standards-table">
             <thead>
               <tr>
-                <th data-i18n="admin_th_user" data-i18n="admin_th_user">Utilizator</th>
-                <th data-i18n="admin_th_username" data-i18n="admin_th_username">Nume Utilizator</th>
-                <th data-i18n="admin_th_role" data-i18n="admin_th_role">Rol</th>
-                <th data-i18n="admin_th_events_count" data-i18n="admin_th_events_count">Evenimente Programate</th>
-                <th data-i18n="admin_th_created" data-i18n="admin_th_created">Creat La</th>
-                <th data-i18n="admin_th_actions" data-i18n="admin_th_actions">Acțiuni</th>
+                <th data-i18n="admin_th_user">Utilizator</th>
+                <th data-i18n="admin_th_username">Nume Utilizator</th>
+                <th data-i18n="admin_th_role">Rol</th>
+                <th data-i18n="admin_th_events_count">Evenimente Programate</th>
+                <th data-i18n="admin_th_created">Creat La</th>
+                <th data-i18n="admin_th_actions">Acțiuni</th>
               </tr>
             </thead>
             <tbody id="admin-users-table-body">
@@ -572,12 +572,12 @@
           <table class="standards-table">
             <thead>
               <tr>
-                <th data-i18n="admin_th_datetime" data-i18n="admin_th_space_name">Data &amp; Ora</th>
-                <th data-i18n="admin_th_title" data-i18n="admin_th_space_cap">Titlu Eveniment</th>
-                <th data-i18n="admin_th_social_status" data-i18n="admin_th_space_desc">Stare Promovare</th>
-                <th data-i18n="admin_th_organizer" data-i18n="admin_th_space_events">Organizator</th>
-                <th data-i18n="admin_th_enroll_price" data-i18n="admin_th_space_status">Înscriere / Preț</th>
-                <th data-i18n="admin_th_actions" data-i18n="admin_th_space_actions">Acțiuni</th>
+                <th data-i18n="admin_th_datetime">Data &amp; Ora</th>
+                <th data-i18n="admin_th_title">Titlu Eveniment</th>
+                <th data-i18n="admin_th_social_status">Stare Promovare</th>
+                <th data-i18n="admin_th_organizer">Organizator</th>
+                <th data-i18n="admin_th_enroll_price">Înscriere / Preț</th>
+                <th data-i18n="admin_th_actions">Acțiuni</th>
               </tr>
             </thead>
             <tbody id="admin-spaces-table-body">
@@ -632,13 +632,13 @@
           <table class="standards-table">
             <thead>
               <tr>
-                <th data-i18n="admin_th_room_name" data-i18n="admin_th_room_name">Cameră Cazare</th>
-                <th data-i18n="admin_th_room_type" data-i18n="admin_th_room_type">Tip</th>
-                <th data-i18n="admin_th_room_beds" data-i18n="admin_th_room_beds">Paturi &amp; Oaspeți</th>
-                <th data-i18n="admin_th_room_notes" data-i18n="admin_th_room_notes">Observații &amp; Facilități</th>
-                <th data-i18n="admin_th_room_bookings" data-i18n="admin_th_room_bookings">Rezervări</th>
-                <th data-i18n="admin_th_room_status" data-i18n="admin_th_room_status">Stare</th>
-                <th data-i18n="admin_th_room_actions" data-i18n="admin_th_room_actions">Acțiuni</th>
+                <th data-i18n="admin_th_room_name">Cameră Cazare</th>
+                <th data-i18n="admin_th_room_type">Tip</th>
+                <th data-i18n="admin_th_room_beds">Paturi &amp; Oaspeți</th>
+                <th data-i18n="admin_th_room_notes">Observații &amp; Facilități</th>
+                <th data-i18n="admin_th_room_bookings">Rezervări</th>
+                <th data-i18n="admin_th_room_status">Stare</th>
+                <th data-i18n="admin_th_room_actions">Acțiuni</th>
               </tr>
             </thead>
             <tbody id="admin-rooms-table-body">
@@ -658,12 +658,12 @@
           <table class="standards-table">
             <thead>
               <tr>
-                <th data-i18n="admin_th_datetime" data-i18n="admin_th_datetime">Data &amp; Ora</th>
-                <th data-i18n="admin_th_title" data-i18n="admin_th_title">Titlu Eveniment</th>
-                <th data-i18n="admin_th_social_status" data-i18n="admin_th_social_status">Stare Promovare</th>
-                <th data-i18n="admin_th_organizer" data-i18n="admin_th_organizer">Organizator</th>
-                <th data-i18n="admin_th_enroll_price" data-i18n="admin_th_enroll_price">Înscriere / Preț</th>
-                <th data-i18n="admin_th_actions" data-i18n="admin_th_actions">Acțiuni</th>
+                <th data-i18n="admin_th_datetime">Data &amp; Ora</th>
+                <th data-i18n="admin_th_title">Titlu Eveniment</th>
+                <th data-i18n="admin_th_social_status">Stare Promovare</th>
+                <th data-i18n="admin_th_organizer">Organizator</th>
+                <th data-i18n="admin_th_enroll_price">Înscriere / Preț</th>
+                <th data-i18n="admin_th_actions">Acțiuni</th>
               </tr>
             </thead>
             <tbody id="admin-events-table-body">
@@ -673,12 +673,12 @@
         </div>
       </section>
 
-      <!-- Section 3: Cloud Storage Quota & Media Cleanup (8 GB) -->
+      <!-- Section 3: Storage usage vs the server cap & media cleanup -->
       <section class="admin-card u-mt-24" id="admin-storage-section">
         <div class="admin-card-header">
           <div class="u-flex u-items-center u-gap-10">
-            <h2 data-i18n="admin_sec_storage_title">Stocare în Cloud și Gestiune Cotă</h2>
-            <span data-i18n="admin_storage_cap_badge" class="badge-subtle" id="admin-quota-limit-badge">Limită 8.00 GB</span>
+            <h2 data-i18n="admin_sec_storage_title">Stocare pe server și limită</h2>
+            <span class="badge-subtle" id="admin-quota-limit-badge"></span>
           </div>
           <button data-i18n="admin_storage_cleanup_tools_btn" type="button" class="btn btn-secondary btn-sm" id="btn-open-storage-cleanup">Unelte Curățare Spațiu</button>
         </div>
@@ -687,7 +687,7 @@
           <div class="storage-meter-info">
             <div>
               <span class="storage-meter-main-text" id="admin-storage-used-text">0.00 GB</span>
-              <span class="storage-meter-sub-text" id="admin-storage-total-text">of 8.00 GB used</span>
+              <span class="storage-meter-sub-text" id="admin-storage-total-text"></span>
             </div>
             <span class="storage-pct-badge" id="admin-storage-pct-badge">0%</span>
           </div>
@@ -717,7 +717,7 @@
               <span class="breakdown-icon" aria-hidden="true"><svg class="ui-icon"><use href="#icon-shield"></use></svg></span>
               <div>
                 <span data-i18n="admin_breakdown_free" class="breakdown-label">Spațiu Liber Rămas</span>
-                <strong class="breakdown-val" id="storage-free-size">8.00 GB</strong>
+                <strong class="breakdown-val" id="storage-free-size"></strong>
                 <span class="breakdown-sub" id="storage-status-sub">Healthy</span>
               </div>
             </div>
@@ -839,7 +839,7 @@
         <span class="modal-title-icon" aria-hidden="true"></span>
         <div>
           <h2 class="u-mt-0 u-mr-0 u-mb-0 u-ml-0 u-text-lg" data-i18n="cleanup_modal_title" id="storage-cleanup-title">Curățare Spațiu &amp; Cotă de Stocare</h2>
-          <p class="u-text-2xs u-color-secondary u-mt-0 u-mr-0 u-mb-0 u-ml-0" data-i18n="cleanup_modal_desc">Eliberați spațiu și administrați cota generoasă de 8 GB a site-ului.</p>
+          <p class="u-text-2xs u-color-secondary u-mt-0 u-mr-0 u-mb-0 u-ml-0" data-i18n="cleanup_modal_desc">Eliberați spațiu și administrați limita de stocare setată pe server (STORAGE_CAP_GB).</p>
         </div>
       </div>
       <button type="button" data-i18n-aria-label="close_dialog" class="dialog-close-btn" id="close-storage-cleanup-btn" aria-label="Închide"><svg class="ui-icon" aria-hidden="true"><use href="#icon-x-mark"></use></svg></button>
@@ -849,7 +849,7 @@
       <div class="cleanup-storage-card">
         <div class="u-flex u-justify-between u-items-center u-mb-8">
           <span class="u-text-sm u-fw-700" data-i18n="cleanup_current_usage">Utilizare Curentă</span>
-          <span class="u-text-sm u-fw-700 u-color-sky" id="cleanup-modal-usage-label">0.00 GB / 8.00 GB (0%)</span>
+          <span class="u-text-sm u-fw-700 u-color-sky" id="cleanup-modal-usage-label"></span>
         </div>
         <div class="storage-meter-track u-h-10">
           <div id="cleanup-modal-meter-fill" class="storage-meter-fill u-w-0pct"></div>

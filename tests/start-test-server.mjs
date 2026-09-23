@@ -1,10 +1,12 @@
-// Starts the app server on :3100 with a throwaway users store so tests never touch the real users.json.
+// Starts the app server on :3100 with a throwaway users store and data folder,
+// so tests never touch the real users.json or data/.
 import fs from 'fs'; import path from 'path'; import os from 'os'; import { pathToFileURL } from 'url';
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'cal-users-'));
 Object.assign(process.env, {
   PORT: '3100',
   JWT_SECRET: 'test-secret-not-for-production-0123456789abcdef',
   USERS_FILE: path.join(tmp, 'users.json'),
+  DATA_DIR: path.join(tmp, 'data'),
   ADMIN_INITIAL_PASSWORD: 'Admin-Test-Password-1',
   DEMO_PASSWORD: 'demo123',
   NODE_ENV: 'test',

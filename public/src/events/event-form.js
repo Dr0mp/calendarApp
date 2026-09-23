@@ -621,10 +621,6 @@ export const eventFormMethods = {
       return;
     }
 
-    if (this.isDemoAccount()) {
-      this.notify(this.t("demo_no_save_event"), "warning");
-      return;
-    }
 
     const editId = this.dom.eventEditId.value;
     const title = this.dom.eventTitleInput.value.trim();

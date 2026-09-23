@@ -71,15 +71,17 @@ test('orphan element refs: picking a free-hour slot no longer throws', async ({ 
   expect(errors).toEqual([]);
 });
 
-test('P6.9: events saved by older builds (date/time fields only) are migrated and still render', async ({ page }) => {
-  const legacy = [{ id: 'evt-legacy', creatorId: 'user-demo-admin', creatorUsername: 'demo_admin', creatorName: 'Demo Admin',
-    title: 'Legacy Shape Event', date: '2026-09-21', time: '09:30', durationHours: 1, entryType: 'event', spaceId: null, color: '#0ea5e9', socialStatus: 'none' }];
-  const errors = await boot(page, { storage: { cal_suite_events_v1: JSON.stringify(legacy) } });
+test('P6.9: events in the older shape (date/time fields only) are migrated and still render', async ({ page }) => {
+  const legacy = { id: 'evt-legacy', creatorId: 'user-demo-admin', creatorUsername: 'demo_admin', creatorName: 'Demo Admin',
+    title: 'Legacy Shape Event', date: '2026-09-21', time: '09:30', durationHours: 1, entryType: 'event', spaceId: null, color: '#0ea5e9', socialStatus: 'none' };
+  const errors = await boot(page);
   await login(page, 'demo_admin');
+  expect((await page.request.post('/api/data/events/sync', { data: { upserts: [legacy] } })).ok()).toBe(true);
+  await page.reload();
   await page.click('#nav-my-events-btn');
   await expect(page.locator('#my-events-list-container')).toContainText('Legacy Shape Event');
   await expect(page.locator('#my-events-list-container')).toContainText('2026-09-21');
-  const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('cal_suite_events_v1'))[0]);
+  const stored = (await (await page.request.get('/api/data')).json()).events.find(e => e.id === 'evt-legacy');
   expect(stored).toMatchObject({ startDate: '2026-09-21', endDate: '2026-09-21', hour: '09:30' });
   expect(stored).not.toHaveProperty('date');
   expect(stored).not.toHaveProperty('time');

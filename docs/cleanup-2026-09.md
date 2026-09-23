@@ -93,21 +93,34 @@ CSS refactors were also checked with `tools/audit/css-diff.mjs`. It compares the
 - **Users** manage their own passkeys from the key icon in the top bar. **Admins** can remove all of a user's passkeys when a device is lost. Demo accounts can't add passkeys.
 - **Tests:** four new tests use Chromium's virtual authenticator. They cover the full cycle (register, sign in, remove), the admin reset, the demo block, and rejection of forged or replayed requests. The suite now has 66 tests.
 
+## Data on the server (added after the clean-up)
+
+- **Posts, events, platforms, spaces and rooms moved out of `localStorage`** into `data/workspace.json` on the server. Uploaded images and videos are saved as files in `data/uploads/`. Every browser now sees the same data, and the old `localStorage` copies are removed automatically on the first load.
+- **A new install starts with a copy of the sample content.**
+- **Demo accounts can now edit freely,** but only on their own copy (`data/demo.json`). It's reset on every start and every night. They only see the demo accounts in the user lists.
+- **The server checks every change:** who owns an event, who may book rooms, and which content is admin-only. It also rejects inline base64 media and uploads whose content doesn't match an allowed type.
+- **Storage:** Admin → Storage shows the real usage of events and posts, media included, against `STORAGE_CAP_GB` (default 8 GB). The cap is enforced on uploads and saves.
+- **Fixed along the way:**
+  - the admin events table headers each carried two translation keys;
+  - the new-user password hint said 4 characters, but the minimum is 10;
+  - the storage texts had "8 GB" hardcoded.
+- **Tests:** 6 new tests cover data shared across browsers, permissions, demo isolation, uploads and the storage panel. The suite now has 73 tests.
+
 ## Decisions I made for you (from the plan's defaults)
 
 | # | Decision |
 |---|---|
 | D1 | Kept the full-screen login and removed the login pop-up. |
 | D2 | The storage-quota simulator only appears with `?dev=1` in the URL. |
-| D3 | **Not done:** demo seed events are still loaded for every browser. Calendar data lives in `localStorage`, which is per browser rather than per account, so "demo accounts only" doesn't map cleanly. This is worth revisiting when data moves to the server. |
+| D3 | **Done later:** demo accounts get their own sample workspace; new installs start from a copy of it. |
 | D4 | Done: in-app toasts and dialogs. |
-| D5 | The admin password comes from `ADMIN_INITIAL_PASSWORD`. Demo accounts keep `DEMO_PASSWORD` (default `demo123`) because the login screen's demo buttons use it, and they're read-only. |
+| D5 | The admin password comes from `ADMIN_INITIAL_PASSWORD`. Demo accounts keep `DEMO_PASSWORD` (default `demo123`) because the login screen's demo buttons use it. They can't touch user accounts, and their data is a sample copy that resets. |
 | D6 | `is-*` for states. |
 
 ## Follow-ups (not done, on purpose)
 
 1. **Change the admin password in your existing `users.json`.** It's still `admin123`, and the server warns about this at startup.
-2. **Calendar data is still stored per browser (`localStorage`).** Moving posts and events to the server is a separate project (security audit #5).
+2. ~~Calendar data is stored per browser.~~ **Done:** see "Data on the server" above.
 3. **Visibility still uses JS `style.display`.** There are 120 toggles. Moving them to the `hidden` attribute needs a per-element check. Until then, CSP keeps `style-src 'unsafe-inline'`; `script-src` is strict.
 4. **66 `!important` remain.** They beat inline colours set from JS (per-user accent colours on event pills and nav tabs). They can go once those move to CSS custom properties.
 5. **Component consolidation isn't done yet.** There are still 7 segmented/tab variants and 22 badge classes. Merging them into `.segmented`, `.badge` and `.chip` is a design task: it changes appearance, so review it with the designer.

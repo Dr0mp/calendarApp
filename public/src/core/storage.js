@@ -1,7 +1,14 @@
-// Browser storage (localStorage) for platforms, posts, spaces, rooms, events and preferences.
+// Workspace data (platforms, posts, events, spaces, rooms) lives on the server (/api/data).
+// Each saveX() sends only what changed since the last sync; the server checks permissions.
+// Only per-browser preferences (language, theme, view state) stay in localStorage.
 // Mixed into SocialCalendarApp.prototype by src/app.js; `this` is the app instance.
-import { DEFAULT_PLATFORMS, DEFAULT_ROOMS, DEFAULT_SPACES, INITIAL_EVENTS, INITIAL_POSTS } from "../data/seed-data.js";
-import { STORAGE_EVENTS_KEY, STORAGE_PLATFORMS_KEY, STORAGE_POSTS_KEY, STORAGE_PREFS_KEY, STORAGE_ROOMS_KEY, STORAGE_SPACES_KEY, STORAGE_STORAGE_SIM_KEY, warnStorage } from "../constants.js";
+import { DEFAULT_PLATFORMS } from "../data/seed-data.js";
+import { STORAGE_PREFS_KEY, STORAGE_STORAGE_SIM_KEY, warnStorage } from "../constants.js";
+import { apiRequest } from "./utils.js";
+
+const COLLECTIONS = ["platforms", "posts", "events", "spaces", "rooms"];
+// Collections whose order is meaningful (shown in the order the admin arranged them).
+const ORDERED = new Set(["platforms", "spaces", "rooms"]);
 
 // Events saved by older builds carried duplicate fields (date = startDate, time = hour).
 // Canonical fields: startDate, endDate, hour. Returns the same object when nothing changes.
@@ -14,115 +21,150 @@ export function normalizeEvent(event) {
   return rest;
 }
 
-export const storageMethods = {
-  // Storage Handlers
-  loadPlatforms() {
-    try {
-      const stored = localStorage.getItem(STORAGE_PLATFORMS_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        return parsed.map(p => {
-          const def = DEFAULT_PLATFORMS.find(d => d.id === p.id);
-          if (def) {
-            if (!p.iconUrl) p.iconUrl = def.iconUrl;
-            if (!p.domain) p.domain = def.domain;
-          }
-          if (p.enabled === undefined) p.enabled = true;
-          return p;
-        });
-      }
-    } catch (e) {
-      console.warn("Error loading platforms from localStorage", e);
+// Platform icons/domains are part of the app, not the data: fill them in when missing.
+function withPlatformDefaults(list) {
+  return list.map(p => {
+    const def = DEFAULT_PLATFORMS.find(d => d.id === p.id);
+    if (def) {
+      if (!p.iconUrl) p.iconUrl = def.iconUrl;
+      if (!p.domain) p.domain = def.domain;
     }
-    return JSON.parse(JSON.stringify(DEFAULT_PLATFORMS));
+    if (p.enabled === undefined) p.enabled = true;
+    return p;
+  });
+}
+
+export const storageMethods = {
+  // Empty workspace until someone signs in.
+  resetWorkspaceState() {
+    this.platforms = [];
+    this.posts = [];
+    this.events = [];
+    this.spaces = [];
+    this.rooms = [];
+    this.storageStats = null;
+    this.syncedState = null;
+    this.syncQueue = Promise.resolve();
+  },
+  // Loads the signed-in user's workspace (the demo workspace for demo accounts).
+  async loadWorkspace() {
+    const { res, data } = await apiRequest("GET", "/api/data");
+    if (!res.ok) throw new Error(`Loading data failed (${res.status})`);
+    this.platforms = withPlatformDefaults(data.platforms || []);
+    this.posts = data.posts || [];
+    this.events = (data.events || []).map(normalizeEvent);
+    this.spaces = data.spaces || [];
+    this.rooms = data.rooms || [];
+    this.storageStats = data.storage || null;
+    this.lastWorkspaceLoad = Date.now();
+    this.syncedState = {};
+    COLLECTIONS.forEach(c => this.rememberSynced(c));
+    this.loadPrefs(); // re-check the saved platform filter against the loaded platforms
+  },
+  // Coming back to the tab picks up changes other people saved meanwhile (at most every 30 s).
+  bindWorkspaceRefresh() {
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState !== "visible" || !this.currentUser) return;
+      if (Date.now() - (this.lastWorkspaceLoad || 0) < 30000) return;
+      this.lastWorkspaceLoad = Date.now();
+      this.syncQueue
+        .then(() => this.loadWorkspace())
+        .then(() => this.refreshAfterDataReload())
+        .catch(err => console.warn("Workspace refresh failed:", err));
+    });
+  },
+  rememberSynced(collection) {
+    this.syncedState[collection] = new Map(this[collection].map(item => [item.id, JSON.stringify(item)]));
+  },
+  // Sends the difference between this[collection] and the last synced state.
+  saveCollection(collection) {
+    const prev = this.syncedState?.[collection];
+    if (!prev || !this.currentUser) return Promise.resolve();
+    const current = new Map();
+    const upserts = [];
+    for (const item of this[collection]) {
+      const json = JSON.stringify(item);
+      current.set(item.id, json);
+      if (prev.get(item.id) !== json) upserts.push(item);
+    }
+    const deletes = [...prev.keys()].filter(id => !current.has(id));
+    const ids = [...current.keys()];
+    const orderChanged = ORDERED.has(collection) && ids.join("\n") !== [...prev.keys()].join("\n");
+    if (!upserts.length && !deletes.length && !orderChanged) return Promise.resolve();
+    this.syncedState[collection] = current;
+    const body = { upserts, deletes };
+    if (orderChanged) body.order = ids;
+    this.syncQueue = this.syncQueue
+      .then(() => apiRequest("POST", `/api/data/${collection}/sync`, body))
+      .then(({ res, data }) => {
+        if (res.ok) {
+          this.storageStats = data.storage || this.storageStats;
+          this.updateStorageQuotaDisplay();
+          return;
+        }
+        return this.handleSyncFailure(data?.code);
+      })
+      .catch(err => {
+        console.warn("Sync failed:", err);
+        return this.handleSyncFailure("network");
+      });
+    return this.syncQueue;
+  },
+  // The server refused a change (permissions, storage full) or was unreachable:
+  // tell the user and reload the server's version so the screen matches what is saved.
+  async handleSyncFailure(code) {
+    const known = { storage_full: "sync_error_storage_full", admin_only: "alert_permission_denied", not_your_event: "alert_permission_denied", rooms_staff_only: "event_room_user_blocked_msg" };
+    this.notify(this.t(known[code] || "sync_error_generic"), "danger");
+    try {
+      await this.loadWorkspace();
+      this.refreshAfterDataReload();
+    } catch (err) {
+      console.warn("Reload after failed sync failed:", err);
+    }
+  },
+  // Re-renders whatever is on screen after the data changed underneath it.
+  refreshAfterDataReload() {
+    this.updateStorageQuotaDisplay();
+    if (this.activeApp === "social") this.render();
+    else if (this.activeApp === "admin") this.renderAdminPanel();
+    else if (this.activeApp === "events" && this.eventsLayoutMode !== "schedule") this.setEventsLayoutMode(this.eventsLayoutMode);
+  },
+  // Uploads a picked file; resolves to its URL on this server.
+  async uploadMedia(file) {
+    const res = await fetch("/api/uploads", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": file.type || "application/octet-stream" },
+      body: file
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      const key = { storage_full: "sync_error_storage_full", unsupported_media: "upload_error_type" }[data.code] || (res.status === 413 ? "upload_error_too_large" : "upload_error_generic");
+      throw Object.assign(new Error(data.code || "upload_failed"), { messageKey: key });
+    }
+    if (data.storage) this.storageStats = data.storage;
+    return data.url;
   },
   savePlatforms() {
-    try {
-      localStorage.setItem(STORAGE_PLATFORMS_KEY, JSON.stringify(this.platforms));
-    } catch (e) {
-      console.error("Error saving platforms", e);
-    }
-  },
-  loadPosts() {
-    try {
-      const stored = localStorage.getItem(STORAGE_POSTS_KEY);
-      if (stored) {
-        return JSON.parse(stored);
-      }
-    } catch (e) {
-      console.warn("Error loading posts from localStorage", e);
-    }
-    return JSON.parse(JSON.stringify(INITIAL_POSTS));
+    return this.saveCollection("platforms");
   },
   savePosts() {
-    try {
-      localStorage.setItem(STORAGE_POSTS_KEY, JSON.stringify(this.posts));
-    } catch (e) {
-      console.error("Error saving posts", e);
-    }
-  },
-  // Spaces & Venues Storage
-  loadSpaces() {
-    try {
-      const stored = localStorage.getItem(STORAGE_SPACES_KEY);
-      if (stored) {
-        let spaces = JSON.parse(stored);
-        const validIds = DEFAULT_SPACES.map(s => s.id);
-        spaces = spaces.filter(s => validIds.includes(s.id));
-        if (spaces.length === 0) spaces = JSON.parse(JSON.stringify(DEFAULT_SPACES));
-        localStorage.setItem(STORAGE_SPACES_KEY, JSON.stringify(spaces));
-        return spaces;
-      }
-    } catch (e) { warnStorage(e); }
-    return JSON.parse(JSON.stringify(DEFAULT_SPACES || []));
+    return this.saveCollection("posts");
   },
   saveSpaces() {
-    try {
-      localStorage.setItem(STORAGE_SPACES_KEY, JSON.stringify(this.spaces));
-    } catch (e) { warnStorage(e); }
-  },
-  // Accommodation / Sleeping Rooms Storage
-  loadRooms() {
-    try {
-      const stored = localStorage.getItem(STORAGE_ROOMS_KEY);
-      if (stored) {
-        let rooms = JSON.parse(stored);
-        const validIds = DEFAULT_ROOMS.map(r => r.id);
-        rooms = rooms.filter(r => validIds.includes(r.id));
-        if (rooms.length === 0) rooms = JSON.parse(JSON.stringify(DEFAULT_ROOMS));
-        localStorage.setItem(STORAGE_ROOMS_KEY, JSON.stringify(rooms));
-        return rooms;
-      }
-    } catch (e) { warnStorage(e); }
-    return JSON.parse(JSON.stringify(DEFAULT_ROOMS || []));
+    return this.saveCollection("spaces");
   },
   saveRooms() {
-    try {
-      localStorage.setItem(STORAGE_ROOMS_KEY, JSON.stringify(this.rooms));
-    } catch (e) { warnStorage(e); }
-  },
-  // Events Storage
-  loadEvents() {
-    try {
-      const stored = localStorage.getItem(STORAGE_EVENTS_KEY);
-      if (stored) {
-        const events = JSON.parse(stored);
-        const migrated = events.map(normalizeEvent);
-        if (migrated.some((e, i) => e !== events[i])) localStorage.setItem(STORAGE_EVENTS_KEY, JSON.stringify(migrated));
-        return migrated;
-      }
-    } catch (e) { warnStorage(e); }
-    return JSON.parse(JSON.stringify(INITIAL_EVENTS));
+    return this.saveCollection("rooms");
   },
   saveEvents() {
-    try {
-      localStorage.setItem(STORAGE_EVENTS_KEY, JSON.stringify(this.events));
-    } catch (e) { warnStorage(e); }
+    const done = this.saveCollection("events");
     this.updateStorageQuotaDisplay();
     this.updateMyEventsBadgeCount();
     if (this.activeApp === "events" && this.eventsLayoutMode === "my-events") {
       this.renderMyEventsPage();
     }
+    return done;
   },
   loadSimulatedStorage() {
     try {
@@ -142,14 +184,17 @@ export const storageMethods = {
     } catch (e) { warnStorage(e); }
     this.simulatedStorageRatio = ratio;
   },
-  // Current User Session
   // One-time removal of localStorage keys written by earlier builds.
   cleanupLegacyStorage() {
     const SCHEMA_KEY = "cal_suite_schema";
-    const SCHEMA_VERSION = 3;
+    const SCHEMA_VERSION = 4;
     try {
       if (Number(localStorage.getItem(SCHEMA_KEY)) >= SCHEMA_VERSION) return;
-      ["cal_suite_auth_session_v1", "cal_suite_users_v1", "cal_suite_spaces_v1", "cal_suite_rooms_v1"].forEach(k => localStorage.removeItem(k));
+      [
+        "cal_suite_auth_session_v1", "cal_suite_users_v1", "cal_suite_spaces_v1", "cal_suite_rooms_v1",
+        // v4: workspace data moved to the server
+        "social_cal_platforms_2026_v1", "social_cal_posts_2026_v1", "cal_suite_events_v1", "cal_suite_spaces_v2", "cal_suite_rooms_v2"
+      ].forEach(k => localStorage.removeItem(k));
       localStorage.setItem(SCHEMA_KEY, String(SCHEMA_VERSION));
     } catch (e) {
       console.warn("Legacy storage cleanup skipped:", e);

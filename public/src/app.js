@@ -1,6 +1,5 @@
 // Social Calendar & Workspace Suite — application entry point.
 // The class holds state (constructor); behaviour lives in feature mixins under src/.
-import { DEFAULT_STORAGE_QUOTA_BYTES } from "./constants.js";
 import { storageMethods } from "./core/storage.js";
 import { i18nMethods } from "./core/i18n.js";
 import { domRefsMethods } from "./core/dom-refs.js";
@@ -28,22 +27,14 @@ class SocialCalendarApp {
   constructor() {
     this.cleanupLegacyStorage();
 
-    // Platform & Social Posts Data
-    this.platforms = this.loadPlatforms();
-    this.posts = this.loadPosts();
-
-    // Users, Spaces, Accommodation Rooms & Team Events Data
+    // Workspace data comes from the server after sign-in (loadWorkspace); empty until then.
+    this.resetWorkspaceState();
     this.users = []; // filled from the server by fetchServerUsers()
-    this.spaces = this.loadSpaces();
-    this.rooms = this.loadRooms();
-    this.events = this.loadEvents();
     // The server session (httpOnly cookie) is the only source of truth: initServerAuth() decides the view.
     this.currentUser = null;
     this.eventEntryType = "event"; // 'event' | 'locked'
     this.adminActiveCategory = "users"; // 'users' | 'events' | 'spaces' | 'rooms' | 'storage' | 'all'
 
-    // Storage Quota State (8 GB Cap)
-    this.storageQuotaBytes = DEFAULT_STORAGE_QUOTA_BYTES;
     // Developer-only quota simulator: open the app with ?dev=1 to show it.
     this.devMode = new URLSearchParams(location.search).has("dev");
     this.simulatedStorageRatio = this.devMode ? this.loadSimulatedStorage() : null;

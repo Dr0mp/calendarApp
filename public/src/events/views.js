@@ -70,11 +70,14 @@ export const eventViewMethods = {
     if (this.dom.eventFbImageFile) {
       this.dom.eventFbImageFile.addEventListener("change", (e) => {
         const file = e.target.files && e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = (evt) => this.validateFacebookImage(evt.target.result);
-          reader.readAsDataURL(file);
-        }
+        if (!file) return;
+        this.notify(this.t("upload_in_progress"), "info");
+        this.uploadMedia(file)
+          .then(url => this.validateFacebookImage(url))
+          .catch(err => {
+            this.notify(this.t(err.messageKey || "upload_error_generic"), "danger");
+            this.resetFacebookValidation();
+          });
       });
     }
 

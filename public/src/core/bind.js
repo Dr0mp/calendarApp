@@ -5,6 +5,7 @@ export const bindMethods = {
   bindEvents() {
     this.bindGlobal();
     this.bindPasskeys();
+    this.bindWorkspaceRefresh();
     this.bindSocialCalendar();
     this.bindNavigation();
     this.bindAdminDialogs();

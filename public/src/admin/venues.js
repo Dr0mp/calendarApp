@@ -42,10 +42,6 @@ export const adminVenueMethods = {
   },
   handleCreateSpace(e) {
     e.preventDefault();
-    if (this.isDemoAccount()) {
-      this.notify(this.t("demo_no_admin_save"), "warning");
-      return;
-    }
     const name = this.dom.newSpaceName?.value.trim();
     if (!name) return;
     const capacity = parseInt(this.dom.newSpaceCapacity?.value, 10) || null;
@@ -69,10 +65,6 @@ export const adminVenueMethods = {
     this.renderAdminSpaces();
   },
   async handleDeleteSpace(id) {
-    if (this.isDemoAccount()) {
-      this.notify(this.t("demo_no_admin_save"), "warning");
-      return;
-    }
     const space = (this.spaces || []).find(s => s.id === id);
     if (!space) return;
     if (await this.confirmDialog(this.t("confirm_delete_space").replace("${name}", space.name))) {
@@ -82,10 +74,6 @@ export const adminVenueMethods = {
     }
   },
   handleToggleSpace(id) {
-    if (this.isDemoAccount()) {
-      this.notify(this.t("demo_no_admin_save"), "warning");
-      return;
-    }
     const space = (this.spaces || []).find(s => s.id === id);
     if (!space) return;
     space.enabled = space.enabled === false ? true : false;
@@ -132,10 +120,6 @@ export const adminVenueMethods = {
   },
   handleCreateRoom(e) {
     e.preventDefault();
-    if (this.isDemoAccount()) {
-      this.notify(this.t("demo_no_admin_save"), "warning");
-      return;
-    }
     const name = this.dom.newRoomName?.value.trim();
     if (!name) return;
     const type = this.dom.newRoomType?.value.trim() || "Standard";
@@ -163,10 +147,6 @@ export const adminVenueMethods = {
     this.renderAdminRooms();
   },
   async handleDeleteRoom(id) {
-    if (this.isDemoAccount()) {
-      this.notify(this.t("demo_no_admin_save"), "warning");
-      return;
-    }
     const room = (this.rooms || []).find(r => r.id === id);
     if (!room) return;
     if (await this.confirmDialog(this.t("confirm_delete_room").replace("${name}", room.name))) {
@@ -176,10 +156,6 @@ export const adminVenueMethods = {
     }
   },
   handleToggleRoom(id) {
-    if (this.isDemoAccount()) {
-      this.notify(this.t("demo_no_admin_save"), "warning");
-      return;
-    }
     const room = (this.rooms || []).find(r => r.id === id);
     if (!room) return;
     room.enabled = room.enabled === false ? true : false;

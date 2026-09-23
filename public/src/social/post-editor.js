@@ -247,22 +247,23 @@ export const postEditorMethods = {
       this.processUploadedFiles(files);
     }
   },
-  processUploadedFiles(files) {
+  // Uploads the first file to the server and uses its URL as the post media.
+  async processUploadedFiles(files) {
     const firstFile = files[0];
     const isVideo = firstFile.type.startsWith("video/");
-    const reader = new FileReader();
-
-    reader.onload = (event) => {
+    this.notify(this.t("upload_in_progress"), "info");
+    try {
+      const url = await this.uploadMedia(firstFile);
       this.setPostMedia({
         type: isVideo ? "video" : (files.length > 1 ? "photos" : "photo"),
-        url: event.target.result,
+        url,
         name: firstFile.name,
         aspectRatio: isVideo ? "9:16" : (files.length > 1 ? "4:5" : "1:1"),
         count: files.length
       });
-    };
-
-    reader.readAsDataURL(firstFile);
+    } catch (err) {
+      this.notify(this.t(err.messageKey || "upload_error_generic"), "danger");
+    }
   },
   handleUrlApply() {
     const url = this.dom.mediaUrlInput.value.trim();
@@ -280,10 +281,6 @@ export const postEditorMethods = {
   handlePostFormSubmit(e) {
     e.preventDefault();
 
-    if (this.isDemoAccount()) {
-      this.notify(this.t("demo_no_save_post"), "warning");
-      return;
-    }
 
     // If media not set yet, check if URL input has text
     if (!this.currentPostMedia) {
@@ -437,10 +434,6 @@ export const postEditorMethods = {
   },
   async deleteCurrentDetailPost() {
     if (!this.currentDetailPostId) return;
-    if (this.isDemoAccount()) {
-      this.notify(this.t("demo_no_delete"), "warning");
-      return;
-    }
     if (await this.confirmDialog(this.t("confirm_delete_post"))) {
       this.posts = this.posts.filter(p => p.id !== this.currentDetailPostId);
       this.savePosts();
@@ -451,10 +444,6 @@ export const postEditorMethods = {
   duplicateCurrentDetailPost() {
     const post = this.posts.find(p => p.id === this.currentDetailPostId);
     if (!post) return;
-    if (this.isDemoAccount()) {
-      this.notify(this.t("demo_no_save_post"), "warning");
-      return;
-    }
 
     const duplicated = {
       ...post,

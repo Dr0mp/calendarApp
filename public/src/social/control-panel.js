@@ -1,7 +1,6 @@
 // Platform control panel, standards matrix, import/export.
 // Mixed into SocialCalendarApp.prototype by src/app.js; `this` is the app instance.
 import { DEFAULT_PLATFORMS, INITIAL_POSTS } from "../data/seed-data.js";
-import { STORAGE_PLATFORMS_KEY, STORAGE_POSTS_KEY } from "../constants.js";
 
 export const controlPanelMethods = {
   // Control Panel Handling
@@ -151,10 +150,6 @@ export const controlPanelMethods = {
   },
   handleAddPlatform(e) {
     e.preventDefault();
-    if (this.isDemoAccount()) {
-      this.notify(this.t("demo_no_save"), "warning");
-      return;
-    }
     const name = this.dom.newPlatformName.value.trim();
     if (!name) return;
 
@@ -212,13 +207,7 @@ export const controlPanelMethods = {
     this.notify((this.t("alert_platform_added")).replace("${name}", name), "success");
   },
   async resetAllDefaults() {
-    if (this.isDemoAccount()) {
-      this.notify(this.t("demo_no_save"), "warning");
-      return;
-    }
     if (await this.confirmDialog(this.t("confirm_reset_platforms"))) {
-      localStorage.removeItem(STORAGE_PLATFORMS_KEY);
-      localStorage.removeItem(STORAGE_POSTS_KEY);
       this.platforms = JSON.parse(JSON.stringify(DEFAULT_PLATFORMS));
       this.posts = JSON.parse(JSON.stringify(INITIAL_POSTS));
       this.savePlatforms();
@@ -244,10 +233,6 @@ export const controlPanelMethods = {
     URL.revokeObjectURL(url);
   },
   importData(e) {
-    if (this.isDemoAccount()) {
-      this.notify(this.t("demo_no_save"), "warning");
-      return;
-    }
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
