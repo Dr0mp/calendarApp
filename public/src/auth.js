@@ -78,21 +78,24 @@ export const authMethods = {
       }
 
       errorEl.style.display = "none";
-      this.currentUser = data.user;
-      await this.fetchServerUsers();
-
-      // Honour the page that asked for a login (e.g. the admin panel), when the role allows it.
-      const target = this.pendingLoginTarget;
-      this.pendingLoginTarget = null;
-      if (this.currentUser.role === "admin") {
-        this.setAppView(target === "admin" || target === "events" ? target : "social");
-      } else {
-        this.setAppView("events");
-      }
-      this.updateUserNavDisplay();
+      await this.completeLogin(data.user);
     } catch (err) {
       showError(this.t("login_error_invalid"));
     }
+  },
+  // After a successful password or passkey sign-in.
+  async completeLogin(user) {
+    this.currentUser = user;
+    await this.fetchServerUsers();
+    // Honour the page that asked for a login (e.g. the admin panel), when the role allows it.
+    const target = this.pendingLoginTarget;
+    this.pendingLoginTarget = null;
+    if (this.currentUser.role === "admin") {
+      this.setAppView(target === "admin" || target === "events" ? target : "social");
+    } else {
+      this.setAppView("events");
+    }
+    this.updateUserNavDisplay();
   },
   // Any action that needs a session sends the visitor to the login screen, then back.
   openLoginDialog(targetApp = "events") {

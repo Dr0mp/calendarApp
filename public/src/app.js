@@ -9,6 +9,7 @@ import { routerMethods } from "./core/router.js";
 import { utilMethods } from "./core/utils.js";
 import { feedbackMethods } from "./core/feedback.js";
 import { authMethods } from "./auth.js";
+import { passkeyMethods } from "./passkeys.js";
 import { socialCalendarMethods } from "./social/calendar.js";
 import { postEditorMethods } from "./social/post-editor.js";
 import { controlPanelMethods } from "./social/control-panel.js";
@@ -105,6 +106,7 @@ const MIXINS = [
   utilMethods,
   feedbackMethods,
   authMethods,
+  passkeyMethods,
   socialCalendarMethods,
   postEditorMethods,
   controlPanelMethods,

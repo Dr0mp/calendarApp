@@ -46,6 +46,7 @@ export const adminUserMethods = {
     this.dom.editUserRole.value = user.role || "user";
     this.dom.editUserRole.disabled = isSystemAdmin;
 
+    this.renderEditUserPasskeys(user);
     this.dom.editUserDialog.showModal();
     setTimeout(() => {
       if (isSystemAdmin) {

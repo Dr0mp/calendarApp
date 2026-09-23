@@ -181,6 +181,7 @@ export const routerMethods = {
   },
   updateUserNavDisplay() {
     if (!this.dom || !this.dom.navUserPill) return;
+    this.updatePasskeyNav();
 
     if (this.currentUser) {
       this.dom.navUserPill.style.display = "inline-flex";

@@ -10,6 +10,7 @@ import jwt from "jsonwebtoken";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import cors from "cors";
+import { server as webauthn } from "@passwordless-id/webauthn";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,6 +31,9 @@ const ENABLE_DEMO_ACCOUNTS = process.env.ENABLE_DEMO_ACCOUNTS !== "0";
 // Demo accounts are read-only previews (see blockDemoWrites); their password is shown on the login screen.
 const DEMO_PASSWORD = process.env.DEMO_PASSWORD || "demo123";
 const MIN_PASSWORD_LENGTH = 10;
+// Passkeys (WebAuthn) are bound to the site's origin. List every address people open the app at.
+const APP_ORIGINS = (process.env.APP_ORIGINS || `http://localhost:${PORT},http://127.0.0.1:${PORT}`)
+  .split(",").map(s => s.trim().replace(/\/$/, "")).filter(Boolean);
 
 if (!JWT_SECRET || JWT_SECRET.length < 32) {
   console.error("[FATAL] JWT_SECRET is missing or shorter than 32 characters.");
@@ -124,8 +128,8 @@ const findUser = id => users.find(u => u.id === id);
 // Strip secrets from anything sent to the browser.
 function sanitizeUser(u) {
   if (!u) return null;
-  const { passwordHash, tokenVersion, ...safe } = u;
-  return { ...safe, isDemo: Boolean(u.isDemo) };
+  const { passwordHash, tokenVersion, passkeys, ...safe } = u;
+  return { ...safe, isDemo: Boolean(u.isDemo), passkeyCount: (passkeys || []).length };
 }
 
 function validatePassword(password, username) {
@@ -230,11 +234,16 @@ app.post("/api/auth/login", loginLimiter, (req, res) => {
     return res.status(401).json({ error: "Invalid username or password" });
   }
 
+  startSession(res, user);
+});
+
+// Issues the session cookie (shared by password and passkey sign-in).
+function startSession(res, user) {
   const payload = { id: user.id, role: user.role, tv: user.tokenVersion || 0 };
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: `${TOKEN_TTL_HOURS}h` });
   res.cookie("auth_token", token, { ...COOKIE_OPTS, maxAge: TOKEN_TTL_HOURS * 3600 * 1000 });
   res.json({ success: true, user: sanitizeUser(user) });
-});
+}
 
 app.post("/api/auth/logout", async (req, res) => {
   // Revoke every token issued to this user so a copied cookie stops working too.
@@ -251,6 +260,132 @@ app.post("/api/auth/logout", async (req, res) => {
 app.get("/api/auth/me", (req, res) => {
   if (!req.user) return res.json({ authenticated: false, user: null });
   res.json({ authenticated: true, user: req.user });
+});
+
+// =========================================================================
+// 3b. PASSKEYS (WebAuthn, via @passwordless-id/webauthn)
+// =========================================================================
+// One-time challenges live in memory for 5 minutes. Each is bound to its purpose (and user).
+const CHALLENGE_TTL_MS = 5 * 60 * 1000;
+const challenges = new Map(); // challenge -> { purpose, userId, expires }
+
+function issueChallenge(purpose, userId = null) {
+  const now = Date.now();
+  for (const [c, v] of challenges) if (v.expires < now) challenges.delete(c);
+  const challenge = webauthn.randomChallenge();
+  challenges.set(challenge, { purpose, userId, expires: now + CHALLENGE_TTL_MS });
+  return challenge;
+}
+
+// Returns true and consumes the challenge if it is valid for this purpose/user.
+function consumeChallenge(challenge, purpose, userId = null) {
+  const entry = challenges.get(challenge);
+  challenges.delete(challenge);
+  return Boolean(entry && entry.purpose === purpose && entry.expires >= Date.now() && (userId === null || entry.userId === userId));
+}
+
+// Challenge embedded in the signed clientData (base64url JSON).
+function clientChallenge(json) {
+  try { return JSON.parse(Buffer.from(json.response.clientDataJSON, "base64url").toString("utf8")).challenge; }
+  catch { return null; }
+}
+
+const passkeySummary = k => ({ id: k.id, name: k.name, createdAt: k.createdAt, lastUsedAt: k.lastUsedAt || null });
+const findPasskeyOwner = credentialId => users.find(u => (u.passkeys || []).some(k => k.id === credentialId));
+
+// Registration, step 1: a challenge for the signed-in user.
+app.post("/api/passkeys/register/options", requireAuth, blockDemoWrites, (req, res) => {
+  const user = findUser(req.user.id);
+  res.json({
+    challenge: issueChallenge("register", user.id),
+    user: { id: user.id, name: user.username, displayName: user.name },
+    excludeCredentials: (user.passkeys || []).map(k => ({ id: k.id, type: "public-key", transports: k.transports || [] }))
+  });
+});
+
+// Registration, step 2: verify the new credential and store its public key.
+app.post("/api/passkeys/register", requireAuth, blockDemoWrites, async (req, res) => {
+  const user = findUser(req.user.id);
+  const { registration, name } = req.body || {};
+  const challenge = registration && clientChallenge(registration);
+  if (!challenge || !consumeChallenge(challenge, "register", user.id)) {
+    return res.status(400).json({ code: "passkey_challenge_invalid", error: "Passkey request expired. Please try again." });
+  }
+  try {
+    const info = await webauthn.verifyRegistration(registration, {
+      challenge, // one-time and bound to this user (checked above)
+      origin: origin => APP_ORIGINS.includes(origin),
+      userVerified: true
+    });
+    if (findPasskeyOwner(info.credential.id)) return res.status(409).json({ code: "passkey_exists", error: "This passkey is already registered." });
+    const passkey = {
+      id: info.credential.id,
+      publicKey: info.credential.publicKey,
+      algorithm: info.credential.algorithm,
+      transports: info.credential.transports || [],
+      counter: info.authenticator.counter || 0,
+      name: String(name || info.authenticator.name || "Passkey").slice(0, 60),
+      createdAt: new Date().toISOString()
+    };
+    user.passkeys = [...(user.passkeys || []), passkey];
+    await persistUsers();
+    res.status(201).json({ success: true, passkey: passkeySummary(passkey) });
+  } catch (err) {
+    res.status(400).json({ code: "passkey_invalid", error: "The passkey could not be verified." });
+  }
+});
+
+// Sign-in, step 1: a challenge. Discoverable credentials: the browser lets the user pick an account.
+app.post("/api/passkeys/login/options", loginLimiter, (req, res) => {
+  res.json({ challenge: issueChallenge("login") });
+});
+
+// Sign-in, step 2: verify the signature with the stored public key and start a session.
+app.post("/api/passkeys/login", loginLimiter, async (req, res) => {
+  const { authentication } = req.body || {};
+  const fail = () => res.status(401).json({ code: "passkey_login_failed", error: "Passkey sign-in failed." });
+  const challenge = authentication && clientChallenge(authentication);
+  if (!challenge || !consumeChallenge(challenge, "login")) return fail();
+  const user = findPasskeyOwner(authentication.id);
+  const passkey = user && user.passkeys.find(k => k.id === authentication.id);
+  if (!passkey) return fail();
+  try {
+    const info = await webauthn.verifyAuthentication(authentication, passkey, {
+      challenge, // one-time (checked above)
+      origin: origin => APP_ORIGINS.includes(origin),
+      userVerified: true,
+      counter: passkey.counter || 0
+    });
+    passkey.counter = info.counter;
+    passkey.lastUsedAt = new Date().toISOString();
+    await persistUsers();
+    startSession(res, user);
+  } catch (err) {
+    fail();
+  }
+});
+
+// The signed-in user's passkeys.
+app.get("/api/passkeys", requireAuth, (req, res) => {
+  res.json((findUser(req.user.id).passkeys || []).map(passkeySummary));
+});
+
+app.delete("/api/passkeys/:credentialId", requireAuth, blockDemoWrites, async (req, res) => {
+  const user = findUser(req.user.id);
+  const before = (user.passkeys || []).length;
+  user.passkeys = (user.passkeys || []).filter(k => k.id !== req.params.credentialId);
+  if (user.passkeys.length === before) return res.status(404).json({ error: "Passkey not found" });
+  await persistUsers();
+  res.json({ success: true });
+});
+
+// Admin recovery: remove all passkeys of a user (lost or replaced device).
+app.delete("/api/users/:id/passkeys", requireAdmin, blockDemoWrites, async (req, res) => {
+  const user = findUser(req.params.id);
+  if (!user) return res.status(404).json({ error: "User not found" });
+  user.passkeys = [];
+  await persistUsers();
+  res.json({ success: true });
 });
 
 // =========================================================================
@@ -354,6 +489,10 @@ app.use("/api", (req, res) => res.status(404).json({ error: "Not found" }));
 // 5. STATIC ASSETS — only the public/ folder is ever served
 // =========================================================================
 app.use(express.static(PUBLIC_DIR, { index: "index.html", dotfiles: "deny" }));
+// Browser build of the passkey library, served from node_modules (same origin, allowed by the CSP).
+app.get("/vendor/webauthn.js", (req, res) => {
+  res.type("text/javascript").sendFile(path.join(__dirname, "node_modules/@passwordless-id/webauthn/dist/browser/webauthn.min.js"));
+});
 
 // SPA fallback for page navigations only; everything else is a plain 404.
 app.get(/.*/, (req, res, next) => {

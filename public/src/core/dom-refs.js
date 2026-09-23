@@ -4,6 +4,18 @@
 export const domRefsMethods = {
   initElements() {
     this.dom = {
+      passkeyLoginBlock: document.getElementById("passkey-login-block"),
+      passkeyLoginBtn: document.getElementById("passkey-login-btn"),
+      navPasskeysBtn: document.getElementById("nav-passkeys-btn"),
+      passkeysDialog: document.getElementById("passkeys-dialog"),
+      closePasskeysDialogBtn: document.getElementById("close-passkeys-dialog-btn"),
+      passkeysList: document.getElementById("passkeys-list"),
+      passkeysEmpty: document.getElementById("passkeys-empty"),
+      passkeyNameInput: document.getElementById("passkey-name-input"),
+      passkeyAddBtn: document.getElementById("passkey-add-btn"),
+      editUserPasskeysRow: document.getElementById("edit-user-passkeys-row"),
+      editUserPasskeysCount: document.getElementById("edit-user-passkeys-count"),
+      editUserResetPasskeysBtn: document.getElementById("edit-user-reset-passkeys-btn"),
       adminQuotaLimitBadge: document.getElementById("admin-quota-limit-badge"),
       savePostBtn: document.getElementById("save-post-btn"),
       // Universal Top Navigation Bar

@@ -29,8 +29,8 @@ if not exist ".env" (
     exit /b 1
 )
 
-:: Install dependencies on first run
-if not exist "node_modules" (
+:: Install dependencies on first run (or when a newer version added a dependency)
+if not exist "node_modules\@passwordless-id\webauthn" (
     echo [INFO] Installing dependencies...
     call npm install --omit=dev
 )

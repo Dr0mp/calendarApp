@@ -19,6 +19,16 @@ Node/Express server (authentication + user management) and a vanilla-JS single-p
 - `admin`: the full administrator. Its password is set through `ADMIN_INITIAL_PASSWORD`, as described above.
 - `demo` / `demo_admin`: read-only preview accounts that appear on the login screen. The password is `DEMO_PASSWORD` (default `demo123`). Set `ENABLE_DEMO_ACCOUNTS=0` to disable them.
 
+## Passkeys
+
+Users can sign in with a passkey (Windows Hello, Touch ID, a phone or a security key) instead of a password. The password stays as the fallback.
+
+- **Add one:** sign in with your password, click the key icon in the top bar, then **Add passkey**. You can remove passkeys from the same dialog.
+- **Sign in:** click **Sign in with passkey** on the login screen. You don't need to type a username.
+- **Lost device:** an admin opens Admin → Users → Edit and clicks **Remove all passkeys**. The user then signs in with their password and adds a new passkey.
+- **Requirements:** the browser only allows passkeys over HTTPS, or on `localhost`. A passkey is tied to the domain it was created on: passkeys made on `localhost` won't work on your real domain, and vice versa. When you deploy, set `APP_ORIGINS` in `.env` to the exact address users open, for example `https://calendar.example.com`.
+- **Library:** the passkey code uses [`@passwordless-id/webauthn`](https://webauthn.passwordless.id/), on the server and in the browser (served from `/vendor/webauthn.js`). Passkeys are stored in `users.json`. Only the public key is stored, never a secret.
+
 ## Where data lives
 
 - **Users:** on the server, in `users.json`. Passwords are stored as bcrypt hashes. This file is git-ignored.

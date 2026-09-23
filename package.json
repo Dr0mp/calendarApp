@@ -26,6 +26,7 @@
   "author": "",
   "license": "GPL-3.0-only",
   "dependencies": {
+    "@passwordless-id/webauthn": "^2.4.0",
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",

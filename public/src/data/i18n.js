@@ -401,7 +401,6 @@ export const TRANSLATIONS = {
     edit_user_pass_label: "Parolă *",
     edit_user_role_label: "Rol Cont *",
     edit_user_role_user: "Utilizator (Doar Calendar Evenimente)",
-    edit_user_role_admin: "Administrator (Acces Complet)",
     edit_user_cancel: "Anulare",
     edit_user_save: "Salvează Modificările",
 
@@ -653,7 +652,29 @@ export const TRANSLATIONS = {
     dialog_confirm: "Confirmă",
     dialog_ok: "OK",
     // Clipboard fallback
-    copy_manual_hint: "Copiați manual textul de mai jos:"
+    copy_manual_hint: "Copiați manual textul de mai jos:",
+    // Passkeys
+    passkey_or: "sau",
+    passkey_sign_in: "Autentificare cu cheie de acces (passkey)",
+    passkey_login_failed: "Autentificarea cu cheia de acces a eșuat. Încercați din nou sau folosiți parola.",
+    passkeys_title: "Chei de acces (passkeys)",
+    passkeys_intro: "Autentificați-vă cu amprenta, fața sau PIN-ul dispozitivului, fără parolă. Parola rămâne valabilă ca alternativă.",
+    passkeys_empty: "Nu aveți încă nicio cheie de acces.",
+    passkey_name_placeholder: "Nume (ex: Laptop birou)",
+    passkey_add: "Adaugă cheie de acces",
+    passkey_added: "Cheia de acces a fost adăugată.",
+    passkey_add_failed: "Cheia de acces nu a putut fi adăugată.",
+    passkey_exists: "Această cheie de acces este deja înregistrată.",
+    passkey_meta: "Creată {created} · folosită ultima dată {used}",
+    passkey_remove: "Șterge cheia de acces",
+    passkey_remove_confirm: "Ștergeți această cheie de acces? Nu vă veți mai putea autentifica cu ea.",
+    passkey_removed: "Cheia de acces a fost ștearsă.",
+    passkey_remove_failed: "Cheia de acces nu a putut fi ștearsă.",
+    passkey_count: "{count} chei de acces înregistrate",
+    passkey_count_one: "{count} cheie de acces înregistrată",
+    passkeys_reset_btn: "Șterge cheile de acces",
+    passkeys_reset_confirm: "Ștergeți toate cheile de acces ale utilizatorului {name}? (ex: dispozitiv pierdut)",
+    passkeys_reset_done: "Cheile de acces au fost șterse."
 
   },
 
@@ -1057,7 +1078,6 @@ export const TRANSLATIONS = {
     edit_user_pass_label: "Password *",
     edit_user_role_label: "Account Role *",
     edit_user_role_user: "User (Events Calendar Only)",
-    edit_user_role_admin: "Administrator (Full Access)",
     edit_user_cancel: "Cancel",
     edit_user_save: "Save Changes",
 
@@ -1309,7 +1329,29 @@ export const TRANSLATIONS = {
     dialog_confirm: "Confirm",
     dialog_ok: "OK",
     // Clipboard fallback
-    copy_manual_hint: "Copy the text below manually:"
+    copy_manual_hint: "Copy the text below manually:",
+    // Passkeys
+    passkey_or: "or",
+    passkey_sign_in: "Sign in with a passkey",
+    passkey_login_failed: "Passkey sign-in failed. Try again or use your password.",
+    passkeys_title: "Passkeys",
+    passkeys_intro: "Sign in with your device's fingerprint, face or PIN instead of a password. Your password keeps working as a fallback.",
+    passkeys_empty: "You don't have any passkeys yet.",
+    passkey_name_placeholder: "Name (e.g. Office laptop)",
+    passkey_add: "Add passkey",
+    passkey_added: "Passkey added.",
+    passkey_add_failed: "The passkey could not be added.",
+    passkey_exists: "This passkey is already registered.",
+    passkey_meta: "Created {created} · last used {used}",
+    passkey_remove: "Remove passkey",
+    passkey_remove_confirm: "Remove this passkey? You won't be able to sign in with it any more.",
+    passkey_removed: "Passkey removed.",
+    passkey_remove_failed: "The passkey could not be removed.",
+    passkey_count: "{count} passkeys registered",
+    passkey_count_one: "{count} passkey registered",
+    passkeys_reset_btn: "Remove passkeys",
+    passkeys_reset_confirm: "Remove all passkeys of {name}? (e.g. a lost device)",
+    passkeys_reset_done: "Passkeys removed."
   }
 };
 

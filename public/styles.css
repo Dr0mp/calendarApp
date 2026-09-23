@@ -5173,6 +5173,52 @@ button.timeline-time-header-spacer:hover {
   gap: 8px;
 }
 
+/* === Passkeys === */
+.passkey-login-block { margin-top: 16px; }
+.passkey-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.passkey-divider::before,
+.passkey-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border-subtle);
+}
+.passkeys-body { display: flex; flex-direction: column; gap: 14px; }
+.passkeys-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.passkey-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+}
+.passkey-item-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.passkey-item-text strong { color: var(--text-primary); font-size: var(--text-sm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.passkey-item-text span { font-size: var(--text-2xs); color: var(--text-muted); }
+.passkeys-add { display: flex; gap: 8px; flex-wrap: wrap; }
+.passkeys-add .form-input { flex: 1 1 180px; }
+.edit-user-passkeys-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
 /* === States that used to be inline styles set from JS === */
 .is-clickable { cursor: pointer; }
 .media-uploader-box.is-dragover { border-color: var(--primary); }

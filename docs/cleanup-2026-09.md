@@ -86,6 +86,13 @@ CSS refactors were also checked with `tools/audit/css-diff.mjs`. It compares the
 
 ---
 
+## Passkeys (added after the clean-up)
+
+- **Passkey sign-in (WebAuthn)** uses `@passwordless-id/webauthn`. Passwords remain as the fallback.
+- **Endpoints:** `/api/passkeys/*`. Challenges are single-use and expire after 5 minutes. The server checks the origin against `APP_ORIGINS` and requires user verification. Signature counters are tracked.
+- **Users** manage their own passkeys from the key icon in the top bar. **Admins** can remove all of a user's passkeys when a device is lost. Demo accounts can't add passkeys.
+- **Tests:** four new tests use Chromium's virtual authenticator. They cover the full cycle (register, sign in, remove), the admin reset, the demo block, and rejection of forged or replayed requests. The suite now has 66 tests.
+
 ## Decisions I made for you (from the plan's defaults)
 
 | # | Decision |
